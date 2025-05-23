@@ -1,0 +1,155 @@
+[
+  {
+    "id": 1,
+    "header": "Albert Einstein",
+    "text": "La imaginación es más importante que el conocimiento. El conocimiento es limitado, pero la imaginación abarca el mundo.",
+    "fecha": "12-enero-2022",
+    "hora": "22:05:38",
+    "name": "Server",
+    "color": "success"
+  },
+  {
+    "id": 2,
+    "header": "Marcas de Autos",
+    "text": "Toyota, Ford, Volkswagen, Nissan, Honda",
+    "fecha": "05-junio-2024",
+    "hora": "12:52:08",
+    "name": "Server",
+    "color": "success"
+  },
+  {
+    "id": 3,
+    "header": "Jardín Abandonado",
+    "text": "En un rincón olvidado de la ciudad, había un jardín que había sido abandonado durante décadas. Las plantas y flores que una vez florecieron con vida y color, ahora estaban marchitas y cubiertas de polvo.",
+    "fecha": "20-mayo-2024",
+    "hora": "12:50:08",
+    "name": "Server",
+    "color": "success"
+  },
+  {
+    "id": 4,
+    "header": "El Regalo Inesperado",
+    "text": "Un anciano encontró un paquete misterioso en su puerta. Al abrirlo, encontró un reloj de bolsillo antiguo con una nota que decía: \"Para recordar el tiempo que te queda\". El anciano sonrió, sabiendo que era un recordatorio para vivir cada momento.",
+    "fecha": "07-noviembre-2020",
+    "hora": "08:50:59",
+    "name": "Server",
+    "color": "success"
+  },
+  {
+    "id": 5,
+    "header": "Acertijo 1",
+    "text": "Estoy siempre delante de ti, pero nunca puedes verme. ¿Qué soy?",
+    "fecha": "01-abril-2025",
+    "hora": "15:21:42",
+    "name": "Server",
+    "color": "warning"
+  },
+  {
+    "id": 6,
+    "header": "Acertijo 2",
+    "text": "Tengo cabeza, pero no cabello. Tengo boca, pero no hablo. ¿Qué soy?",
+    "fecha": "01-abril-2025",
+    "hora": "15:22:12",
+    "name": "Server",
+    "color": "warning"
+  },
+  {
+    "id": 7,
+    "header": "Respuesta Acertijo 1",
+    "text": "El futuro. Siempre está delante de nosotros, pero no podemos verlo porque no ha llegado aún. No podemos predecir con certeza lo que sucederá en el futuro, por lo que siempre está oculto para nosotros.",
+    "fecha": "02-abril-2025",
+    "hora": "16:25:32",
+    "name": "Server",
+    "color": "light"
+  },
+  {
+    "id": 8,
+    "header": "Respuesta Acertijo 2",
+    "text": "Un río. Tiene una cabeza o nacimiento, pero no tiene cabello. También tiene una boca o desembocadura, pero no habla. Es una forma poética de describir las características de un río.",
+    "fecha": "02-abril-2025",
+    "hora": "16:26:12",
+    "name": "Server",
+    "color": "light"
+  },
+  {
+    "id": 9,
+    "header": "AAAAA AAA AAAAAAAA AAAAAAAAAAAA AAAAA A AAAAAAAAAAA",
+    "text": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolore ut dolorem, culpa fugiat nobis velit distinctio iste cum quos unde, in vero, quam esse quod similique ipsa reiciendis saepe harum!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolore ut dolorem, culpa fugiat nobis velit distinctio iste cum quos unde, in vero, quam esse quod similique ipsa reiciendis saepe harum!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolore ut dolorem, culpa fugiat nobis velit distinctio iste cum quos unde, in vero, quam esse quod similique ipsa reiciendis saepe harum!Lorem ipsum dolor sit, amet consectetur adipisicing elit. Dolore ut dolorem, culpa fugiat nobis velit distinctio iste cum quos unde, in vero, quam esse quod similique ipsa reiciendis saepe harum!",
+    "fecha": "02-abril-2025",
+    "hora": "16:26:12",
+    "name": "Server",
+    "color": "light"
+  },
+  {
+    "id": 10,
+    "header": "Respuesta Acertijo 2",
+    "text": "Lorem ipsum dolor sit, amet consectetur.",
+    "fecha": "02-abril-2025",
+    "hora": "16:26:12",
+    "name": "Server",
+    "color": "primary"
+  },
+  {
+    "id": 11,
+    "header": "Respuesta Acertijo 2",
+    "text": "Lorem ipsum dolor sit, amet consectetur.",
+    "fecha": "02-abril-2025",
+    "hora": "16:26:12",
+    "name": "Server",
+    "color": "secondary"
+  },
+  {
+    "id": 12,
+    "header": "Respuesta Acertijo 2",
+    "text": "Lorem ipsum dolor sit, amet consectetur.",
+    "fecha": "02-abril-2025",
+    "hora": "16:26:12",
+    "name": "Server",
+    "color": "success"
+  },
+  {
+    "id": 13,
+    "header": "Respuesta Acertijo 2",
+    "text": "Lorem ipsum dolor sit, amet consectetur.",
+    "fecha": "02-abril-2025",
+    "hora": "16:26:12",
+    "name": "Server",
+    "color": "danger"
+  },
+  {
+    "id": 14,
+    "header": "Respuesta Acertijo 2",
+    "text": "Lorem ipsum dolor sit, amet consectetur.",
+    "fecha": "02-abril-2025",
+    "hora": "16:26:12",
+    "name": "Server",
+    "color": "warning"
+  },
+  {
+    "id": 15,
+    "header": "Respuesta Acertijo 2",
+    "text": "Lorem ipsum dolor sit, amet consectetur.",
+    "fecha": "02-abril-2025",
+    "hora": "16:26:12",
+    "name": "Server",
+    "color": "info"
+  },
+  {
+    "id": 16,
+    "header": "Respuesta Acertijo 2",
+    "text": "Lorem ipsum dolor sit, amet consectetur.",
+    "fecha": "02-abril-2025",
+    "hora": "16:26:12",
+    "name": "Server",
+    "color": "light"
+  },
+  {
+    "id": 17,
+    "header": "Respuesta Acertijo 2",
+    "text": "Lorem ipsum dolor sit, amet consectetur.",
+    "fecha": "02-abril-2025",
+    "hora": "16:26:12",
+    "name": "Server",
+    "color": "dark"
+  }
+]
