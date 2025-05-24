@@ -1,34 +1,63 @@
 import { useEffect, useState } from "react";
-import { View, ActivityIndicator, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Platform,
+} from "react-native";
 
-import getCards, { getCardsLocal, getCardsVacio } from "../../lib/notes";
+import getCards, { getCardsLocal } from "../../lib/notes";
 import { AnimatedCard } from "../../components/Card";
 import { colores } from "../../components/utils/colors";
+import { AlertDiv } from "../../components/utils/Modals";
 
 export default function Main() {
   const [cards, setCards] = useState([]);
+  const [error, setError] = useState();
 
   useEffect(() => {
     // const datos = getCards();
     // setCards(datos);
-    getCards().then((notes) => setCards(notes)); // API
+
     // setCards(getCardsLocal());
     // setCards(getCardsVacio());
+
+    // API
+    getCards()
+      .then((notes) => setCards(notes))
+      .catch(
+        (error) =>
+          setError({
+            mensaje:
+              "No se pudo conectar con el servidor. (Mostrando Notas en Local).",
+          }),
+        setCards(getCardsLocal()),
+      );
   }, []);
 
   return (
-    <View style={{ backgroundColor: "#0a0a23" }}>
+    <View style={{ backgroundColor: "#0a0a23", flex: 1, minHeight: "100vh" }}>
+      {error && (
+        <AlertDiv
+          tipo={error.tipo}
+          mensaje={error.mensaje}
+          setError={setError}
+        />
+      )}
       {cards.length === 0 ? (
         <View style={styles.loader}>
-          <ActivityIndicator size="large" color={colores.loader} />
+          {!error && <ActivityIndicator size="large" color={colores.loader} />}
         </View>
       ) : (
         <FlatList
+          // style={{ flex: 1 }}
           data={cards}
           keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => (
             <AnimatedCard note={item} index={index} />
           )}
+          contentContainerStyle={styles.flatContainer}
         />
       )}
     </View>
@@ -41,5 +70,9 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     paddingBlock: "100%",
+  },
+  flatContainer: {
+    padding: 16,
+    margin: Platform.OS === "web" ? "auto" : 0,
   },
 });

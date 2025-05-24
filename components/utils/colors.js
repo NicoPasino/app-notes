@@ -18,3 +18,14 @@ export const colores = {
   turquesa: "#5eeaf9",
   turquesa2: "#7dd3fd",
 };
+
+/*
+  primary_s: "primary-subtle",
+  secondary_s: "secondary-subtle",
+  success_s: "success-subtle",
+  danger_s: "danger-subtle",
+  warning_s: "warning-subtle",
+  info_s: "info-subtle",
+  dark_s: "dark-subtle",
+  light_s: "ligh-subtlet" 
+*/

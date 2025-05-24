@@ -4,6 +4,7 @@ import {
   Alert,
   Button,
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -15,7 +16,13 @@ import { useLocalSearchParams } from "expo-router"; // obtener parametros
 import { Screen } from "../components/Screen";
 import { useEffect, useState } from "react";
 
-import { createCard, deleteCard, getCardId, updateCard } from "../lib/notes";
+import {
+  createCard,
+  deleteCard,
+  getCardId,
+  getCardIdLocal,
+  updateCard,
+} from "../lib/notes";
 import { colores, colorType } from "../components/utils/colors";
 import {
   CancelIcon,
@@ -55,11 +62,16 @@ export default function Detail() {
 
       // setnote(getCardId(id)); // Local
 
-      getCardId(id).then((data) => {
-        setnote(data);
-        setNewData(data);
-        // setError({ mensaje: "It's a sample error." });
-      });
+      getCardId(id)
+        .then((data) => {
+          setnote(data);
+          setNewData(data);
+        })
+        .catch((e) => {
+          setError({ mensaje: "Error al obtener ID (mostrando Local)." });
+          setnote(getCardIdLocal(id));
+          setNewData(getCardIdLocal(id));
+        });
     }
   }, [id]);
 
@@ -137,8 +149,9 @@ export default function Detail() {
               placeholderTextColor={newColor}
               onChangeText={(header) => setNewData({ ...newData, header })}
               maxLength={50}
+              value={!isNew ? newData.header : ""}
             >
-              {!isNew && newData.header}
+              {/* {!isNew && newData.header} */}
             </TextInput>
           ),
           headerRight: () => (
@@ -220,7 +233,7 @@ export default function Detail() {
           ),
         }}
       />
-      <View style={styles.h100}>
+      <View>
         {error && (
           <AlertDiv
             tipo={error.tipo}
@@ -251,8 +264,9 @@ export default function Detail() {
                 editable={editMode}
                 onChangeText={(text) => setNewData({ ...newData, text })}
                 maxLength={500}
+                value={!isNew ? newData.text : ""}
               >
-                {!isNew && newData.text}
+                {/* {!isNew && newData.text} */}
               </TextInput>
             </View>
           </ScrollView>
@@ -316,25 +330,20 @@ const styles = StyleSheet.create({
     // backgroundColor: "red",
   },
   body: {
-    // display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
+    margin: Platform.select({ web: 35 }),
   },
   text: {
     color: "white",
     paddingBottom: 5,
   },
   info: {
-    // display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
   },
   textInfo: {
     color: "gray",
-  },
-  h100: {
-    height: "100%",
-    // display: "flex",
   },
 
   squad: {

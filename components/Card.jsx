@@ -20,7 +20,7 @@ export function Card({ note }) {
       ]}
     >
       <View key={id} style={[styles.card, { borderColor: colorType[color] }]}>
-        <View style={{ flexShrink: 1 }}>
+        <View style={{ flexShrink: 1, width: "100%" }}>
           <View style={styles.cardTop}>
             {/* Header */}
             <Text
@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#000e3572",
     width: "96%",
+    maxWidth: 800,
     marginInline: "2%",
     padding: 20,
     borderRadius: 20,
@@ -84,10 +85,9 @@ const styles = StyleSheet.create({
     marginBlock: 12,
   },
   cardTop: {
-    display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "100%",
+    // width: "100%",
     marginBottom: 12,
   },
   header: {
