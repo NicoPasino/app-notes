@@ -79,5 +79,23 @@
     "hora": "16:26:12",
     "name": "Server",
     "color": "dark"
+  },
+  {
+    "id": 18,
+    "header": "Texto de Prueba",
+    "text": "Lorem ipsum dolor sit, amet consectetur.",
+    "fecha": "02-abril-2025",
+    "hora": "16:26:12",
+    "name": "Server",
+    "color": "dark"
+  },
+  {
+    "id": 19,
+    "header": "Texto de Prueba",
+    "text": "Lorem ipsum dolor sit, amet consectetur.",
+    "fecha": "02-abril-2025",
+    "hora": "16:26:12",
+    "name": "Server",
+    "color": "danger"
   }
 ]

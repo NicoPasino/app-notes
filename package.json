@@ -2,6 +2,7 @@
   "name": "notas",
   "version": "1.0.0",
   "main": "expo-router/entry",
+  "homepage": "/app-notes",
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -16,7 +17,7 @@
     "expo-constants": "~17.1.6",
     "expo-linear-gradient": "^14.1.4",
     "expo-linking": "~7.1.4",
-    "expo-router": "~5.0.6",
+    "expo-router": "~5.0.7",
     "expo-status-bar": "~2.2.3",
     "prettier": "^3.5.3",
     "react": "19.0.0",

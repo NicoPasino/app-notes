@@ -35,6 +35,9 @@
       "eas": {
         "projectId": "f63d8404-8ec1-4e37-8275-5b5c81b93075"
       }
+    },
+    "router": {
+      "basePath": "app-notes"
     }
   }
 }
