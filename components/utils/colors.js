@@ -1,12 +1,23 @@
 export const colorType = {
-  primary: "#3939ff",
-  secondary: "#646464",
-  success: "#52b952",
-  danger: "#ff3d3d",
-  warning: "#d1c464",
-  info: "#7dd3fc",
-  light: "#fff",
-  dark: "#000",
+  primary: "#0d6efd",
+  secondary: "#6c757d",
+  success: "#198754",
+  danger: "#dc3545",
+  warning: "#ffc107",
+  info: "#0dcaf0",
+  light: "#f8f9fa",
+  dark: "#343a40",
+};
+
+export const colorTypeB = {
+  primary: "#0d6dfd15",
+  secondary: "#6c757d15",
+  success: "#19875415",
+  danger: "#dc354515",
+  warning: "#ffc10715",
+  info: "#0dcaf015",
+  light: "#f8f9fa15",
+  dark: "#343a4015",
 };
 
 export const colores = {
@@ -18,14 +29,3 @@ export const colores = {
   turquesa: "#5eeaf9",
   turquesa2: "#7dd3fd",
 };
-
-/*
-  primary_s: "primary-subtle",
-  secondary_s: "secondary-subtle",
-  success_s: "success-subtle",
-  danger_s: "danger-subtle",
-  warning_s: "warning-subtle",
-  info_s: "info-subtle",
-  dark_s: "dark-subtle",
-  light_s: "ligh-subtlet" 
-*/

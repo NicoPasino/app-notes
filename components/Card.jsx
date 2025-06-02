@@ -1,7 +1,7 @@
 import { useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
 import { View, Text, StyleSheet, Animated, Pressable } from "react-native";
-import { colorType } from "./utils/colors";
+import { colorType, colorTypeB } from "./utils/colors";
 
 const showMaxHeader = 20;
 const showMaxText = 170;
@@ -21,7 +21,15 @@ export function Card({ note }) {
     >
       <View key={id} style={[styles.card, { borderColor: colorType[color] }]}>
         <View style={{ flexShrink: 1, width: "100%" }}>
-          <View style={styles.cardTop}>
+          <View
+            style={[
+              styles.cardTop,
+              {
+                borderColor: colorType[color],
+                backgroundColor: colorTypeB[color],
+              },
+            ]}
+          >
             {/* Header */}
             <Text
               style={[
@@ -42,7 +50,7 @@ export function Card({ note }) {
           </View>
 
           {/* Texto */}
-          <Text style={styles.text}>
+          <Text style={[styles.text, { borderColor: colorType[color] }]}>
             {text.slice(0, showMaxText)}
             {text.length > showMaxText && "..."}
           </Text>
@@ -71,36 +79,45 @@ export function AnimatedCard({ note, index }) {
   );
 }
 
+const borderRadius = 5;
+
 const styles = StyleSheet.create({
   card: {
     flexDirection: "row",
-    backgroundColor: "#000e3572",
+    backgroundColor: "#111", // #000e3572
     width: "96%",
     maxWidth: 800,
     marginInline: "2%",
-    padding: 20,
-    borderRadius: 20,
-    borderWidth: 0.5,
-    borderColor: "#3b83f6a8",
-    marginBlock: 12,
+    marginBlock: 16,
+    borderRadius: borderRadius,
+    // borderWidth: 1,
+    // borderColor: "#3b83f6a8",
   },
   cardTop: {
     flexDirection: "row",
     justifyContent: "space-between",
-    // width: "100%",
-    marginBottom: 12,
+    alignItems: "center",
+    borderTopStartRadius: borderRadius,
+    borderTopEndRadius: borderRadius,
+    padding: 10,
+    borderWidth: 1,
   },
   header: {
     fontSize: 20,
     color: "#7dd3fc",
   },
   fecha: {
-    color: "gray",
     fontSize: 11,
+    color: "gray",
   },
   text: {
     fontSize: 16,
-    color: "#cdb5e1",
+    padding: 10,
+    color: colorType.light, // "#cdb5e1"
+    borderWidth: 1,
+    borderTopWidth: 0,
+    borderBottomLeftRadius: borderRadius,
+    borderBottomRightRadius: borderRadius,
   },
   subtitle: {
     fontSize: 15,
