@@ -6,8 +6,9 @@ export function NewNoteBtn() {
   const router = useRouter();
   return (
     <Pressable
-      style={({ pressed }) => [
+      style={({ pressed, hovered }) => [
         { borderColor: pressed ? colores.blanco : colores.turquesa },
+        { transform: [{ scale: hovered ? 1.02 : 1 }] },
         styles.nuevaNota,
       ]}
       onPress={() => router.push(`/${"new"}`)}

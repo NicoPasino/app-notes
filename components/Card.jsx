@@ -14,13 +14,23 @@ export function Card({ note }) {
 
   return (
     <Pressable
+      key={id}
       onPress={() => router.push(`/${id}`)}
-      style={({ pressed }) => [
-        { backgroundColor: pressed ? "#fff1" : "#fff0" },
+      style={({ hovered }) => [
+        styles.cardMargin,
+        { transform: [{ scale: hovered ? 1.02 : 1 }] },
       ]}
     >
-      <View key={id} style={[styles.card, { borderColor: colorType[color] }]}>
-        <View style={{ flexShrink: 1, width: "100%" }}>
+      {({ pressed }) => (
+        <View
+          style={[
+            styles.card,
+            {
+              borderColor: colorType[color],
+              backgroundColor: pressed ? "#fff1" : "#fff0",
+            },
+          ]}
+        >
           <View
             style={[
               styles.cardTop,
@@ -55,7 +65,7 @@ export function Card({ note }) {
             {text.length > showMaxText && "..."}
           </Text>
         </View>
-      </View>
+      )}
     </Pressable>
   );
 }
@@ -82,16 +92,16 @@ export function AnimatedCard({ note, index }) {
 const borderRadius = 5;
 
 const styles = StyleSheet.create({
-  card: {
-    flexDirection: "row",
-    backgroundColor: "#111", // #000e3572
+  cardMargin: {
     width: "96%",
-    maxWidth: 800,
     marginInline: "2%",
     marginBlock: 16,
+  },
+  card: {
+    backgroundColor: "#111", // #000e3572
+    maxWidth: 800, // web
     borderRadius: borderRadius,
-    // borderWidth: 1,
-    // borderColor: "#3b83f6a8",
+    boxShadow: "5px 5px 15px 2px #0008",
   },
   cardTop: {
     flexDirection: "row",
@@ -111,7 +121,7 @@ const styles = StyleSheet.create({
     color: "gray",
   },
   text: {
-    fontSize: 16,
+    fontSize: 14,
     padding: 10,
     color: colorType.light, // "#cdb5e1"
     borderWidth: 1,

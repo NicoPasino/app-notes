@@ -20,7 +20,10 @@ export default function Layout() {
               {Platform.OS === "web" ? (
                 <Pressable
                   onPress={() => Linking.openURL(downloadApk)}
-                  style={{ flexDirection: "row" }}
+                  style={({ pressed, hovered }) => [
+                    { transform: [{ scale: hovered ? 1.02 : 1 }] },
+                    { flexDirection: "row" },
+                  ]}
                 >
                   <DownloadIcon color={colores.turquesa2} />
                   <Text style={styles.Titulo}>Download Apk</Text>

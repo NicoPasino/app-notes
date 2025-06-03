@@ -10,14 +10,14 @@ export const colorType = {
 };
 
 export const colorTypeB = {
-  primary: "#0d6dfd15",
-  secondary: "#6c757d15",
-  success: "#19875415",
-  danger: "#dc354515",
-  warning: "#ffc10715",
-  info: "#0dcaf015",
-  light: "#f8f9fa15",
-  dark: "#343a4015",
+  primary: "#0d6dfd20",
+  secondary: "#6c757d20",
+  success: "#19875420",
+  danger: "#dc354520",
+  warning: "#ffc10720",
+  info: "#0dcaf020",
+  light: "#f8f9fa20",
+  dark: "#343a4020",
 };
 
 export const colores = {
