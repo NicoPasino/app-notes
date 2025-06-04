@@ -25,6 +25,7 @@ import {
 } from "../lib/notes";
 import { colores, colorType } from "../components/utils/colors";
 import {
+  BackIcon,
   CancelIcon,
   ConfirmIcon,
   DelIcon,
@@ -87,7 +88,7 @@ export default function Detail() {
           // headerBackTitleStyle: { color: "red" },
           headerLeft: () => (
             <View>
-              {editMode && (
+              {editMode ? (
                 // Confirm
                 <Pressable
                   style={{ marginRight: 30 }}
@@ -138,6 +139,20 @@ export default function Detail() {
                     />
                   )}
                 </Pressable>
+              ) : (
+                Platform.OS === "web" && (
+                  <Pressable
+                    onPress={() => {
+                      router.replace("/");
+                    }}
+                  >
+                    {({ pressed }) => (
+                      <BackIcon
+                        color={pressed ? colores.pressed : colorType.light}
+                      />
+                    )}
+                  </Pressable>
+                )
               )}
             </View>
           ),
@@ -149,10 +164,8 @@ export default function Detail() {
               placeholderTextColor={newColor}
               onChangeText={(header) => setNewData({ ...newData, header })}
               maxLength={50}
-              value={!isNew ? newData.header : ""}
-            >
-              {/* {!isNew && newData.header} */}
-            </TextInput>
+              value={newData.header}
+            />
           ),
           headerRight: () => (
             <View>
@@ -194,32 +207,14 @@ export default function Detail() {
                       />
                     )}
                   </Pressable>
+
                   {/* Delete 🗑️ */}
                   <Pressable
-                    onPress={() => {
-                      Alert.alert(
-                        "Borrar Nota?",
-                        "Seguro que quieres borrar esta Nota? No podrás recuperarlo",
-                        [
-                          {
-                            text: "NO",
-                            // onPress: () => console.warn("NO Pressed"),
-                            style: "cancel",
-                          },
-                          {
-                            text: "SI",
-                            onPress: () => {
-                              deleteCard({ id });
-                              showToast({
-                                texto1: "Eliminado correctamente ✅",
-                              });
-                              // TODO: ir a inicio
-                              router.replace("/");
-                            },
-                          },
-                        ],
-                      );
-                    }}
+                    onPress={() =>
+                      Platform.OS === "web"
+                        ? deleteCardAlert.web(id)
+                        : deleteCardAlert.otros(id)
+                    }
                   >
                     {({ pressed }) => (
                       <DelIcon
@@ -244,7 +239,7 @@ export default function Detail() {
         {newData === null ? (
           <ActivityIndicator color={colores.loader} size={"large"} />
         ) : (
-          <ScrollView>
+          <ScrollView scrollIndicatorInsets={{ right: 1, bottom: 1 }}>
             <View style={styles.body}>
               <View style={styles.info}>
                 <Text style={styles.textInfo}>{newData.fecha}</Text>
@@ -254,7 +249,7 @@ export default function Detail() {
               </View>
               <TextInput
                 style={styles.text}
-                placeholder="Texto..."
+                placeholder="Ingresar texto aquí..."
                 placeholderTextColor="#888"
                 enterKeyHint="enter"
                 multiline
@@ -264,10 +259,8 @@ export default function Detail() {
                 editable={editMode}
                 onChangeText={(text) => setNewData({ ...newData, text })}
                 maxLength={500}
-                value={!isNew ? newData.text : ""}
-              >
-                {/* {!isNew && newData.text} */}
-              </TextInput>
+                value={newData.text}
+              />
             </View>
           </ScrollView>
         )}
@@ -311,6 +304,41 @@ export default function Detail() {
   );
 }
 
+class deleteCardAlert {
+  static web(id) {
+    if (
+      !global.confirm(
+        "Seguro que quieres borrar esta Nota? No podrás recuperarlo",
+      )
+    )
+      return;
+    deleteCard({ id });
+    showToast({ texto1: "Nota Eliminada ✅" });
+    router.replace("/");
+  }
+
+  static otros(id) {
+    Alert.alert(
+      "Borrar Nota?",
+      "Seguro que quieres borrar esta Nota? No podrás recuperarlo",
+      [
+        {
+          text: "NO",
+          style: "cancel",
+        },
+        {
+          text: "SI",
+          onPress: () => {
+            deleteCard({ id });
+            showToast({ texto1: "Nota Eliminada ✅" });
+            router.replace("/");
+          },
+        },
+      ],
+    );
+  }
+}
+
 const showToast = ({ tipo = "success", texto1, texto2 }) => {
   Toast.show({
     type: tipo,
@@ -336,11 +364,16 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "white",
+    padding: 15,
     paddingBottom: 5,
+    // borderWidth: 1,
+    borderRadius: 10,
+    backgroundColor: "#0003",
   },
   info: {
     flexDirection: "row",
     justifyContent: "space-between",
+    marginBottom: 20,
   },
   textInfo: {
     color: "gray",

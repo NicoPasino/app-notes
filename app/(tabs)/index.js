@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 import getCards, { getCardsLocal } from "../../lib/notes";
-import { AnimatedCard } from "../../components/Card";
+import { AnimatedCard, Card } from "../../components/Card";
 import { colores } from "../../components/utils/colors";
 import { AlertDiv } from "../../components/utils/Modals";
 
@@ -51,11 +51,12 @@ export default function Main() {
         </View>
       ) : (
         <FlatList
-          // style={{ flex: 1 }}
+          style={{ paddingBottom: 150 }}
           data={cards}
           keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => (
-            <AnimatedCard note={item} index={index} />
+            <Card note={item} />
+            // <AnimatedCard note={item} index={index} />
           )}
           contentContainerStyle={styles.flatContainer}
         />

@@ -37,6 +37,10 @@ export const NavIcon = (props) => (
   <FontAwesome name="navicon" size={32} color="white" {...props} />
 );
 
+export const BackIcon = (props) => (
+  <FontAwesome name="arrow-left" size={32} color="white" {...props} />
+);
+
 // Notes
 
 export const PlusIcon = (props) => (

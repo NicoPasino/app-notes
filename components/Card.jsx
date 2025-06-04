@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
     marginBlock: 16,
   },
   card: {
-    backgroundColor: "#111", // #000e3572
     maxWidth: 800, // web
     borderRadius: borderRadius,
     boxShadow: "5px 5px 15px 2px #0008",
@@ -124,6 +123,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     padding: 10,
     color: colorType.light, // "#cdb5e1"
+    backgroundColor: "#112",
     borderWidth: 1,
     borderTopWidth: 0,
     borderBottomLeftRadius: borderRadius,
