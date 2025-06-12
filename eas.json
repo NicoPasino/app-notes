@@ -20,6 +20,9 @@
     },
     "preview3": {
       "developmentClient": true
+    },
+    "production": {
+      "distribution": "store"
     }
   },
   "submit": {
