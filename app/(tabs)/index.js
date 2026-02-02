@@ -7,7 +7,7 @@ import {
   Platform,
 } from "react-native";
 
-import getCards, { getCardsLocal } from "../../lib/notes";
+import getCards, { getCardsLocal } from "../../services/notes";
 import { AnimatedCard, Card } from "../../components/Card";
 import { colores } from "../../components/utils/colors";
 import { AlertDiv } from "../../components/utils/Modals";

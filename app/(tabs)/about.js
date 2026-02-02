@@ -22,10 +22,9 @@ export default function About() {
           estas notas son públicas y se guardan en una Base de Datos.
         </Text>
         <Text></Text>
-        <Text style={{ color: "gray" }}>
-          lorem ipsum dolocididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea.
+        <Text style={{ color: "white" }}>
+          Tecnologías ustilizadas: React Native, .NET, Entity Framework, API
+          Rest, MySql.
         </Text>
         <Text></Text>
         <Text style={{ color: "gray" }}>

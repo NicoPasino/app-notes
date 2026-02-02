@@ -6,7 +6,7 @@ import { NewNoteBtn } from "../components/NewNoteBtn";
 import Toast from "react-native-toast-message";
 import { colores } from "../components/utils/colors";
 import { NavIcon, DownloadIcon, AndroidIcon } from "../components/Icons";
-import { downloadApk } from "../lib/notes";
+import { downloadApk } from "../services/notes";
 
 export default function Layout() {
   return (
@@ -53,10 +53,10 @@ const styles = StyleSheet.create({
   Titulo: {
     color: colores.turquesa2,
     fontWeight: "bold",
-    fontSize: 25,
+    fontSize: 23,
     textAlign: "center",
     fontFamily: "sans-serif",
-    letterSpacing: 3,
+    // letterSpacing: 10,
     paddingInline: 15,
   },
   textShadow100: {

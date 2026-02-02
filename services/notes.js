@@ -1,7 +1,10 @@
 import mockData from "../mocks/res.json";
 import vacio from "../mocks/vacio.json";
-const apiUrl = "https://nicopasino.space/api/notes";
-export const downloadApk = "https://nicopasino.space/notes/notes.apk";
+
+// const miDominio = "https://nicopasino.space";
+const miDominio = "https://localhost:7267";
+const apiUrl = miDominio + "/api/notes";
+export const downloadApk = miDominio + "/notes/notes.apk";
 
 export default function getCardsAPI() {
   return fetch(apiUrl)

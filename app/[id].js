@@ -1,28 +1,31 @@
-import { router, Stack } from "expo-router";
+import { defaultData } from "../components/utils/defaultData";
+import { deleteCardAlert } from "../components/utils/deleteCardAlert";
+import { showToast } from "../components/utils/toast";
+import { detailStyles as styles } from "../components/utils/detailStyles";
+
+import { AlertDiv } from "../components/utils/Modals";
+
+import { router, Stack, useLocalSearchParams } from "expo-router";
 import {
   ActivityIndicator,
-  Alert,
   Button,
   Modal,
   Platform,
   Pressable,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router"; // obtener parametros
-import { Screen } from "../components/Screen";
 import { useEffect, useState } from "react";
 
 import {
   createCard,
-  deleteCard,
   getCardId,
   getCardIdLocal,
   updateCard,
-} from "../lib/notes";
+} from "../services/notes";
+import { Screen } from "../components/Screen";
 import { colores, colorType } from "../components/utils/colors";
 import {
   BackIcon,
@@ -31,18 +34,6 @@ import {
   DelIcon,
   EditIcon,
 } from "../components/Icons";
-import { AlertDiv } from "../components/utils/Modals";
-import { getDate } from "../components/utils/getDate";
-import Toast from "react-native-toast-message";
-
-const defaultData = {
-  header: "",
-  text: "",
-  fecha: getDate().fecha,
-  hora: getDate().hora,
-  name: "New",
-  color: "info",
-};
 
 export default function Detail() {
   const { id } = useLocalSearchParams(); // obtener parametros
@@ -85,7 +76,6 @@ export default function Detail() {
           headerStyle: { backgroundColor: "#000033" },
           headerTintColor: colores.blanco,
           headerBackVisible: !editMode,
-          // headerBackTitleStyle: { color: "red" },
           headerLeft: () => (
             <View>
               {editMode ? (
@@ -141,6 +131,7 @@ export default function Detail() {
                 </Pressable>
               ) : (
                 Platform.OS === "web" && (
+                  // Back
                   <Pressable
                     onPress={() => {
                       router.replace("/");
@@ -265,7 +256,7 @@ export default function Detail() {
           </ScrollView>
         )}
       </View>
-
+      {/* // TODO: exportar */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -303,132 +294,3 @@ export default function Detail() {
     </Screen>
   );
 }
-
-class deleteCardAlert {
-  static web(id) {
-    if (
-      !global.confirm(
-        "Seguro que quieres borrar esta Nota? No podrás recuperarlo",
-      )
-    )
-      return;
-    deleteCard({ id });
-    showToast({ texto1: "Nota Eliminada ✅" });
-    router.replace("/");
-  }
-
-  static otros(id) {
-    Alert.alert(
-      "Borrar Nota?",
-      "Seguro que quieres borrar esta Nota? No podrás recuperarlo",
-      [
-        {
-          text: "NO",
-          style: "cancel",
-        },
-        {
-          text: "SI",
-          onPress: () => {
-            deleteCard({ id });
-            showToast({ texto1: "Nota Eliminada ✅" });
-            router.replace("/");
-          },
-        },
-      ],
-    );
-  }
-}
-
-const showToast = ({ tipo = "success", texto1, texto2 }) => {
-  Toast.show({
-    type: tipo,
-    text1: texto1,
-    text2: texto2,
-  });
-};
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 18,
-    verticalAlign: "bottom",
-    fontWeight: "bold",
-    color: "white",
-    // lineHeight: 12,
-    // paddingBottom: 20,
-    // backgroundColor: "red",
-  },
-  body: {
-    flexDirection: "column",
-    justifyContent: "space-between",
-    margin: Platform.select({ web: 35 }),
-  },
-  text: {
-    color: "white",
-    padding: 15,
-    paddingBottom: 5,
-    // borderWidth: 1,
-    borderRadius: 10,
-    backgroundColor: "#0003",
-  },
-  info: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20,
-  },
-  textInfo: {
-    color: "gray",
-  },
-
-  squad: {
-    borderRadius: 5,
-    // marginRight: 5,
-    borderWidth: 1,
-    borderColor: "#000",
-  },
-  selectorSquad: {
-    width: 30,
-    height: 30,
-  },
-  colorSquad: {
-    width: 80,
-    height: 80,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#0005",
-  },
-  modalContent: {
-    backgroundColor: "#007bff64",
-    padding: 20,
-    borderRadius: 10,
-    elevation: 10,
-    width: "60%",
-  },
-  coloresView: {
-    justifyContent: "space-evenly",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 15,
-    marginBottom: 25,
-    alignContent: "center",
-  },
-  wrap: {
-    justifyContent: "space-between",
-    flexDirection: "row",
-    gap: 10,
-    // flexWrap: "wrap",
-  },
-  /*
-    editView: {
-    width: "100%",
-    flexDirection: "row",
-    // gap: 5,
-    justifyContent: "flex-start",
-    // backgroundColor: "#fff",
-    marginRight: 35,
-    paddingInline: 3,
-    alignItems: "center",
-  }, */
-});
