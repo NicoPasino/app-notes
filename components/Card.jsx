@@ -44,7 +44,7 @@ export function Card({ note }) {
             <Text
               style={[
                 styles.header,
-                styles.textShadow100,
+                styles.textWithShadow100,
                 { color: colorType[color] },
               ]}
             >
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     color: "gray",
     marginBottom: 10,
   },
-  textShadow100: {
+  textWithShadow100: {
     color: "#88defd",
     textShadowColor: "#7ddcff7d",
     textShadowOffset: { width: 1, height: 1 },

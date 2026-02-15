@@ -6,6 +6,8 @@ export const detailStyles = StyleSheet.create({
     verticalAlign: "bottom",
     fontWeight: "bold",
     color: "white",
+    backgroundColor: Platform.select({ web: "#0002" }),
+    padding: Platform.select({ web: 8 }),
   },
   body: {
     flexDirection: "column",

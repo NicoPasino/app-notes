@@ -3,6 +3,7 @@ import { Tabs } from "expo-router";
 import { InfoIcon, NoteIcon } from "../../components/Icons";
 import { colores } from "../../components/utils/colors";
 
+// Nav (Footer)
 export default function TabsLayout() {
   return (
     <Tabs

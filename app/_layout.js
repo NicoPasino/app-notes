@@ -1,13 +1,10 @@
-import { router, Stack } from "expo-router";
+import { Stack } from "expo-router";
 import { Screen } from "../components/Screen";
-import { Linking, Platform, Pressable, StyleSheet, Text } from "react-native";
 import { NewNoteBtn } from "../components/NewNoteBtn";
-// import { useRouter } from "expo-router";
 import Toast from "react-native-toast-message";
-import { colores } from "../components/utils/colors";
-import { NavIcon, DownloadIcon, AndroidIcon } from "../components/Icons";
-import { downloadApk } from "../services/notes";
+import { HeaderTitle } from "../components/layoutComponents/HeaderTitle";
 
+// Header + Toast (home/info)
 export default function Layout() {
   return (
     <Screen>
@@ -15,29 +12,7 @@ export default function Layout() {
         screenOptions={{
           headerStyle: { backgroundColor: "#00001d" },
           // headerLeft: () => <NavIcon />,
-          headerTitle: () => (
-            <>
-              {Platform.OS === "web" ? (
-                <Pressable
-                  onPress={() => Linking.openURL(downloadApk)}
-                  style={({ pressed, hovered }) => [
-                    { transform: [{ scale: hovered ? 1.02 : 1 }] },
-                    { flexDirection: "row" },
-                  ]}
-                >
-                  <DownloadIcon color={colores.turquesa2} />
-                  <Text style={styles.Titulo}>Download Apk</Text>
-                  <AndroidIcon color={colores.turquesa2} />
-                </Pressable>
-              ) : (
-                <Pressable onPress={() => router.replace("/")}>
-                  <Text style={[styles.Titulo, styles.textShadow100]}>
-                    NOTAS
-                  </Text>
-                </Pressable>
-              )}
-            </>
-          ),
+          headerTitle: () => <HeaderTitle />,
           headerRight: () => <NewNoteBtn />,
           headerLeftContainerStyle: { paddingLeft: "10%" },
           headerRightContainerStyle: { paddingRight: "10%" },
@@ -48,21 +23,3 @@ export default function Layout() {
     </Screen>
   );
 }
-
-const styles = StyleSheet.create({
-  Titulo: {
-    color: colores.turquesa2,
-    fontWeight: "bold",
-    fontSize: 23,
-    textAlign: "center",
-    fontFamily: "sans-serif",
-    // letterSpacing: 10,
-    paddingInline: 15,
-  },
-  textShadow100: {
-    color: colores.turquesa,
-    textShadowColor: colores.turquesa2,
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 15,
-  },
-});

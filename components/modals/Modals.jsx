@@ -1,19 +1,23 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { CancelIcon } from "../Icons";
-import { colorType } from "./colors";
+import { colorType } from "../utils/colors";
 
 export function AlertDiv({ tipo = "Error", mensaje, setError }) {
+  const tipoErrorStyle = tipo === "Error" ? styles.error : styles.warning;
+
   return (
-    <View style={[styles.errorView, styles.error]}>
+    <View style={[styles.errorView, tipoErrorStyle]}>
       <Text style={{ width: "90%" }}>
         <Text style={{ fontWeight: 900 }}>{tipo}: </Text>
         <Text>{mensaje}</Text>
       </Text>
-      <Pressable onPress={() => setError(null)}>
-        {({ pressed }) => (
-          <CancelIcon color={pressed ? "white" : colorType.danger} />
-        )}
-      </Pressable>
+      {setError != null && (
+        <Pressable onPress={() => setError(null)}>
+          {({ pressed }) => (
+            <CancelIcon color={pressed ? "white" : colorType.danger} />
+          )}
+        </Pressable>
+      )}
     </View>
   );
 }
