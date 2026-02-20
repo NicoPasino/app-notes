@@ -1,20 +1,26 @@
 import { View, FlatList, StyleSheet, Platform } from "react-native";
-import { notasAPI } from "../../services/notesService";
 import { Card } from "../../components/Card";
 import { AlertDiv } from "../../components/modals/Modals";
-import { useItems } from "../../components/hooks/useItems";
 import { LoadingBackground } from "../../components/Spinner";
+import { useContext, useEffect, useState } from "react";
+import { DataContext } from "../../context/dataContext";
 
 export default function Main() {
-  const { items, error } = useItems({ itemsDB: notasAPI });
+  const { notasManager } = useContext(DataContext);
+  const { items, error } = notasManager;
+  const [itemsIndex, setItemsIndex] = useState();
+
+  useEffect(() => {
+    setItemsIndex(items);
+  }, [items, setItemsIndex]);
 
   function Contenido() {
-    return items.length === 0 && !error ? (
+    return (!itemsIndex || itemsIndex.length === 0) && !error ? (
       <LoadingBackground />
     ) : (
       <FlatList
         style={{ paddingBottom: 150 }}
-        data={items}
+        data={itemsIndex}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <Card note={item} />}
         contentContainerStyle={styles.flatContainer}

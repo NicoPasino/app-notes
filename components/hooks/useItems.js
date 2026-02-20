@@ -14,7 +14,11 @@ export function useItems({ itemsDB }) {
       } else if (res?.message) {
         setMensaje(res.message);
         return true;
-      } else return false;
+      } else {
+        setError();
+        setMensaje(res.message);
+        return false;
+      }
     } catch {
       setError("Error de código, al checkear la respuesta de la API.");
       return true;
@@ -27,9 +31,7 @@ export function useItems({ itemsDB }) {
       const res = await itemsDBArg.obtenerTodos();
       // const res = await itemsDBArg.getCardsVacio();
       // const res = await itemsDBArg.getCardsLocal();
-
-      if (res?.error) setError(res.error);
-      else if (res?.message) setError(res.message);
+      if (hayError(res)) return;
 
       setItems(Array.isArray(res) ? res : []);
     } catch (err) {

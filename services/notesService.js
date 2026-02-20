@@ -1,7 +1,9 @@
 import mockData from "../mocks/res.json";
 import vacio from "../mocks/vacio.json";
 
-const url = __DEV__ ? "localhost:7267" : "nicopasino.space";
+// const local = "localhost:7267"; // localhost:7267
+const local = "nicopasino.space"; // localhost:7267
+const url = __DEV__ ? local : "nicopasino.space";
 const miDominio = `https://${url}`;
 const apiUrl = miDominio + `/api/notes`;
 
@@ -15,11 +17,16 @@ async function request(path, options = {}) {
     .then((res) => {
       if (res.error) {
         return { error: "Error al hacer la petición con el servidor." };
-      } else if (res.status === 202 || res.status === 201) {
-        return { ok: true };
       } else if (res.status === 200) {
         let resJson = res.json();
         return resJson;
+      } else if (
+        res.ok ||
+        res.status === 202 ||
+        res.status === 201 ||
+        res.status === 204
+      ) {
+        return { ok: true };
       } else if (res.message || res.status === 400) {
         return { message: res.message ?? "Error 400: Solicitud incorrecta." };
       } else if (res.status === 404) {
@@ -30,8 +37,8 @@ async function request(path, options = {}) {
         return { error: "Error: (Respuesta no controlada)." };
       }
     })
-    .catch(() => {
-      return { error: "Error al conectar con la API del Servidor." };
+    .catch((e) => {
+      return { error: "Error al conectar con la API del Servidor." + e };
     });
 }
 

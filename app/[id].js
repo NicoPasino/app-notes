@@ -1,15 +1,13 @@
 import { useLocalSearchParams } from "expo-router";
+import { useContext, useEffect, useState } from "react";
 import { View } from "react-native";
-import { useEffect, useState } from "react";
-import { notasAPI as itemsDB } from "../services/notesService";
-import { useItems } from "../components/hooks/useItems";
-
 import { defaultData } from "../components/utils/defaultData";
 import { AlertDiv } from "../components/modals/Modals";
 import { Screen } from "../components/Screen";
 import { LoadingBackground } from "../components/Spinner";
 import { TextoCont } from "../components/idComponents/contInput";
 import { Header } from "../components/idComponents/header";
+import { DataContext } from "../context/dataContext";
 
 export default function Detail() {
   const { id } = useLocalSearchParams(); // obtener parametros
@@ -17,7 +15,7 @@ export default function Detail() {
   const [note, setnote] = useState(null);
   const [newData, setNewData] = useState(defaultData);
   const [editMode, setEditMode] = useState(false);
-  const notasManager = useItems({ itemsDB });
+  const { notasManager } = useContext(DataContext);
   const { obtenerItem, error } = notasManager;
 
   useEffect(() => {
