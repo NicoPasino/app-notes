@@ -1,4 +1,4 @@
-import { View, ActivityIndicator, StyleSheet, Platform } from "react-native";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { colores } from "./utils/colors";
 
 export function LoadingBackground() {
@@ -18,6 +18,6 @@ const styles = StyleSheet.create({
     height: "100%",
     display: "flex",
     alignItems: "center",
-    paddingBlock: Platform.OS === "web" ? "50%" : "100%", // TODO: TEST
+    paddingBlock: 350,
   },
 });

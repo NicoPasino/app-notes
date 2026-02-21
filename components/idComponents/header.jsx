@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { router, Stack } from "expo-router";
-import { Platform, View } from "react-native";
+import { View } from "react-native";
 
 import {
   ConfirmBtn,
@@ -10,47 +10,32 @@ import {
 } from "../buttons/EditButtons";
 import { BackBtn, CancelBtn } from "../buttons/GeneralButtons";
 import { colores, colorType } from "../utils/colors";
-import { TituloCont } from "../idComponents/contInput";
 import detailStyles from "../utils/detailStyles";
+import { TituloCont } from "../idComponents/contInput";
 import { ModalColorView } from "../modals/ModalColorView";
-import showToast from "../utils/toast";
+import { __IsWeb__ } from "../../config";
+import { DataContext } from "../../context/dataContext";
 
-export function Header({ edit, data, manageDB }) {
+export function Header({ edit, data }) {
   const { editMode, setEditMode, isNew } = edit;
   const { newData, setNewData, note, id } = data;
-  const { agregar, actualizar, eliminar } = manageDB;
 
+  const { notasManager } = useContext(DataContext);
+  const { agregar, actualizar, eliminar } = notasManager;
   const [modalColorVisible, setModalColorVisible] = useState(false);
   const newColor = newData ? colorType[newData?.color] : colorType.light;
 
+  // TODO: Refactorizar - Exportar
   async function enviarDatos() {
     const nuevoItem = { ...note, ...newData };
 
     if (isNew) {
-      // Crear
-      const res = await agregar({ nuevoItem });
-      if (res) {
-        showToast({ texto1: "Creado correctamente ✅" });
-        router.replace("/");
-      }
+      await agregar({ nuevoItem });
     } else {
-      // Actualizar
       const nuevoDato = { ...nuevoItem, id };
-      let res = await actualizar({ nuevoDato });
-      if (res) {
-        showToast({ texto1: "Actualizado correctamente ✅" });
-        router.replace("/");
-      }
+      await actualizar({ nuevoDato });
     }
     setEditMode(false);
-  }
-
-  async function enviarDelete(id) {
-    const res = await eliminar(id);
-    if (res) {
-      showToast({ texto1: "Eliminado correctamente ✅" });
-      router.replace("/");
-    }
   }
 
   return (
@@ -65,7 +50,7 @@ export function Header({ edit, data, manageDB }) {
               {editMode ? (
                 <ConfirmBtn accion={enviarDatos} />
               ) : (
-                Platform.OS === "web" && <BackBtn />
+                __IsWeb__ && <BackBtn />
               )}
             </View>
           ),
@@ -100,7 +85,7 @@ export function Header({ edit, data, manageDB }) {
                 // (Reading)
                 <View style={detailStyles.wrap}>
                   <EditBtn accion={() => setEditMode(true)} />
-                  <DeleteBtn accion={() => enviarDelete(id)} />
+                  <DeleteBtn accion={() => eliminar(id)} />
                 </View>
               )}
             </View>

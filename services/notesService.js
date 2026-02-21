@@ -1,8 +1,8 @@
+import { __IsWeb__ } from "../config";
 import mockData from "../mocks/res.json";
 import vacio from "../mocks/vacio.json";
 
-// const local = "localhost:7267"; // localhost:7267
-const local = "nicopasino.space"; // localhost:7267
+const local = __IsWeb__ ? "localhost:7267" : "nicopasino.space"; // "localhost:5230"
 const url = __DEV__ ? local : "nicopasino.space";
 const miDominio = `https://${url}`;
 const apiUrl = miDominio + `/api/notes`;
@@ -20,17 +20,12 @@ async function request(path, options = {}) {
       } else if (res.status === 200) {
         let resJson = res.json();
         return resJson;
-      } else if (
-        res.ok ||
-        res.status === 202 ||
-        res.status === 201 ||
-        res.status === 204
-      ) {
+      } else if (res.ok || res.status === 201 || res.status === 202) {
         return { ok: true };
       } else if (res.message || res.status === 400) {
         return { message: res.message ?? "Error 400: Solicitud incorrecta." };
       } else if (res.status === 404) {
-        return { error: "Error 404: Solicitud no encontrada." };
+        return { error: "Error 404: Not Found." };
       } else if (res.status === 500) {
         return { error: "Error 500: Error desde el servidor." };
       } else {
@@ -38,7 +33,7 @@ async function request(path, options = {}) {
       }
     })
     .catch((e) => {
-      return { error: "Error al conectar con la API del Servidor." + e };
+      return { error: "Error al intentar conectar con la API del Servidor." };
     });
 }
 

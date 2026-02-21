@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import showToast from "../utils/toast";
+import { router } from "expo-router";
 
 export function useItems({ itemsDB }) {
   const [items, setItems] = useState([]);
@@ -16,7 +18,7 @@ export function useItems({ itemsDB }) {
         return true;
       } else {
         setError();
-        setMensaje(res.message);
+        setMensaje();
         return false;
       }
     } catch {
@@ -49,25 +51,43 @@ export function useItems({ itemsDB }) {
   const agregar = async ({ nuevoItem }) => {
     const res = await itemsDB.agregar(nuevoItem);
     if (hayError(res)) return;
+    showToast({ texto1: "Creado correctamente ✅" });
     recargarItems(itemsDB);
-    return res;
+    router.replace("/");
+    // return res;
   };
   const actualizar = async ({ nuevoDato }) => {
     const res = await itemsDB.actualizar(nuevoDato);
     if (hayError(res)) return;
+    showToast({ texto1: "Actualizado correctamente ✅" });
     recargarItems(itemsDB);
-    return res;
+    router.replace("/");
+    // return res;
   };
-  const obtenerItem = async (id) => {
+  const obtenerItemDb = async (id) => {
     const res = await itemsDB.obtenerPorId(id);
     if (hayError(res)) return;
     return res;
   };
+  const obtenerItem = async (id, api = false) => {
+    if (!items || api) {
+      obtenerItemDb(id);
+    } else {
+      const itemExistente = items.find(
+        (item) => String(item.id) === String(id),
+      );
+
+      if (itemExistente) return itemExistente;
+      else return await obtenerItemDb(id);
+    }
+  };
   const eliminar = async (id) => {
     const res = await itemsDB.eliminar(Number(id));
     if (hayError(res)) return;
+    showToast({ texto1: "Eliminado correctamente ✅" });
     recargarItems(itemsDB);
-    return res;
+    router.replace("/");
+    // return res;
   };
 
   const buscarItems = async (campo, valor) => {

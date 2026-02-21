@@ -14,11 +14,11 @@ export const InfoIcon = (props) => (
 );
 
 export const DownloadIcon = (props) => (
-  <FontAwesome name="download" size={32} color="white" {...props} />
+  <FontAwesome name="cloud-download" size={32} color="white" {...props} />
 );
 
 export const AndroidIcon = (props) => (
-  <FontAwesome name="android" size={32} color="white" {...props} />
+  <FontAwesome name="android" size={30} color="white" {...props} />
 );
 
 export const NoteIcon = (props) => (
@@ -41,14 +41,18 @@ export const BackIcon = (props) => (
   <FontAwesome name="arrow-left" size={32} color="white" {...props} />
 );
 
+export const ReloadIcon = (props) => (
+  <FontAwesome name="refresh" size={32} color="white" {...props} />
+);
+
 // Notes
 
 export const PlusIcon = (props) => (
   <FontAwesome name="plus" size={25} color="white" {...props} />
 );
 
-export const PlusCircleIcon = (props) => (
-  <FontAwesome name="plus-circle" size={25} color="white" {...props} />
+export const CirclePlusIcon = (props) => (
+  <FontAwesome6 name="circle-plus" size={25} color="white" {...props} />
 );
 
 export const DelIcon = (props) => (
