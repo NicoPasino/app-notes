@@ -6,7 +6,7 @@ import confirmAlert from "../utils/ConfirmAlert";
 
 export function ConfirmBtn({ accion }) {
   return (
-    <Pressable style={{ marginRight: 30 }} onPress={() => accion()}>
+    <Pressable onPress={() => accion()}>
       {({ pressed }) => (
         <ConfirmIcon color={pressed ? colores.pressed : colorType.success} />
       )}

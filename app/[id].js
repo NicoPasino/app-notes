@@ -1,4 +1,4 @@
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, router } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import { View } from "react-native";
 import { defaultData } from "../components/utils/defaultData";
@@ -51,11 +51,13 @@ export default function Detail() {
 }
 
 function ContenidoDetail({ modoEdit, data, notasManager }) {
-  const { error, mensaje, setMensaje } = notasManager;
+  const { error, mensaje, setMensaje, setError } = notasManager;
   const { editMode, setEditMode, isNew } = modoEdit;
   const { newData, setNewData, note, id } = data;
 
-  if (error) return <AlertDiv mensaje={error} />;
+  const handleVolverOnError = () => { setError(""); router.replace("/") };
+
+  if (error) return <AlertDiv mensaje={error} link={{ onPress: () => handleVolverOnError(), label: "Volver a Inicio" }} />;
   return (
     <>
       {mensaje && (
@@ -64,9 +66,8 @@ function ContenidoDetail({ modoEdit, data, notasManager }) {
       <Header
         edit={{ editMode, setEditMode, isNew }}
         data={{ newData, setNewData, note, id }}
-        manageDB={notasManager}
       />
-      <View>
+      <View style={{ flex: 1 }}>
         <TextoCont data={{ newData, setNewData }} editMode={editMode} />
       </View>
     </>

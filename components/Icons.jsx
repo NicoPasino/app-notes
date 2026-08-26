@@ -1,4 +1,5 @@
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export const CircleInfoIcon = (props) => (
@@ -38,7 +39,7 @@ export const NavIcon = (props) => (
 );
 
 export const BackIcon = (props) => (
-  <FontAwesome name="arrow-left" size={32} color="white" {...props} />
+  <FontAwesome6 name="arrow-left" size={32} color="white" {...props} />
 );
 
 export const ReloadIcon = (props) => (
@@ -60,7 +61,7 @@ export const DelIcon = (props) => (
 );
 
 export const EditIcon = (props) => (
-  <FontAwesome name="edit" size={25} color="white" {...props} />
+  <FontAwesome6 name="pen" size={18} color="white" {...props} /> // edit / pen
 );
 
 export const ConfirmIcon = (props) => (

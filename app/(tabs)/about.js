@@ -8,16 +8,14 @@ export default function About() {
       <View style={style.body}>
         <Text style={style.tituloAbout}>{"📌 Acerca de:"}</Text>
         <Text style={style.textoAbout}>
-          {"Se puede Ver, Crear y Modificar todas las notas que quieras,"}
-          {"estas notas son públicas y se guardan en una Base de Datos.\n"}
-          {"Esta app aún está en desarrollo, por lo que puede haber fallos."}
+          {"Esta app es un proyecto personal con la finalidad de aprender y mejorar en el desarrollo de aplicaciones móviles y web.\n"}
+          {"Se puede Ver, Crear, Modificar y Eliminar todas las notas que quieras.\n"}
+          {"Estas notas son públicas y se guardan en una Base de Datos."}
         </Text>
         <Text style={style.tituloAbout}>{"🛠️ Tecnologías utilizadas:"}</Text>
         <Text style={style.textoAbout}>
           {" * React Native. \n"}
           {" * .NET. \n"}
-          {" * Entity Framework. \n"}
-          {" * API Rest. \n"}
           {" * MySql. "}
         </Text>
         <Text style={style.tituloAbout}>{"🧑‍💻 Autor: Nicolás Pasino."}</Text>

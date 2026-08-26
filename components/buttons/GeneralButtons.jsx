@@ -1,5 +1,5 @@
 import { Pressable } from "react-native";
-import { BackIcon, CancelIcon } from "../Icons";
+import { BackIcon, CancelIcon, ReloadIcon } from "../Icons";
 import { colores, colorType } from "../utils/colors";
 import { router } from "expo-router";
 
@@ -18,6 +18,16 @@ export function CancelBtn({ accion }) {
     <Pressable onPress={() => accion()}>
       {({ pressed }) => (
         <CancelIcon color={pressed ? colores.pressed : colorType.danger} />
+      )}
+    </Pressable>
+  );
+}
+
+export function ReloadBtn({ accion }) {
+  return (
+    <Pressable onPress={() => accion()}>
+      {({ pressed }) => (
+        <ReloadIcon color={pressed ? colores.pressed : colores.turquesa2} />
       )}
     </Pressable>
   );

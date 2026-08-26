@@ -71,7 +71,7 @@ export function useItems({ itemsDB }) {
   };
   const obtenerItem = async (id, api = false) => {
     if (!items || api) {
-      obtenerItemDb(id);
+      return obtenerItemDb(id);
     } else {
       const itemExistente = items.find(
         (item) => String(item.id) === String(id),
@@ -112,6 +112,7 @@ export function useItems({ itemsDB }) {
     buscarItems,
     loading,
     error,
+    setError,
     mensaje,
     setMensaje,
 

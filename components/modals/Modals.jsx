@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { CancelIcon } from "../Icons";
 import { colorType } from "../utils/colors";
 
-export function AlertDiv({ tipo = "Error", mensaje, setError }) {
+export function AlertDiv({ tipo = "Error", mensaje, link, setError }) {
   const tipoErrorStyle = tipo === "Error" ? styles.error : styles.warning;
 
   return (
@@ -10,6 +10,11 @@ export function AlertDiv({ tipo = "Error", mensaje, setError }) {
       <Text style={{ width: "90%" }}>
         <Text style={{ fontWeight: 900 }}>{tipo}: </Text>
         <Text>{mensaje}</Text>
+        {link && (
+          <Pressable onPress={link.onPress}>
+            <Text style={styles.link}>{link.label}</Text>
+          </Pressable>
+        )}
       </Text>
       {setError != null && (
         <Pressable onPress={() => setError(null)}>
@@ -42,5 +47,11 @@ const styles = StyleSheet.create({
   warning: {
     backgroundColor: "#ffea8d",
     borderColor: "#fff94f",
+  },
+  link: {
+    paddingHorizontal: 4,
+    color: "#4d23d6ff",
+    fontWeight: "bold",
+    textDecorationLine: "underline",
   },
 });

@@ -1,44 +1,58 @@
-import { View, FlatList, StyleSheet, Platform } from "react-native";
-import { Card } from "../../components/Card";
+import { View, ScrollView, StyleSheet } from "react-native";
+import { Card, NewCard } from "../../components/Card";
 import { AlertDiv } from "../../components/modals/Modals";
 import { LoadingBackground } from "../../components/Spinner";
+import { SearchFilter } from "../../components/SearchFilter";
 import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/dataContext";
+import { __IsWeb__ } from "../../config";
+
+function Contenido({ itemsIndex }) {
+  const [filteredItems, setFilteredItems] = useState([]);
+
+  return (
+    <ScrollView
+      keyboardShouldPersistTaps="handled"
+      contentContainerStyle={styles.scrollContent}
+    >
+      <SearchFilter notes={itemsIndex} onFilter={setFilteredItems} />
+      {filteredItems.length > 0 ? (
+        filteredItems.map((item) => <Card key={item.id} note={item} />)
+      ) : (
+        <NewCard />
+      )}
+    </ScrollView>
+  );
+}
 
 export default function Main() {
   const { notasManager } = useContext(DataContext);
-  const { items, error } = notasManager;
-  const [itemsIndex, setItemsIndex] = useState();
+  const { items, error, loading } = notasManager;
+  const [itemsIndex, setItemsIndex] = useState([]);
 
   useEffect(() => {
     setItemsIndex(items);
   }, [items, setItemsIndex]);
 
-  function Contenido() {
-    return (!itemsIndex || itemsIndex.length === 0) && !error ? (
-      <LoadingBackground />
-    ) : (
-      <FlatList
-        style={{ paddingBottom: 150 }}
-        data={itemsIndex}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <Card note={item} />}
-        contentContainerStyle={styles.flatContainer}
-      />
-    );
-  }
-
   return (
-    <View style={{ backgroundColor: "#0a0a23", flex: 1, minHeight: "100vh" }}>
-      {error && <AlertDiv mensaje={error} />}
-      {<Contenido />}
+    <View style={{ backgroundColor: "#0a0a23", flex: 1 }}>
+      {loading ? (
+        <LoadingBackground />
+      ) : error ? (
+        <AlertDiv mensaje={error} />
+      ) : (
+        <Contenido itemsIndex={itemsIndex} />
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  flatContainer: {
+  scrollContent: {
     padding: 16,
-    margin: Platform.OS === "web" ? "auto" : 0,
+    paddingBottom: 150,
+    margin: __IsWeb__ ? "auto" : 0,
+    maxWidth: __IsWeb__ ? 832 : undefined,
+    width: "100%",
   },
 });

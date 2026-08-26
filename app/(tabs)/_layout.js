@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import { StyleSheet, View } from "react-native";
+import { Platform, StyleSheet, View } from "react-native";
 
 import { InfoIcon, NoteIcon } from "../../components/Icons";
 import { colores } from "../../components/utils/colors";
@@ -13,8 +13,14 @@ export default function TabsLayout() {
       <Tabs
         screenOptions={{
           headerShown: false,
-          tabBarStyle: styles.barStyle,
           tabBarActiveTintColor: colores.turquesa,
+          tabBarStyle: styles.barStyle,
+          tabBarItemStyle: {
+            // backgroundColor: "gray",
+            // marginInline: 30,
+            marginBlock: 0,
+          },
+          tabBarLabelStyle: styles.barTextStyle,
         }}
       >
         <Tabs.Screen
@@ -45,14 +51,18 @@ export default function TabsLayout() {
 const styles = StyleSheet.create({
   newBtn: {
     position: "absolute",
-    bottom: 20,
+    bottom: Platform.select({ web: 25, android: 50 }), // altura botón
     left: 0,
     right: 0,
     alignItems: "center",
   },
   barStyle: {
     backgroundColor: "#0a0a15",
-    height: 64,
-    paddingBottom: 8,
+    height: Platform.select({ web: 64, android: 95 }), // altura bar
+  },
+  barTextStyle: {
+    fontSize: 14,
+    // fontFamily: "Georgia",
+    fontWeight: 500,
   },
 });

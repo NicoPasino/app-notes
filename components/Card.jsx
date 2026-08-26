@@ -16,38 +16,13 @@ export function Card({ note }) {
     <Pressable
       key={id}
       onPress={() => router.push(`/${id}`)}
-      style={({ hovered }) => [
-        styles.cardMargin,
-        { transform: [{ scale: hovered ? 1.02 : 1 }] },
-      ]}
+      style={({ hovered }) => [ styles.cardMargin, { transform: [{ scale: hovered ? 1.02 : 1 }] } ]}
     >
       {({ pressed }) => (
-        <View
-          style={[
-            styles.card,
-            {
-              borderColor: colorType[color],
-              backgroundColor: pressed ? "#fff1" : "#fff0",
-            },
-          ]}
-        >
-          <View
-            style={[
-              styles.cardTop,
-              {
-                borderColor: colorType[color],
-                backgroundColor: colorTypeB[color],
-              },
-            ]}
-          >
+        <View style={[ styles.card, { borderColor: colorType[color], backgroundColor: pressed ? "#fff1" : "#fff0" } ]}>
+          <View style={[ styles.cardTop, { borderColor: colorType[color], backgroundColor: colorTypeB[color] } ]}>
             {/* Header */}
-            <Text
-              style={[
-                styles.header,
-                styles.textWithShadow100,
-                { color: colorType[color] },
-              ]}
-            >
+            <Text style={[styles.header, styles.textWithShadow100, { color: colorType[color] } ]}>
               {header.slice(0, showMaxHeader)}
               {header.length > showMaxHeader && "..."}
             </Text>
@@ -66,6 +41,24 @@ export function Card({ note }) {
           </Text>
         </View>
       )}
+    </Pressable>
+  );
+}
+
+export function NewCard() {
+  const router = useRouter();
+
+  return (
+    <Pressable
+      onPress={() => router.push(`/new`)}
+      style={({ hovered }) => [ styles.cardMargin, { transform: [{ scale: hovered ? 1.02 : 1 }] } ]}
+      >
+        {({ pressed }) => (
+          <View style={[styles.newCard, { backgroundColor: pressed ? "#223" : "#112" }]}>
+            <Text style={styles.newCardPlus}>+</Text>
+            <Text style={styles.newCardText}>Nueva Nota</Text>
+          </View>
+        )}
     </Pressable>
   );
 }
@@ -101,6 +94,27 @@ const styles = StyleSheet.create({
     maxWidth: 800, // web
     borderRadius: borderRadius,
     boxShadow: "5px 5px 15px 2px #0008",
+  },
+  newCard: {
+    maxWidth: 800,
+    borderRadius: borderRadius,
+    borderWidth: 2,
+    borderColor: "gray",
+    borderStyle: "dashed",
+    margin: 20,
+    padding: 30,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  newCardPlus: {
+    fontSize: 40,
+    color: "gray",
+    marginTop: -10,
+  },
+  newCardText: {
+    fontSize: 16,
+    color: "gray",
+    marginBottom: 10,
   },
   cardTop: {
     flexDirection: "row",

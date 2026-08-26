@@ -6,13 +6,15 @@ export const detailStyles = StyleSheet.create({
     verticalAlign: "bottom",
     fontWeight: "bold",
     color: "white",
-    backgroundColor: Platform.select({ web: "#0002" }),
-    padding: Platform.select({ web: 8 }),
+    // backgroundColor: "#0002", /* Platform.select({ web: "#0002" }), */
+    padding: 10,
+    display: "flex",
   },
   body: {
     flexDirection: "column",
     justifyContent: "space-between",
     margin: Platform.select({ web: 35 }),
+    flex: 1,
   },
   text: {
     color: "white",
@@ -20,6 +22,8 @@ export const detailStyles = StyleSheet.create({
     paddingBottom: 5,
     borderRadius: 10,
     backgroundColor: "#0003",
+    textAlignVertical: "top",
+    flex: 1,
   },
   info: {
     flexDirection: "row",
@@ -51,7 +55,14 @@ export const detailStyles = StyleSheet.create({
     marginBottom: 25,
     alignContent: "center",
   },
-  wrap: { justifyContent: "space-between", flexDirection: "row", gap: 10 },
+  wrap: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: 25,
+  },
 });
 
 export default detailStyles;
+
+// Platform.select({ web: 8 }),

@@ -45,15 +45,11 @@ export function Header({ edit, data }) {
           headerStyle: { backgroundColor: "#000033" },
           headerTintColor: colores.blanco,
           headerBackVisible: !editMode,
-          headerLeft: () => (
-            <View>
-              {editMode ? (
-                <ConfirmBtn accion={enviarDatos} />
-              ) : (
-                __IsWeb__ && <BackBtn />
-              )}
-            </View>
-          ),
+          headerLeft: () => {
+            if (editMode) return <ConfirmBtn accion={enviarDatos} />;
+            if (__IsWeb__) return <BackBtn />;
+            return null;
+          },
           headerTitle: () => (
             <TituloCont
               header={newData?.header}
@@ -64,32 +60,29 @@ export function Header({ edit, data }) {
               }
             />
           ),
-          headerRight: () => (
-            <View>
-              {editMode ? (
-                // (Editing)
-                <View style={detailStyles.wrap}>
-                  <SelectColorBtn
-                    accion={() => setModalColorVisible(true)}
-                    color={newColor}
-                  />
-                  <CancelBtn
-                    accion={() => {
-                      setEditMode(false);
-                      if (isNew) return router.replace("/");
-                      setNewData(note);
-                    }}
-                  />
-                </View>
-              ) : (
-                // (Reading)
-                <View style={detailStyles.wrap}>
-                  <EditBtn accion={() => setEditMode(true)} />
-                  <DeleteBtn accion={() => eliminar(id)} />
-                </View>
-              )}
-            </View>
-          ),
+          headerRight: () => {
+            if (editMode) return (
+              <View style={detailStyles.wrap}>
+                <SelectColorBtn
+                  accion={() => setModalColorVisible(true)}
+                  color={newColor}
+                />
+                <CancelBtn
+                  accion={() => {
+                    setEditMode(false);
+                    if (isNew) return router.replace("/");
+                    setNewData(note);
+                  }}
+                />
+              </View>
+            );
+            return (
+              <View style={detailStyles.wrap}>
+                <EditBtn accion={() => setEditMode(true)} />
+                <DeleteBtn accion={() => eliminar(id)} />
+              </View>
+            );
+          },
         }}
       />
 
@@ -100,3 +93,7 @@ export function Header({ edit, data }) {
     </>
   );
 }
+
+// Notes: 
+// - No crear componentes de inputs para el Header, ya que se vuelve a renderizar en cada cambio del input.
+// - 
