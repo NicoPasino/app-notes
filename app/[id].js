@@ -1,7 +1,6 @@
 import { useLocalSearchParams, router } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import { View } from "react-native";
-import { defaultData } from "../components/utils/defaultData";
 import { AlertDiv } from "../components/modals/Modals";
 import { Screen } from "../components/Screen";
 import { LoadingBackground } from "../components/Spinner";
@@ -68,8 +67,15 @@ function ContenidoDetail({ modoEdit, data, notasManager }) {
         data={{ newData, setNewData, note, id }}
       />
       <View style={{ flex: 1 }}>
-        <TextoCont data={{ newData, setNewData }} editMode={editMode} />
+        <TextoCont data={{ newData, setNewData }} editMode={editMode} isNew={isNew} />
       </View>
     </>
   );
 }
+
+const defaultData = {
+  header: "",
+  text: "",
+  name: "New",
+  color: "info",
+};

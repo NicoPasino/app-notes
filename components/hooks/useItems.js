@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import showToast from "../utils/toast";
 import { router } from "expo-router";
+import { converToLocal } from "../utils/getDate";
 
 export function useItems({ itemsDB }) {
   const [items, setItems] = useState([]);
@@ -22,7 +23,7 @@ export function useItems({ itemsDB }) {
         return false;
       }
     } catch {
-      setError("Error de código, al checkear la respuesta de la API.");
+      setError("Error de código, error al checkear la respuesta de la API.");
       return true;
     }
   }
@@ -33,6 +34,15 @@ export function useItems({ itemsDB }) {
       const res = await itemsDBArg.obtenerTodos();
       // const res = await itemsDBArg.getCardsVacio();
       // const res = await itemsDBArg.getCardsLocal();
+
+      // Convertir fechas de UTC a local
+      if (res.length > 0) {
+        res.forEach((item) => {
+          item.fechaCreacion = converToLocal(item.fechaCreacion);
+          item.fechaModificacion = converToLocal(item.fechaModificacion);
+        });
+      }
+
       if (hayError(res)) return;
 
       setItems(Array.isArray(res) ? res : []);
@@ -66,6 +76,10 @@ export function useItems({ itemsDB }) {
   };
   const obtenerItemDb = async (id) => {
     const res = await itemsDB.obtenerPorId(id);
+
+    res.fechaCreacion = converToLocal(res.fechaCreacion);
+    res.fechaModificacion = converToLocal(res.fechaModificacion);
+
     if (hayError(res)) return;
     return res;
   };

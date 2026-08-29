@@ -3,6 +3,7 @@ import { memo } from "react";
 import { Loading } from "../Spinner";
 import { colorType } from "../utils/colors";
 import detailStyles from "../utils/detailStyles";
+import { converToLocal, DesglosarFecha } from "../utils/getDate";
 
 const cursorStyle = (editMode) => (!editMode ? "default" : "text");
 
@@ -30,10 +31,9 @@ export function TituloCont({ header, color, editMode, handleHeaderChange }) {
   );
 }
 
-export const TextoCont = memo(function TextoCont({ data, editMode }) {
+export const TextoCont = memo(function TextoCont({ data, editMode, isNew }) {
   if (!data) return <Loading />;
   const { newData, setNewData } = data;
-  const { text, fecha, hora } = newData;
 
   return (
     <ScrollView
@@ -42,10 +42,10 @@ export const TextoCont = memo(function TextoCont({ data, editMode }) {
       contentContainerStyle={{ flexGrow: 1 }}
     >
       <View style={[detailStyles.body]}>
-        {!editMode && (
+        {!editMode && !isNew && (
           <View style={detailStyles.info}>
-            <Text style={detailStyles.textInfo}>{fecha}</Text>
-            <Text style={detailStyles.textInfo}>{hora.substring(0, 5)}</Text>
+            <Text style={detailStyles.textInfo}>Creada: {(DesglosarFecha(newData.fechaCreacion)).fecha}</Text>
+            <Text style={detailStyles.textInfo}>Modificada: hace {(DesglosarFecha(newData.fechaModificacion)).tiempoTranscurrido}</Text>
           </View>
         )}
         <TextInput
@@ -59,7 +59,7 @@ export const TextoCont = memo(function TextoCont({ data, editMode }) {
           editable={editMode}
           onChangeText={(text) => setNewData((prev) => ({ ...prev, text }))}
           maxLength={5000}
-          value={text}
+          value={newData.text}
         />
       </View>
     </ScrollView>

@@ -22,7 +22,7 @@ async function request(path, options = {}) {
     .then(async (res) => {
       if (res.error) {
         return { error: "Error al hacer la petición con el servidor." };
-      } else if (res.status === 202 || res.status === 201) {
+      } else if (res.status === 202 || res.status === 201 || res.status === 204) {
         return { ok: true };
       } else if (res.status === 200) {
         let resJson = await res.json();

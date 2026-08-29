@@ -2,14 +2,13 @@ import { useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
 import { View, Text, StyleSheet, Animated, Pressable } from "react-native";
 import { colorType, colorTypeB } from "./utils/colors";
+import { converToLocal, DesglosarFecha } from "./utils/getDate";
 
 const showMaxHeader = 20;
 const showMaxText = 170;
 
 export function Card({ note }) {
-  const { id, header, text, fecha, color } = note;
-  const [day, month, year] = fecha.replaceAll(/[-/]/g, "-").split("-");
-  const fechaActual = new Date();
+  const { id, header, text, color } = note;
   const router = useRouter();
 
   return (
@@ -29,8 +28,7 @@ export function Card({ note }) {
 
             {/* Fecha */}
             <Text style={styles.fecha}>
-              {day}-{month.slice(0, 3)}
-              {+year === fechaActual.getFullYear() ? "." : `-${year}`}
+              {(DesglosarFecha(note.fechaModificacion)).tiempoTranscurrido}
             </Text>
           </View>
 
