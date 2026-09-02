@@ -2,7 +2,8 @@ import { useRouter } from "expo-router";
 import { useEffect, useRef } from "react";
 import { View, Text, StyleSheet, Animated, Pressable } from "react-native";
 import { colorType, colorTypeB } from "./utils/colors";
-import { converToLocal, DesglosarFecha } from "./utils/getDate";
+import { DesglosarFecha } from "./utils/getDate";
+import { FavoriteIcon } from "./Icons";
 
 const showMaxHeader = 20;
 const showMaxText = 170;
@@ -22,6 +23,7 @@ export function Card({ note }) {
           <View style={[ styles.cardTop, { borderColor: colorType[color], backgroundColor: colorTypeB[color] } ]}>
             {/* Header */}
             <Text style={[styles.header, styles.textWithShadow100, { color: colorType[color] } ]}>
+              {note?.favorito && <FavoriteIcon isFav size={16} color={colorType[color]} />}
               {header.slice(0, showMaxHeader)}
               {header.length > showMaxHeader && "..."}
             </Text>
@@ -124,6 +126,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   header: {
+    display: "flex",
+    gap: 10,
+    flexDirection: "row",
+    alignItems: "center",
     fontSize: 20,
     color: "#7dd3fc",
   },

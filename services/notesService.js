@@ -34,7 +34,7 @@ async function request(path, options = {}) {
       } else if (res.message || res.status === 400) {
         return { message: res.message ?? "Error 400: Solicitud incorrecta." };
       } else if (res.status === 404) {
-        return { error: "Error 404: Solicitud no encontrada." };
+        return { error: "Error 404: Solicitud/Nota no encontrada." };
       } else if (res.status === 500) {
         return { error: "Error 500: Error desde el servidor." };
       } else {
@@ -60,6 +60,8 @@ function buildCollection() {
       if (!id) throw new Error("No se encontró ID en el item para actualizar");
       return request("/", { method: "PUT", body: JSON.stringify(item) });
     },
+    actualizarParcial: async (id, campos) =>
+      request(`/${Number(id)}`, { method: "PATCH", body: JSON.stringify(campos) }),
     getCardsVacio: () => vacio,
     getCardsLocal: () => mockData,
   };

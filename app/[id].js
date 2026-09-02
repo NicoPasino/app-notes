@@ -9,48 +9,70 @@ import { Header } from "../components/idComponents/header";
 import { DataContext } from "../context/dataContext";
 
 export default function Detail() {
-  const { id } = useLocalSearchParams(); // obtener parametros
+  const { id: idParam } = useLocalSearchParams(); // obtener parametros
+  const id = Array.isArray(idParam) ? idParam[0] : idParam;
   const [isNew, setIsNew] = useState(false);
   const [note, setnote] = useState(null);
   const [newData, setNewData] = useState(defaultData);
   const [editMode, setEditMode] = useState(false);
+  const [localError, setLocalError] = useState("");
   const { notasManager } = useContext(DataContext);
-  const { obtenerItem, error } = notasManager;
+  const { obtenerItem, setError } = notasManager;
 
   useEffect(() => {
-    if (id) {
-      if (id === "new") {
-        setIsNew(true);
-        setEditMode(true);
+    if (!id) return;
+
+    if (id === "new") {
+      setIsNew(true);
+      setEditMode(true);
+      return;
+    }
+
+    setError(""); // limpiar error compartido de la lista
+    setLocalError("");
+    setnote(null);
+    setIsNew(false);
+    setEditMode(false);
+
+    async function fetchData() {
+      let res;
+      try {
+        res = await obtenerItem(id);
+      } catch (_err) {
+        setError("");
+        setLocalError("Nota no encontrada");
         return;
       }
-
-      async function fetchData() {
-        let res = await obtenerItem(id);
+      setError(""); // quitar el 404 que hayError dejó en el estado compartido
+      if (res) {
         setnote(res);
         setNewData(res);
+      } else {
+        setLocalError("Nota no encontrada");
       }
-      fetchData();
     }
+    fetchData();
   }, [id]);
 
   return (
     <Screen>
-      {!note && !error && !isNew ? (
+      {!note && !localError && !isNew ? (
         <LoadingBackground />
       ) : (
         <ContenidoDetail
           modoEdit={{ editMode, setEditMode, isNew }}
           data={{ newData, setNewData, note, id }}
           notasManager={notasManager}
+          error={localError}
+          setError={setLocalError}
         />
       )}
     </Screen>
   );
 }
 
-function ContenidoDetail({ modoEdit, data, notasManager }) {
-  const { error, mensaje, setMensaje, setError } = notasManager;
+function ContenidoDetail({ modoEdit, data, notasManager, error, setError }) {
+  const { mensaje, setMensaje } = notasManager;
   const { editMode, setEditMode, isNew } = modoEdit;
   const { newData, setNewData, note, id } = data;
 

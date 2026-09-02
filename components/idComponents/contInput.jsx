@@ -3,7 +3,7 @@ import { memo } from "react";
 import { Loading } from "../Spinner";
 import { colorType } from "../utils/colors";
 import detailStyles from "../utils/detailStyles";
-import { converToLocal, DesglosarFecha } from "../utils/getDate";
+import { DesglosarFecha } from "../utils/getDate";
 
 const cursorStyle = (editMode) => (!editMode ? "default" : "text");
 

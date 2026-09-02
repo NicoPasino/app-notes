@@ -1,5 +1,4 @@
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export const CircleInfoIcon = (props) => (
@@ -46,6 +45,18 @@ export const ReloadIcon = (props) => (
   <FontAwesome name="refresh" size={32} color="white" {...props} />
 );
 
+export const BoxArchiveIcon = (props) => (
+  <FontAwesome6 name="box-archive" size={24} color="black" {...props} />
+);
+
+export const PlaneIcon = (props) => (
+  <FontAwesome6 name="paper-plane" size={24} color="black" {...props} />
+);
+
+export const ShareIcon = (props) => (
+  <FontAwesome6 name="share-nodes" size={24} color="black" {...props} />
+);
+
 // Notes
 
 export const PlusIcon = (props) => (
@@ -66,6 +77,14 @@ export const EditIcon = (props) => (
 
 export const ConfirmIcon = (props) => (
   <FontAwesome name="check" size={25} color="white" {...props} />
+);
+
+export const EllipsisIcon = (props) => (
+  <FontAwesome6 name="ellipsis-vertical" size={22} color="white" {...props} />
+);
+
+export const FavoriteIcon = ({ isFav, ...props }) => (
+  <FontAwesome name={isFav ? "star" : "star-o"} size={20} color="white" {...props} />
 );
 
 export const CancelIcon = (props) => (

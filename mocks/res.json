@@ -1,74 +1,98 @@
 [
   {
-    "id": 7823519,
-    "header": "Albert Einst. LOCAL",
-    "text": "La imaginación es más importante que el conocimiento. El conocimiento es limitado, pero la imaginación abarca el mundo.",
-    "fecha": "12-enero-2022",
-    "hora": "22:05",
-    "name": "Server",
-    "color": "success"
-  },
-  {
-    "id": 7358490,
-    "header": "Marcas de Autos",
-    "text": "Toyota, Ford, Volkswagen, Nissan, Honda",
-    "fecha": "05-junio-2024",
-    "hora": "12:52",
-    "name": "Server",
-    "color": "success"
-  },
-  {
     "id": 3428957,
     "header": "Jardín Abandonado",
     "text": "En un rincón olvidado de la ciudad, había un jardín que había sido abandonado durante décadas. Las plantas y flores que una vez florecieron con vida y color, ahora estaban marchitas y cubiertas de polvo.",
-    "fecha": "20-mayo-2024",
-    "hora": "12:50",
+    "fechaCreacion": "2025-04-20T12:50:08",
+    "fechaModificacion": "2025-04-20T12:50:08",
     "name": "Server",
-    "color": "success"
+    "color": "success",
+    "archivado": true,
+    "eliminado": false,
+    "favorito": true
   },
   {
     "id": 3256785,
     "header": "El Regalo Inesperado",
-    "text": "Un anciano encontró un paquete misterioso en su puerta. Al abrirlo, encontró un reloj de bolsillo antiguo con una nota que decía: \\\"Para recordar el tiempo que te queda\\\". El anciano sonrió, sabiendo que era un recordatorio para vivir cada momento.",
-    "fecha": "07-noviembre-2020",
-    "hora": "08:50",
+    "text": "Un anciano encontró un paquete misterioso en su puerta. Al abrirlo, encontró un reloj de bolsillo antiguo con una nota que decía: \"Para recordar el tiempo que te queda\". El anciano sonrió, sabiendo que era un recordatorio para vivir cada momento.",
+    "fechaCreacion": "2020-11-07T08:50:59",
+    "fechaModificacion": "2025-04-20T10:20:08",
     "name": "Server",
-    "color": "success"
-  },
-  {
-    "id": 9403478,
-    "header": "Acertijo 1",
-    "text": "Estoy siempre delante de ti, pero nunca puedes verme. ¿Qué soy?",
-    "fecha": "01-abril-2025",
-    "hora": "15:21",
-    "name": "New",
-    "color": "warning"
+    "color": "success",
+    "archivado": false,
+    "eliminado": false,
+    "favorito": false
   },
   {
     "id": 9034663,
     "header": "Acertijo 2",
     "text": "Tengo cabeza, pero no cabello. Tengo boca, pero no hablo. ¿Qué soy?",
-    "fecha": "01-abril-2025",
-    "hora": "15:22",
+    "fechaCreacion": "2025-04-01T15:22:12",
+    "fechaModificacion": "2025-04-01T15:23:42",
     "name": "Server",
-    "color": "warning"
+    "color": "warning",
+    "archivado": false,
+    "eliminado": false,
+    "favorito": false
   },
   {
-    "id": 4982047,
-    "header": "Respuesta Acertijo",
-    "text": "El futuro. Siempre está delante de nosotros, pero no podemos verlo porque no ha llegado aún. No podemos predecir con certeza lo que sucederá en el futuro, por lo que siempre está oculto para nosotros.",
-    "fecha": "02-abril-2025",
-    "hora": "16:25",
+    "id": 9403478,
+    "header": "Acertijo 1",
+    "text": "Estoy siempre delante de ti, pero nunca puedes verme. ¿Qué soy?",
+    "fechaCreacion": "2025-04-01T15:21:42",
+    "fechaModificacion": "2025-04-01T15:21:42",
     "name": "Server",
-    "color": "warning"
+    "color": "warning",
+    "archivado": false,
+    "eliminado": false,
+    "favorito": false
   },
   {
     "id": 3561980,
     "header": "Respuesta Acertijo 2",
     "text": "Un río. Tiene una cabeza o nacimiento, pero no tiene cabello. También tiene una boca o desembocadura, pero no habla. Es una forma poética de describir las características de un río.",
-    "fecha": "02-abril-2025",
-    "hora": "16:26",
+    "fechaCreacion": "2025-02-05T16:26:12",
+    "fechaModificacion": "2025-02-05T16:26:12",
     "name": "Server",
-    "color": "warning"
+    "color": "warning",
+    "archivado": false,
+    "eliminado": false,
+    "favorito": false
+  },
+  {
+    "id": 4982047,
+    "header": "Respuesta Acertijo",
+    "text": "El futuro. Siempre está delante de nosotros, pero no podemos verlo porque no ha llegado aún. No podemos predecir con certeza lo que sucederá en el futuro, por lo que siempre está oculto para nosotros.",
+    "fechaCreacion": "2025-02-05T16:25:32",
+    "fechaModificacion": "2025-02-05T16:25:32",
+    "name": "Server",
+    "color": "warning",
+    "archivado": false,
+    "eliminado": false,
+    "favorito": false
+  },
+  {
+    "id": 7358490,
+    "header": "Marcas de Autos",
+    "text": "Toyota, Ford, Volkswagen, Nissan, Honda",
+    "fechaCreacion": "2024-06-05T12:52:08",
+    "fechaModificacion": "2024-06-05T12:52:08",
+    "name": "Server",
+    "color": "success",
+    "archivado": false,
+    "eliminado": true,
+    "favorito": false
+  },
+  {
+    "id": 7823519,
+    "header": "Albert Einstein",
+    "text": "La imaginación es más importante que el conocimiento. El conocimiento es limitado, pero la imaginación abarca el mundo.",
+    "fechaCreacion": "2022-01-12T22:05:38",
+    "fechaModificacion": "2022-01-12T22:05:38",
+    "name": "Server",
+    "color": "success",
+    "archivado": false,
+    "eliminado": false,
+    "favorito": true
   }
 ]

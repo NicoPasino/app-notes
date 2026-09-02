@@ -74,13 +74,20 @@ export function useItems({ itemsDB }) {
     router.replace("/");
     // return res;
   };
+  const actualizarParcial = async ({ id, campos }) => {
+    const res = await itemsDB.actualizarParcial(id, campos);
+    if (hayError(res)) return false;
+    showToast({ texto1: "Actualizado correctamente ✅" });
+    recargarItems(itemsDB);
+    return true;
+  };
   const obtenerItemDb = async (id) => {
     const res = await itemsDB.obtenerPorId(id);
+    if (hayError(res)) return;
 
     res.fechaCreacion = converToLocal(res.fechaCreacion);
     res.fechaModificacion = converToLocal(res.fechaModificacion);
 
-    if (hayError(res)) return;
     return res;
   };
   const obtenerItem = async (id, api = false) => {
@@ -120,6 +127,7 @@ export function useItems({ itemsDB }) {
     items,
     agregar,
     actualizar,
+    actualizarParcial,
     obtenerItem,
     eliminar,
     recargarItems,

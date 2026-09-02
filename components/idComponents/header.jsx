@@ -4,8 +4,8 @@ import { View } from "react-native";
 
 import {
   ConfirmBtn,
-  DeleteBtn,
   EditBtn,
+  EllipsisBtn,
   SelectColorBtn,
 } from "../buttons/EditButtons";
 import { BackBtn, CancelBtn } from "../buttons/GeneralButtons";
@@ -13,6 +13,7 @@ import { colores, colorType } from "../utils/colors";
 import detailStyles from "../utils/detailStyles";
 import { TituloCont } from "../idComponents/contInput";
 import { ModalColorView } from "../modals/ModalColorView";
+import { NoteOptionsMenu } from "../modals/NoteOptionsMenu";
 import { __IsWeb__ } from "../../config";
 import { DataContext } from "../../context/dataContext";
 
@@ -21,9 +22,33 @@ export function Header({ edit, data }) {
   const { newData, setNewData, note, id } = data;
 
   const { notasManager } = useContext(DataContext);
-  const { agregar, actualizar, eliminar } = notasManager;
+  const { agregar, actualizar, actualizarParcial, eliminar, obtenerItem } = notasManager;
   const [modalColorVisible, setModalColorVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
   const newColor = newData ? colorType[newData?.color] : colorType.light;
+
+  const refrescarNota = async () => {
+    const res = await obtenerItem(id, true);
+    if (res) setNewData(res);
+  };
+
+  const favorito = async () => {
+    const ok = await actualizarParcial({
+      id,
+      campos: { favorito: !newData?.favorito },
+    });
+    if (ok) refrescarNota();
+  };
+
+  const archivar = async () => {
+    const ok = await actualizarParcial({ id, campos: { archivado: true } });
+    if (ok) router.replace("/");
+  };
+
+  const papelera = async () => {
+    const ok = await actualizarParcial({ id, campos: { eliminado: true } });
+    if (ok) router.replace("/");
+  };
 
   // TODO: Refactorizar - Exportar
   async function enviarDatos() {
@@ -79,7 +104,17 @@ export function Header({ edit, data }) {
             return (
               <View style={detailStyles.wrap}>
                 <EditBtn accion={() => setEditMode(true)} />
-                <DeleteBtn accion={() => eliminar(id)} />
+                <EllipsisBtn accion={() => setMenuVisible((v) => !v)} />
+                <NoteOptionsMenu
+                  visible={menuVisible}
+                  onClose={() => setMenuVisible(false)}
+                  id={id}
+                  note={newData}
+                  onFavorito={favorito}
+                  onArchivar={archivar}
+                  onPapelera={papelera}
+                  onEliminar={eliminar}
+                />
               </View>
             );
           },

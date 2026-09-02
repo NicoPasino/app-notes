@@ -19,7 +19,7 @@ function HeaderWeb() {
       ]}
     >
       <DownloadIcon color={colores.turquesa2} />
-      <Text style={styles.Titulo}>Download Apk</Text>
+      <Text style={styles.Titulo}>Descargar Apk<br/>para Android</Text>
       <AndroidIcon color={colores.turquesa2} />
     </Pressable>
   );
@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
   Titulo: {
     color: colores.turquesa2,
     fontWeight: "bold",
-    fontSize: 23,
     textAlign: "center",
     fontFamily: "sans-serif",
     paddingInline: 15,
@@ -47,6 +46,7 @@ const styles = StyleSheet.create({
     textShadowColor: colores.turquesa2,
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 15,
+    fontSize: 26,
   },
   downloadBtn: {
     flexDirection: "row",
@@ -55,5 +55,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: "#51afb926",
     borderColor: colores.turquesa,
+    alignItems: "center",
+    alignContent: "center",
+    justifyContent: "center",
   },
 });

@@ -31,7 +31,11 @@ export default function Main() {
   const [itemsIndex, setItemsIndex] = useState([]);
 
   useEffect(() => {
-    setItemsIndex(items);
+    setItemsIndex(
+      items.filter(
+        (item) => item.eliminado !== true && item.archivado !== true,
+      ),
+    );
   }, [items, setItemsIndex]);
 
   return (
@@ -51,6 +55,7 @@ const styles = StyleSheet.create({
   scrollContent: {
     padding: 16,
     paddingBottom: 150,
+    marginTop: 0,
     margin: __IsWeb__ ? "auto" : 0,
     maxWidth: __IsWeb__ ? 832 : undefined,
     width: "100%",

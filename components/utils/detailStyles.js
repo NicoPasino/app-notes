@@ -61,6 +61,11 @@ export const detailStyles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 25,
   },
+  ellipsisBtn: {
+    padding: 8,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 export default detailStyles;
