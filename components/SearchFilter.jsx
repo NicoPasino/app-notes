@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import { colorType } from "./utils/colors";
+import { useContext } from "react";
+import { DataContext } from "../context/dataContext";
 
 const colorKeys = Object.keys(colorType);
 
 export function SearchFilter({ notes, onFilter }) {
   const [query, setQuery] = useState("");
   const [selectedColor, setSelectedColor] = useState(null);
+  const { vista } = useContext(DataContext);
 
   useEffect(() => {
     const q = query.toLowerCase().trim();
@@ -27,7 +30,7 @@ export function SearchFilter({ notes, onFilter }) {
       <View style={styles.searchRow}>
         <TextInput
           style={styles.input}
-          placeholder="Buscar notas..."
+          placeholder={`Buscar en ${vista}...`}
           placeholderTextColor="#555"
           value={query}
           onChangeText={setQuery}

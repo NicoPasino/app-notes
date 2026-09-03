@@ -24,6 +24,7 @@ export function Card({ note }) {
             {/* Header */}
             <Text style={[styles.header, styles.textWithShadow100, { color: colorType[color] } ]}>
               {note?.favorito && <FavoriteIcon isFav size={16} color={colorType[color]} />}
+              {note?.favorito && " "}
               {header.slice(0, showMaxHeader)}
               {header.length > showMaxHeader && "..."}
             </Text>
@@ -127,7 +128,6 @@ const styles = StyleSheet.create({
   },
   header: {
     display: "flex",
-    gap: 10,
     flexDirection: "row",
     alignItems: "center",
     fontSize: 20,
@@ -136,6 +136,8 @@ const styles = StyleSheet.create({
   fecha: {
     fontSize: 11,
     color: "gray",
+    width: 60,
+    textAlign: "right",
   },
   text: {
     fontSize: 14,

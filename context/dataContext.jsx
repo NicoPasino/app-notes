@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import { useItems } from "../components/hooks/useItems";
 import { notasAPI } from "../services/notesService";
 
@@ -8,9 +8,10 @@ export const DataContext = createContext();
 // 2. Crear proveedor
 export function DataProvider({ children }) {
   const notasManager = useItems({ itemsDB: notasAPI });
+  const [vista, setVista] = useState("notas");
 
   return (
-    <DataContext.Provider value={{ notasManager }}>
+    <DataContext.Provider value={{ notasManager, vista, setVista }}>
       {children}
     </DataContext.Provider>
   );
@@ -25,3 +26,4 @@ export function DataProvider({ children }) {
 
 // 3. Usar contexto
 // const [productos] = useContext(DataContext);
+// const { vista, setVista } = useContext(DataContext);

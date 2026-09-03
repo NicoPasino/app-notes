@@ -26,6 +26,7 @@ export const colores = {
   pressed: "#fff5",
 
   blanco: "#fff",
+  gris: "#999",
   turquesa: "#5eeaf9",
   turquesa2: "#7dd3fd",
 };

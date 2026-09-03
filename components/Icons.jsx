@@ -57,6 +57,23 @@ export const ShareIcon = (props) => (
   <FontAwesome6 name="share-nodes" size={24} color="black" {...props} />
 );
 
+export const ListIcon = ({ type = 0, ...props }) => {
+  switch (type) {
+    case 1:
+      return <FontAwesome name="th-list" size={24} color="black" {...props} />;
+    case 2:
+      return <FontAwesome name="th-large" size={24} color="black" {...props} />;
+    case 3:
+      return <FontAwesome name="th" size={24} color="black" {...props} />;
+    default:
+      return <FontAwesome name="list" size={24} color="black" {...props} />;
+  }
+};
+
+export const TrashIcon = ({ isDeleted = false, ...props }) => (
+  <FontAwesome6 name={isDeleted ? "trash-arrow-up" : "trash-alt"} size={24} color="black" {...props} />
+);
+
 // Notes
 
 export const PlusIcon = (props) => (

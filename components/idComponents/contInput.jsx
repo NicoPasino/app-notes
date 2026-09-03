@@ -20,6 +20,7 @@ export function TituloCont({ header, color, editMode, handleHeaderChange }) {
           cursor: cursorStyle(editMode),
           backgroundColor: backgColor(),
         },
+        editMode && { width: "95%", alignSelf: "center", textAlign: "center", borderRadius: 8 },
       ]}
       editable={editMode}
       placeholder="Título..."

@@ -1,12 +1,53 @@
 import { router } from "expo-router";
-import { Linking, Pressable, StyleSheet, Text } from "react-native";
-import { DownloadIcon, AndroidIcon } from "../Icons";
+import { useContext, useState } from "react";
+import { Linking, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { DownloadIcon, AndroidIcon, ListIcon } from "../Icons";
 import { downloadApk } from "../../services/notesService";
-import { colores } from "../utils/colors";
+import { colores, colorType } from "../utils/colors";
 import { __IsWeb__ } from "../../config";
+import { DataContext } from "../../context/dataContext";
+
+const opcionesVista = [
+  { key: "notas", label: "Notas", titulo: "NOTAS", descripcion: "Todas las notas" },
+  { key: "favoritos", label: "Favoritos", titulo: "FAVORITOS", descripcion: "Solo notas favoritas" },
+  { key: "archivados", label: "Archivados", titulo: "ARCHIVADOS", descripcion: "Solo notas archivadas" },
+  { key: "eliminados", label: "Papelera", titulo: "PAPELERA", descripcion: "Solo notas eliminadas" },
+];
 
 export function HeaderTitle() {
-  return __IsWeb__ ? <HeaderWeb /> : <HeaderAIOS />;
+  const { vista } = useContext(DataContext);
+  const opcionActual = opcionesVista.find((o) => o.key === vista) ?? opcionesVista[0];
+
+  return __IsWeb__ ? <HeaderWeb /> : <HeaderAIOS titulo={opcionActual.titulo} />;
+}
+
+export function HeaderRight() {
+  const { vista, setVista } = useContext(DataContext);
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  function seleccionar(key) {
+    setVista(key);
+    setMenuVisible(false);
+  }
+
+  return (
+    <>
+      <Pressable
+        onPress={() => setMenuVisible(true)}
+        style={({ pressed }) => [styles.menuBtn, pressed && styles.menuBtnPressed]}
+        accessibilityLabel="Abrir menú de filtros"
+      >
+        <ListIcon type={3} color={colores.turquesa2} />
+      </Pressable>
+
+      <VistaMenu
+        visible={menuVisible}
+        onClose={() => setMenuVisible(false)}
+        seleccionar={seleccionar}
+        vista={vista}
+      />
+    </>
+  );
 }
 
 function HeaderWeb() {
@@ -25,15 +66,110 @@ function HeaderWeb() {
   );
 }
 
-function HeaderAIOS() {
+function HeaderAIOS({ titulo }) {
   return (
     <Pressable onPress={() => router.replace("/")}>
-      <Text style={[styles.Titulo, styles.textShadow100]}>NOTAS</Text>
+      <Text style={[styles.Titulo, styles.textShadow100]}>{titulo}</Text>
     </Pressable>
   );
 }
 
+function VistaMenu({ visible, onClose, seleccionar, vista }) {
+  return (
+    <Modal
+      transparent
+      animationType="fade"
+      visible={visible}
+      onRequestClose={onClose}
+    >
+      <View style={styles.modalContainer}>
+        <Pressable
+          style={StyleSheet.absoluteFill}
+          onPress={onClose}
+          accessibilityLabel="Cerrar menú"
+        />
+        <View style={styles.menu}>
+          {opcionesVista.map((opcion) => {
+            const activa = opcion.key === vista;
+            return (
+              <Pressable
+                key={opcion.key}
+                style={styles.option}
+                onPress={() => seleccionar(opcion.key)}
+              >
+                <View style={[styles.dot, activa && styles.dotActivo]} />
+                <View style={styles.optionTextCont}>
+                  <Text style={styles.optionText}>{opcion.label}</Text>
+                  <Text style={styles.optionDesc}>{opcion.descripcion}</Text>
+                </View>
+              </Pressable>
+            );
+          })}
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
 const styles = StyleSheet.create({
+  menuBtn: {
+    padding: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: colores.turquesa,
+    backgroundColor: "#51afb926",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  menuBtnPressed: {
+    backgroundColor: "#51afb952",
+  },
+  modalContainer: {
+    flex: 1,
+  },
+  menu: {
+    position: "absolute",
+    top: 64,
+    right: 16,
+    backgroundColor: "#141430",
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#333",
+    paddingVertical: 6,
+    minWidth: 220,
+    zIndex: 1000,
+    elevation: 10,
+  },
+  option: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: colorType.light,
+  },
+  dotActivo: {
+    backgroundColor: colores.turquesa2,
+    borderColor: colores.turquesa2,
+  },
+  optionTextCont: {
+    gap: 2,
+  },
+  optionText: {
+    color: "#f8f9fa",
+    fontSize: 15,
+    fontWeight: "bold",
+  },
+  optionDesc: {
+    color: "gray",
+    fontSize: 12,
+  },
   Titulo: {
     color: colores.turquesa2,
     fontWeight: "bold",

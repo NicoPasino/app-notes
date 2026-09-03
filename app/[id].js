@@ -22,14 +22,15 @@ export default function Detail() {
   useEffect(() => {
     if (!id) return;
 
+    setError("");
+    setLocalError("");
+
     if (id === "new") {
       setIsNew(true);
       setEditMode(true);
       return;
     }
 
-    setError(""); // limpiar error compartido de la lista
-    setLocalError("");
     setnote(null);
     setIsNew(false);
     setEditMode(false);
@@ -43,7 +44,7 @@ export default function Detail() {
         setLocalError("Nota no encontrada");
         return;
       }
-      setError(""); // quitar el 404 que hayError dejó en el estado compartido
+      setError("");
       if (res) {
         setnote(res);
         setNewData(res);

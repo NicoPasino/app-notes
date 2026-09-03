@@ -26,17 +26,38 @@ function Contenido({ itemsIndex }) {
 }
 
 export default function Main() {
-  const { notasManager } = useContext(DataContext);
+  const { notasManager, vista } = useContext(DataContext);
   const { items, error, loading } = notasManager;
   const [itemsIndex, setItemsIndex] = useState([]);
 
   useEffect(() => {
-    setItemsIndex(
-      items.filter(
-        (item) => item.eliminado !== true && item.archivado !== true,
-      ),
-    );
-  }, [items, setItemsIndex]);
+    let filtrados;
+    switch (vista) {
+      case "favoritos":
+        filtrados = items.filter(
+          (item) =>
+            item.favorito === true &&
+            item.eliminado !== true &&
+            item.archivado !== true,
+        );
+        break;
+      case "archivados":
+        filtrados = items.filter(
+          (item) => item.archivado === true && item.eliminado !== true,
+        );
+        break;
+      case "eliminados":
+        filtrados = items.filter((item) => item.eliminado === true);
+        break;
+      case "notas":
+      default:
+        filtrados = items.filter(
+          (item) => item.eliminado !== true && item.archivado !== true,
+        );
+        break;
+    }
+    setItemsIndex(filtrados);
+  }, [items, vista]);
 
   return (
     <View style={{ backgroundColor: "#0a0a23", flex: 1 }}>
