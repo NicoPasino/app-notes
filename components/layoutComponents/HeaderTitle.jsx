@@ -1,7 +1,7 @@
 import { router } from "expo-router";
 import { useContext, useState } from "react";
 import { Linking, Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import { DownloadIcon, AndroidIcon, ListIcon } from "../Icons";
+import { DownloadIcon, AndroidIcon, ListIcon, CloudIcon } from "../Icons";
 import { downloadApk } from "../../services/notesService";
 import { colores, colorType } from "../utils/colors";
 import { __IsWeb__ } from "../../config";
@@ -22,7 +22,7 @@ export function HeaderTitle() {
 }
 
 export function HeaderRight() {
-  const { vista, setVista } = useContext(DataContext);
+  const { vista, setVista, backend, toggleBackend } = useContext(DataContext);
   const [menuVisible, setMenuVisible] = useState(false);
 
   function seleccionar(key) {
@@ -32,13 +32,31 @@ export function HeaderRight() {
 
   return (
     <>
-      <Pressable
-        onPress={() => setMenuVisible(true)}
-        style={({ pressed }) => [styles.menuBtn, pressed && styles.menuBtnPressed]}
-        accessibilityLabel="Abrir menú de filtros"
-      >
-        <ListIcon type={3} color={colores.turquesa2} />
-      </Pressable>
+      <View style={styles.actions}>
+        <Pressable
+          onPress={toggleBackend}
+          style={({ pressed }) => [
+            styles.menuBtn,
+            backend === "api" && styles.cloudBtnActivo,
+            pressed && styles.menuBtnPressed,
+          ]}
+          accessibilityLabel={
+            backend === "api"
+              ? "Usando la API remota. Tocar para usar el almacenamiento local"
+              : "Usando el almacenamiento local. Tocar para usar la API remota"
+          }
+        >
+          <CloudIcon size={24} color={backend === "api" ? colores.turquesa2 : colores.gris} />
+        </Pressable>
+
+        <Pressable
+          onPress={() => setMenuVisible(true)}
+          style={({ pressed }) => [styles.menuBtn, pressed && styles.menuBtnPressed]}
+          accessibilityLabel="Abrir menú de filtros"
+        >
+          <ListIcon type={3} color={colores.turquesa2} />
+        </Pressable>
+      </View>
 
       <VistaMenu
         visible={menuVisible}
@@ -112,6 +130,11 @@ function VistaMenu({ visible, onClose, seleccionar, vista }) {
 }
 
 const styles = StyleSheet.create({
+  actions: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
   menuBtn: {
     padding: 8,
     borderRadius: 10,
@@ -120,6 +143,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#51afb926",
     alignItems: "center",
     justifyContent: "center",
+  },
+  cloudBtnActivo: {
+    borderColor: colores.turquesa2,
+    backgroundColor: "#7dd3fd2e",
   },
   menuBtnPressed: {
     backgroundColor: "#51afb952",

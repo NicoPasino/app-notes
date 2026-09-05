@@ -46,6 +46,13 @@ export function getDate() {
   return DesglosarFecha(new Date());
 }
 
+export function getNowUTC() {
+  // Devuelve la fecha/hora actual en UTC con formato "YYYY-MM-DD HH:mm:ss" (19 chars).
+  const d = new Date();
+  const p = (n) => String(n).padStart(2, "0");
+  return `${d.getUTCFullYear()}-${p(d.getUTCMonth() + 1)}-${p(d.getUTCDate())} ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}:${p(d.getUTCSeconds())}`;
+}
+
 export function converToLocal(fechaUtc) {
   // Se agrega la Z, para que lo reconozca como UTC y lo convierta a la zona local (Ej. Argentina -3hs).
   const dateStr = fechaUtc.endsWith("Z") ? fechaUtc : `${fechaUtc}Z`;
