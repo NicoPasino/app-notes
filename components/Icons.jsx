@@ -70,6 +70,10 @@ export const ListIcon = ({ type = 0, ...props }) => {
   }
 };
 
+export const FolderIcon = ({ isOpen = false, ...props }) => (
+  <FontAwesome6 name={isOpen ? "folder-open" : "folder"} size={24} color="black" {...props} />
+);
+
 export const TrashIcon = ({ isDeleted = false, ...props }) => (
   <FontAwesome6 name={isDeleted ? "trash-arrow-up" : "trash-alt"} size={24} color="black" {...props} />
 );

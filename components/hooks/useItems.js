@@ -8,11 +8,13 @@ export function useItems({ itemsDB }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [mensaje, setMensaje] = useState(false);
+  const [errorConexion, setErrorConexion] = useState(false);
 
   function hayError(res) {
     try {
       if (res?.error) {
         setError(res.error);
+        setErrorConexion(res.esConexion === true);
         return true;
       } else if (res?.message) {
         setMensaje(res.message);
@@ -20,10 +22,12 @@ export function useItems({ itemsDB }) {
       } else {
         setError();
         setMensaje();
+        setErrorConexion(false);
         return false;
       }
     } catch {
       setError("Error de código, error al checkear la respuesta de la API.");
+      setErrorConexion(false);
       return true;
     }
   }
@@ -123,6 +127,8 @@ export function useItems({ itemsDB }) {
     return res;
   };
 
+  const recargar = () => recargarItems(itemsDB);
+
   return {
     items,
     agregar,
@@ -131,12 +137,14 @@ export function useItems({ itemsDB }) {
     obtenerItem,
     eliminar,
     recargarItems,
+    recargar,
     buscarItems,
     loading,
     error,
     setError,
     mensaje,
     setMensaje,
+    esErrorConexion: errorConexion,
 
     getAllLocal,
   };

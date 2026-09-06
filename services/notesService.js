@@ -14,12 +14,18 @@ const apiUrl = miDominio + `/api/notes`;
 
 export const downloadApk = miDominio + "/notes/notes.apk";
 
+const TIMEOUT_MS = 4000;
+
 async function request(path, options = {}) {
-  return await fetch(apiUrl + path, {
-    headers: { "Content-Type": "application/json" },
-    ...options,
-  })
-    .then(async (res) => {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  try {
+    return await fetch(apiUrl + path, {
+      headers: { "Content-Type": "application/json" },
+      signal: controller.signal,
+      ...options,
+    }).then(async (res) => {
       if (res.error) {
         return { error: "Error al hacer la petición con el servidor." };
       } else if (res.status === 202 || res.status === 201 || res.status === 204) {
@@ -40,10 +46,15 @@ async function request(path, options = {}) {
       } else {
         return { error: "Error: (Respuesta no controlada)." };
       }
-    })
-    .catch((e) => {
-      return { error: `Error al intentar conectar con la API del Servidor. \nUrl: ${apiUrl}` };
     });
+  } catch (e) {
+    if (e?.name === "AbortError") {
+      return { error: `La API no respondió en ${TIMEOUT_MS / 1000} segundos.`, esConexion: true };
+    }
+    return { error: "Error al intentar conectar con la API.", esConexion: true };
+  } finally {
+    clearTimeout(timeout);
+  }
 }
 
 function buildCollection() {

@@ -1,17 +1,50 @@
 import { router } from "expo-router";
 import { useContext, useState } from "react";
 import { Linking, Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import { DownloadIcon, AndroidIcon, ListIcon, CloudIcon } from "../Icons";
+import {
+  DownloadIcon,
+  AndroidIcon,
+  CloudIcon,
+  NoteIcon,
+  ArchiveIcon,
+  FavoriteIcon,
+  TrashIcon,
+  FolderIcon,
+} from "../Icons";
 import { downloadApk } from "../../services/notesService";
-import { colores, colorType } from "../utils/colors";
+import { colores } from "../utils/colors";
 import { __IsWeb__ } from "../../config";
 import { DataContext } from "../../context/dataContext";
 
-const opcionesVista = [
-  { key: "notas", label: "Notas", titulo: "NOTAS", descripcion: "Todas las notas" },
-  { key: "favoritos", label: "Favoritos", titulo: "FAVORITOS", descripcion: "Solo notas favoritas" },
-  { key: "archivados", label: "Archivados", titulo: "ARCHIVADOS", descripcion: "Solo notas archivadas" },
-  { key: "eliminados", label: "Papelera", titulo: "PAPELERA", descripcion: "Solo notas eliminadas" },
+export const opcionesVista = [
+  {
+    key: "notas",
+    label: "Notas",
+    titulo: "NOTAS",
+    descripcion: "Notas activas y favoritas",
+    Icono: NoteIcon,
+  },
+  {
+    key: "favoritos",
+    label: "Favoritos",
+    titulo: "FAVORITOS",
+    descripcion: "Notas favoritas",
+    Icono: FavoriteIcon,
+  },
+  {
+    key: "archivados",
+    label: "Archivados",
+    titulo: "ARCHIVADOS",
+    descripcion: "Notas archivadas",
+    Icono: ArchiveIcon,
+  },
+  {
+    key: "eliminados",
+    label: "Papelera",
+    titulo: "PAPELERA",
+    descripcion: "Notas eliminadas",
+    Icono: TrashIcon,
+  },
 ];
 
 export function HeaderTitle() {
@@ -28,11 +61,13 @@ export function HeaderRight() {
   function seleccionar(key) {
     setVista(key);
     setMenuVisible(false);
+    router.navigate("/");
   }
 
   return (
     <>
       <View style={styles.actions}>
+        {/* Botón local/remoto */}
         <Pressable
           onPress={toggleBackend}
           style={({ pressed }) => [
@@ -49,12 +84,13 @@ export function HeaderRight() {
           <CloudIcon size={24} color={backend === "api" ? colores.turquesa2 : colores.gris} />
         </Pressable>
 
+        {/* Botón menú filtros */}
         <Pressable
           onPress={() => setMenuVisible(true)}
           style={({ pressed }) => [styles.menuBtn, pressed && styles.menuBtnPressed]}
           accessibilityLabel="Abrir menú de filtros"
         >
-          <ListIcon type={3} color={colores.turquesa2} />
+          <FolderIcon isOpen={menuVisible} color={colores.turquesa2}/>
         </Pressable>
       </View>
 
@@ -109,16 +145,17 @@ function VistaMenu({ visible, onClose, seleccionar, vista }) {
         <View style={styles.menu}>
           {opcionesVista.map((opcion) => {
             const activa = opcion.key === vista;
+            const Icono = opcion.Icono;
             return (
               <Pressable
                 key={opcion.key}
                 style={styles.option}
                 onPress={() => seleccionar(opcion.key)}
               >
-                <View style={[styles.dot, activa && styles.dotActivo]} />
+                <Icono size={20} color={activa ? colores.turquesa2 : colores.blanco} />
                 <View style={styles.optionTextCont}>
                   <Text style={styles.optionText}>{opcion.label}</Text>
-                  <Text style={styles.optionDesc}>{opcion.descripcion}</Text>
+                  {/* <Text style={styles.optionDesc}>{opcion.descripcion}</Text> */}
                 </View>
               </Pressable>
             );
@@ -173,17 +210,6 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingHorizontal: 14,
     paddingVertical: 12,
-  },
-  dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: colorType.light,
-  },
-  dotActivo: {
-    backgroundColor: colores.turquesa2,
-    borderColor: colores.turquesa2,
   },
   optionTextCont: {
     gap: 2,
