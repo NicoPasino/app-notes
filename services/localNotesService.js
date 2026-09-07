@@ -3,8 +3,7 @@ import { getNowUTC } from "../components/utils/getDate";
 import { validateNote } from "../components/utils/validateNote";
 
 // Backend local de notas. En dispositivos (Android/iOS) usa SQLite (expo-sqlite).
-// En web usa localStorage como capa de persistencia, manteniendo la misma interfaz
-// que notasAPI para poder alternar entre API y local sin tocar el front.
+// En web usa localStorage como capa de persistencia.
 
 const DB_NAME = "notasLocal.db";
 const LS_KEY = "notasLocalStorage";
@@ -114,14 +113,6 @@ function buildCollection() {
     }
   };
 
-  const buscarPorCampo = (campo, valor) => {
-    const lista = __IsWeb__ ? lsGetAll() : obtenerTodos();
-    if (lista?.error || !Array.isArray(lista)) return lista ?? [];
-
-    const v = valor === "true" ? true : valor === "false" ? false : valor;
-    return lista.filter((n) => n[campo] === v);
-  };
-
   const agregar = (item) => {
     const ahora = getNowUTC();
     const nuevaNota = {
@@ -225,24 +216,13 @@ function buildCollection() {
     }
   };
 
-  // getCardsVacio / getCardsLocal se delegan a notasAPI (no hacen falta en local,
-  // pero se exponen con la misma firma para no romper el contrato).
-  const getCardsVacio = () => [];
-  const getCardsLocal = () => {
-    const res = obtenerTodos();
-    return Array.isArray(res) ? res : [];
-  };
-
   return {
     obtenerTodos,
-    buscarPorCampo,
     obtenerPorId,
     agregar,
     eliminar,
     actualizar,
     actualizarParcial,
-    getCardsVacio,
-    getCardsLocal,
   };
 }
 

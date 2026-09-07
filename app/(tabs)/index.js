@@ -2,7 +2,6 @@ import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
 import { Card, NewCard } from "../../components/Card";
 import { AlertDiv } from "../../components/modals/Modals";
 import { LoadingBackground } from "../../components/Spinner";
-import { ApiOfflineWarning } from "../../components/ApiOfflineWarning";
 import { SearchFilter } from "../../components/SearchFilter";
 import { useContext, useEffect, useState } from "react";
 import { DataContext } from "../../context/dataContext";
@@ -15,7 +14,7 @@ function EstadoVacio({ opcion, onIrInicio }) {
   return (
     <View style={styles.emptyCont}>
       <Icono size={44} color={colores.gris} />
-      <Text style={styles.emptyTitle}>Sin notas en {opcion.label}</Text>
+      <Text style={styles.emptyTitle}>Sin {opcion.descripcion.toLowerCase()}</Text>
       <Pressable
         onPress={onIrInicio}
         style={({ pressed }) => [
@@ -51,8 +50,8 @@ function Contenido({ itemsIndex, vista, onIrInicio }) {
 }
 
 export default function Main() {
-  const { notasManager, vista, setVista, backend } = useContext(DataContext);
-  const { items, error, loading, esErrorConexion } = notasManager;
+  const { notasManager, vista, setVista } = useContext(DataContext);
+  const { items, error, loading } = notasManager;
   const [itemsIndex, setItemsIndex] = useState([]);
 
   useEffect(() => {
@@ -89,11 +88,7 @@ export default function Main() {
       {loading ? (
         <LoadingBackground />
       ) : error ? (
-        backend === "api" && esErrorConexion ? (
-          <ApiOfflineWarning mensaje={error} />
-        ) : (
-          <AlertDiv mensaje={error} />
-        )
+        <AlertDiv mensaje={error} />
       ) : (
         <Contenido
           itemsIndex={itemsIndex}

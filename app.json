@@ -9,9 +9,9 @@
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/icon.png",
+      "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#030523"
+      "backgroundColor": "#0A0F23"
     },
     "ios": {
       "supportsTablet": true,
@@ -23,7 +23,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
-        "backgroundColor": "#030523"
+        "backgroundColor": "#0A0F23"
       },
       "edgeToEdgeEnabled": true,
       "package": "com.nikitox.Notas"

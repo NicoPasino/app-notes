@@ -8,13 +8,11 @@ export function useItems({ itemsDB }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [mensaje, setMensaje] = useState(false);
-  const [errorConexion, setErrorConexion] = useState(false);
 
   function hayError(res) {
     try {
       if (res?.error) {
         setError(res.error);
-        setErrorConexion(res.esConexion === true);
         return true;
       } else if (res?.message) {
         setMensaje(res.message);
@@ -22,12 +20,10 @@ export function useItems({ itemsDB }) {
       } else {
         setError();
         setMensaje();
-        setErrorConexion(false);
         return false;
       }
     } catch {
-      setError("Error de código, error al checkear la respuesta de la API.");
-      setErrorConexion(false);
+      setError("Error de código, error al responder la base local.");
       return true;
     }
   }
@@ -35,13 +31,11 @@ export function useItems({ itemsDB }) {
   async function recargarItems(itemsDBArg) {
     setLoading(true);
     try {
-      const res = await itemsDBArg.obtenerTodos();
-      // const res = await itemsDBArg.getCardsVacio();
-      // const res = await itemsDBArg.getCardsLocal();
+      const res = await itemsDBArg?.obtenerTodos();
 
       // Convertir fechas de UTC a local
-      if (res.length > 0) {
-        res.forEach((item) => {
+      if (res?.length > 0) {
+        res?.forEach((item) => {
           item.fechaCreacion = converToLocal(item.fechaCreacion);
           item.fechaModificacion = converToLocal(item.fechaModificacion);
         });
@@ -53,6 +47,7 @@ export function useItems({ itemsDB }) {
     } catch (err) {
       setError(err?.message || String(err));
       setItems([]);
+      // console.error(err);
     } finally {
       setLoading(false);
     }
@@ -85,7 +80,7 @@ export function useItems({ itemsDB }) {
     recargarItems(itemsDB);
     return true;
   };
-  const obtenerItemDb = async (id) => {
+  const obtenerItem = async (id) => {
     const res = await itemsDB.obtenerPorId(id);
     if (hayError(res)) return;
 
@@ -93,18 +88,6 @@ export function useItems({ itemsDB }) {
     res.fechaModificacion = converToLocal(res.fechaModificacion);
 
     return res;
-  };
-  const obtenerItem = async (id, api = false) => {
-    if (!items || api) {
-      return obtenerItemDb(id);
-    } else {
-      const itemExistente = items.find(
-        (item) => String(item.id) === String(id),
-      );
-
-      if (itemExistente) return itemExistente;
-      else return await obtenerItemDb(id);
-    }
   };
   const eliminar = async (id) => {
     const res = await itemsDB.eliminar(Number(id));
@@ -115,20 +98,6 @@ export function useItems({ itemsDB }) {
     // return res;
   };
 
-  const buscarItems = async (campo, valor) => {
-    const res = await itemsDB.buscarPorCampo(campo, valor);
-    if (hayError(res)) return;
-    setItems(res);
-  };
-
-  const getAllLocal = async () => {
-    const res = await itemsDB.getCardsLocal();
-    if (hayError(res)) return;
-    return res;
-  };
-
-  const recargar = () => recargarItems(itemsDB);
-
   return {
     items,
     agregar,
@@ -136,16 +105,10 @@ export function useItems({ itemsDB }) {
     actualizarParcial,
     obtenerItem,
     eliminar,
-    recargarItems,
-    recargar,
-    buscarItems,
     loading,
     error,
     setError,
     mensaje,
     setMensaje,
-    esErrorConexion: errorConexion,
-
-    getAllLocal,
   };
 }

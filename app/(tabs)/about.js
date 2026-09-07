@@ -13,24 +13,18 @@ export default function About() {
       >
         <Text style={style.tituloAbout}>{"📌 Acerca de:"}</Text>
         <Text style={style.textoAbout}>
-          {"Esta app es un proyecto personal con la finalidad de aprender y mejorar en el desarrollo de aplicaciones móviles y web.\n\n"}
-          {"Las notas en local son privadas y solo se pueden acceder desde el dispositivo (no se comparten ni suben a ningún lado).\n"}
-          {"Cuando se usa el servidor, las notas son públicas, se pueden ver, editar y eliminar las notas publicadas.\n"}
+          {"Esta app es un proyecto personal con la finalidad de aprender y mejorar en el desarrollo de aplicaciones móviles y web.\n"}
+          {"Anteriormente funcionaba con una API remota (.NET y MySQL), pero actualmente las notas se guardan localmente en el dispositivo de forma privada.\n"}
         </Text>
 
         <Text style={style.tituloAbout}>{"📌 Funcionalidades:"}</Text>
         <Text style={style.textoAbout}>
           {[
-            "Ver",
-            "Buscar",
-            "Filtrar",
-            "Crear",
-            "Editar",
-            "Archivar",
-            "Marcar como favorito",
-            "Enviar a la papelera",
-            "Eliminar permanentemente",
-            "Alternar notas entre local y públicas",
+            "Ver, Buscar, Filtrar.",
+            "Crear, Editar.",
+            "Archivar, marcar como Favorito.",
+            "Enviar a la papelera.",
+            "Eliminar permanentemente.",
           ]
             .map((f) => ` - ${f}\n`)
             .join("")}
@@ -38,13 +32,19 @@ export default function About() {
 
         <Text style={style.tituloAbout}>{"🛠️ Tecnologías utilizadas:"}</Text>
         <Text style={style.textoAbout}>
-          {" - React Native.\n - .NET.\n - MySql.\n - SQLite.\n"}
+          {" - React Native.\n - SQLite.\n"}
+        </Text>
+
+        <Text style={style.tituloAbout}>{"💻 Repositorio: "}</Text>
+        <Text style={style.textoAbout}>
+          {"GitHub: "}
+          <LinkText url="github.com/NicoPasino/app-notes" />
         </Text>
 
         <Text style={style.tituloAbout}>{"🧑‍💻 Autor: Nicolás Pasino."}</Text>
         <Text style={style.textoAbout}>
           {"LinkedIn: "}
-          <LinkText url="www.linkedin.com/in/nicolas-pasino" />
+          <LinkText url="linkedin.com/in/nicolas-pasino" />
           <Br />
           {"GitHub: "}
           <LinkText url="github.com/NicoPasino" />
