@@ -21,7 +21,7 @@ export function useNoteActions({
 
   const refrescarNota = async () => {
     if (!id || id === "new") return null;
-    const res = await obtenerItem(id, true);
+    const res = await obtenerItem(id);
     if (res && updateNoteState) updateNoteState(res);
     return res;
   };

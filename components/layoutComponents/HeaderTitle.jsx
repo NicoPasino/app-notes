@@ -4,14 +4,13 @@ import { Linking, Modal, Pressable, StyleSheet, Text, View } from "react-native"
 import {
   DownloadIcon,
   AndroidIcon,
-  CloudIcon,
   NoteIcon,
   ArchiveIcon,
   FavoriteIcon,
   TrashIcon,
   FolderIcon,
 } from "../Icons";
-import { downloadApk } from "../../services/notesService";
+import { downloadApk } from "../../config";
 import { colores } from "../utils/colors";
 import { __IsWeb__ } from "../../config";
 import { DataContext } from "../../context/dataContext";
@@ -55,7 +54,7 @@ export function HeaderTitle() {
 }
 
 export function HeaderRight() {
-  const { vista, setVista, backend, toggleBackend } = useContext(DataContext);
+  const { vista, setVista } = useContext(DataContext);
   const [menuVisible, setMenuVisible] = useState(false);
 
   function seleccionar(key) {
@@ -67,23 +66,6 @@ export function HeaderRight() {
   return (
     <>
       <View style={styles.actions}>
-        {/* Botón local/remoto */}
-        <Pressable
-          onPress={toggleBackend}
-          style={({ pressed }) => [
-            styles.menuBtn,
-            backend === "api" && styles.cloudBtnActivo,
-            pressed && styles.menuBtnPressed,
-          ]}
-          accessibilityLabel={
-            backend === "api"
-              ? "Usando la API remota. Tocar para usar el almacenamiento local"
-              : "Usando el almacenamiento local. Tocar para usar la API remota"
-          }
-        >
-          <CloudIcon size={24} color={backend === "api" ? colores.turquesa2 : colores.gris} />
-        </Pressable>
-
         {/* Botón menú filtros */}
         <Pressable
           onPress={() => setMenuVisible(true)}
@@ -180,10 +162,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#51afb926",
     alignItems: "center",
     justifyContent: "center",
-  },
-  cloudBtnActivo: {
-    borderColor: colores.turquesa2,
-    backgroundColor: "#7dd3fd2e",
   },
   menuBtnPressed: {
     backgroundColor: "#51afb952",

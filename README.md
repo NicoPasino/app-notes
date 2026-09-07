@@ -1,7 +1,7 @@
 # 📌 App Notas
 
-## 📝 Aplicación móvil y web de notas.
- (Este proyecto aún está en Desarrollo).
+## 📝 App Notas (móvil y web)
+Esta app es un proyecto personal con la finalidad de aprender y mejorar en el desarrollo de aplicaciones móviles (android).
 
 
 ## 🚀 Funcionalidades principales:
@@ -16,10 +16,9 @@
 - Frameworks: `React Native`.
 - Almacenamiento: `SQLite`.
 
-<!-- 
-## 📌 Estado del proyecto:
-Este proyecto aún está en Desarrollo. -->
 
+## 📌 Estado del proyecto:
+Este proyecto aún está en Desarrollo.
 
 
 <!-- 
@@ -33,7 +32,6 @@ app-notes/
 ``` -->
 
 
-
 <!-- 
 ## 🖼️ Capturas de pantalla:
 ...
@@ -42,36 +40,17 @@ app-notes/
 
 
 ## 💡 Posibles mejoras / Roadmap:
+- Opciones para compartir y exportar notas.
 - Listas de tareas.
-- Recordatorios.
 - Dashboard.
+- Temas y colores.
+- Recordatorios.
 - Configuración de la app.
-- Temas.
-- Widget para la pantalla de inicio (Android).
-- Opciones para compartir notas.
-- Copia de seguridad y restauración de notas.
 - Sincronización con la nube.
-
-
-<!--   
-⚙️ Instalación y ejecución
-...
-```bash
-  # Clonar el repositorio
-  git clone https://github.com/usuario/sistema-ventas.git
-
-  # Ingresar al directorio
-  cd sistema-ventas
-
-  # Instalar dependencias
-  npm install
-
-  # Ejecutar
-  npm start
-  ``` -->
+- Copia de seguridad y restauración de notas.
+- Widget para la pantalla de inicio (Android).
 
 
 ## 🧑‍💻 Autor:
 Nicolás Pasino - nico_pasino@hotmail.com,
 [LinkedIn](https://www.linkedin.com/in/nicolas-pasino/) | [Portfolio](https://nicopasino.space)
-
