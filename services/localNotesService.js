@@ -9,11 +9,29 @@ const DB_NAME = "notasLocal.db";
 const LS_KEY = "notasLocalStorage";
 const WINDOW = typeof window !== "undefined" ? window : null;
 
+// ---------- Normalización de notas ----------
+function normalizeNote(note) {
+  if (!note || typeof note !== "object") return note;
+  return {
+    ...note,
+    header: note.header ?? "",
+    text: note.text ?? "",
+    fechaCreacion: note.fechaCreacion ?? "",
+    fechaModificacion: note.fechaModificacion ?? "",
+    name: note.name ?? "",
+    color: note.color ?? "",
+    favorito: !!note.favorito,
+    archivado: !!note.archivado,
+    eliminado: !!note.eliminado,
+  };
+}
+
 // ---------- Capa de persistencia (web) ----------
 function lsGetAll() {
   try {
     const raw = WINDOW?.localStorage?.getItem(LS_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const lista = raw ? JSON.parse(raw) : [];
+    return Array.isArray(lista) ? lista.map(normalizeNote) : [];
   } catch {
     return [];
   }
@@ -85,8 +103,31 @@ function generarId() {
   return Math.floor(Math.random() * (9999999 - 1 + 1)) + 1;
 }
 
+const MAX_INTENTOS_ID = 100;
+
 function buildCollection() {
   const db = __IsWeb__ ? null : getDb();
+
+  const existeId = (id) => {
+    const nid = Number(id);
+    if (__IsWeb__) return lsGetAll().some((n) => Number(n.id) === nid);
+    try {
+      return !!db.getFirstSync("SELECT 1 FROM notas WHERE id = ?", [nid]);
+    } catch {
+      return false;
+    }
+  };
+
+  // Genera un id libre, reintentando ante colisiones.
+  const generarIdLibre = () => {
+    let id = generarId();
+    let intentos = 0;
+    while (existeId(id) && intentos < MAX_INTENTOS_ID) {
+      id = generarId();
+      intentos++;
+    }
+    return id;
+  };
 
   const obtenerTodos = () => {
     if (__IsWeb__) return lsGetAll();
@@ -115,9 +156,12 @@ function buildCollection() {
 
   const agregar = (item) => {
     const ahora = getNowUTC();
-    const nuevaNota = {
+    const idProvisto = item?.id !== undefined && item?.id !== null;
+    let id = idProvisto ? item.id : generarIdLibre();
+
+    const construirNota = () => ({
       ...item,
-      id: item.id ?? generarId(),
+      id,
       name: item.name ?? "Local",
       color: item.color ?? "info",
       favorito: item.favorito ?? false,
@@ -125,31 +169,44 @@ function buildCollection() {
       eliminado: item.eliminado ?? false,
       fechaCreacion: item.fechaCreacion ?? ahora,
       fechaModificacion: item.fechaModificacion ?? ahora,
-    };
-
-    const validacion = validateNote(nuevaNota, { crear: true });
-    if (!validacion.ok) return { message: validacion.message };
+    });
 
     if (__IsWeb__) {
+      const nuevaNota = construirNota();
+      const validacion = validateNote(nuevaNota, { crear: true });
+      if (!validacion.ok) return { message: validacion.message };
+
       const lista = lsGetAll();
       if (lista.some((n) => Number(n.id) === Number(nuevaNota.id))) {
         return { message: "Ya existe una nota con ese id." };
       }
-      lsSetAll([...lista, nuevaNota]);
+      lsSetAll([...lista, normalizeNote(nuevaNota)]);
       return { ok: true };
     }
 
     try {
-      const row = toRow(nuevaNota);
-      db.runSync(
-        `INSERT INTO notas (id, header, text, fechaCreacion, fechaModificacion, name, color, favorito, archivado, eliminado)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-          row.id, row.header, row.text, row.fechaCreacion, row.fechaModificacion,
-          row.name, row.color, row.favorito, row.archivado, row.eliminado,
-        ],
-      );
-      return { ok: true };
+      for (let intento = 0; ; intento++) {
+        const nuevaNota = construirNota();
+        const validacion = validateNote(nuevaNota, { crear: true });
+        if (!validacion.ok) return { message: validacion.message };
+
+        try {
+          const row = toRow(nuevaNota);
+          db.runSync(
+            `INSERT INTO notas (id, header, text, fechaCreacion, fechaModificacion, name, color, favorito, archivado, eliminado)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+              row.id, row.header, row.text, row.fechaCreacion, row.fechaModificacion,
+              row.name, row.color, row.favorito, row.archivado, row.eliminado,
+            ],
+          );
+          return { ok: true };
+        } catch (err) {
+          // Ante colisión de un id generado, reintentar con otro id.
+          if (idProvisto || intento >= MAX_INTENTOS_ID) throw err;
+          id = generarIdLibre();
+        }
+      }
     } catch {
       return { error: "No se pudo guardar la nota en el dispositivo." };
     }

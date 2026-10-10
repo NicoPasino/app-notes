@@ -54,8 +54,14 @@ export function getNowUTC() {
 }
 
 export function converToLocal(fechaUtc) {
+  // Si la fecha es nula/ausente/malformada, devolver "" en lugar de lanzar.
+  if (typeof fechaUtc !== "string" || fechaUtc.trim() === "") return "";
+
   // Se agrega la Z, para que lo reconozca como UTC y lo convierta a la zona local (Ej. Argentina -3hs).
   const dateStr = fechaUtc.endsWith("Z") ? fechaUtc : `${fechaUtc}Z`;
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return "";
+
   return DesglosarFecha(dateStr).fechaDate; // "2026-01-22 00:00:00"
 }
 

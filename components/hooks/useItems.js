@@ -33,11 +33,18 @@ export function useItems({ itemsDB }) {
     try {
       const res = await itemsDBArg?.obtenerTodos();
 
-      // Convertir fechas de UTC a local
-      if (res?.length > 0) {
-        res?.forEach((item) => {
-          item.fechaCreacion = converToLocal(item.fechaCreacion);
-          item.fechaModificacion = converToLocal(item.fechaModificacion);
+      // Convertir fechas de UTC a local. Se protege cada item para que una
+      // sola nota corrupta no rompa la carga de toda la lista.
+      if (Array.isArray(res)) {
+        res.forEach((item) => {
+          try {
+            item.fechaCreacion = converToLocal(item.fechaCreacion);
+            item.fechaModificacion = converToLocal(item.fechaModificacion);
+          } catch {
+            // Item inválido: se descarta la fecha pero se conserva la nota.
+            item.fechaCreacion = "";
+            item.fechaModificacion = "";
+          }
         });
       }
 
@@ -46,7 +53,7 @@ export function useItems({ itemsDB }) {
       setItems(Array.isArray(res) ? res : []);
     } catch (err) {
       setError(err?.message || String(err));
-      setItems([]);
+      // No se vacía la lista para no perder datos válidos ya cargados.
       // console.error(err);
     } finally {
       setLoading(false);
@@ -83,6 +90,7 @@ export function useItems({ itemsDB }) {
   const obtenerItem = async (id) => {
     const res = await itemsDB.obtenerPorId(id);
     if (hayError(res)) return;
+    if (!res) return null;
 
     res.fechaCreacion = converToLocal(res.fechaCreacion);
     res.fechaModificacion = converToLocal(res.fechaModificacion);

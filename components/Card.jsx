@@ -9,7 +9,9 @@ const showMaxHeader = 20;
 const showMaxText = 170;
 
 export function Card({ note }) {
-  const { id, header, text, color } = note;
+  const { id, color } = note;
+  const header = note.header ?? "";
+  const text = note.text ?? "";
   const router = useRouter();
 
   return (
