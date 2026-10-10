@@ -1,5 +1,12 @@
 import { Alert, Modal, Platform, Pressable, StyleSheet, Text, View } from "react-native";
-import { BoxArchiveIcon, DelIcon, TrashIcon, FavoriteIcon } from "../Icons";
+import {
+  BoxArchiveIcon,
+  DelIcon,
+  DownloadIcon,
+  ShareIcon,
+  TrashIcon,
+  FavoriteIcon,
+} from "../Icons";
 import { colores, colorType } from "../utils/colors";
 import { useNoteActions } from "../hooks/useNoteActions";
 
@@ -70,6 +77,16 @@ export function NoteOptionsMenu({
           accessibilityLabel="Cerrar menú"
         />
         <View style={styles.menu}>
+          <Pressable style={styles.option} onPress={opcion(() => actions.compartir())}>
+            <ShareIcon color={colores.blanco} />
+            <Text style={styles.optionText}>Compartir</Text>
+          </Pressable>
+
+          <Pressable style={styles.option} onPress={opcion(() => actions.guardar())}>
+            <DownloadIcon color={colores.blanco} size={22} />
+            <Text style={styles.optionText}>Guardar como .txt</Text>
+          </Pressable>
+
           {!note?.eliminado &&
             <Pressable style={styles.option} onPress={opcion(() => handleFavorito())}>
               <FavoriteIcon isFav={note?.favorito} color={note?.favorito ? colorType.warning : colorType.light} />
