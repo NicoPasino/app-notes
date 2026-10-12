@@ -8,11 +8,6 @@
     "scheme": "notes",
     "userInterfaceStyle": "dark",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#0A0F23"
-    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.nikitox.Notas",
@@ -38,7 +33,16 @@
     },
     "plugins": [
       "expo-router",
-      "expo-sharing"
+      "expo-sharing",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#0A0F23"
+        }
+      ]
     ]
   }
 }
