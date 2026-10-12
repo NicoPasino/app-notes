@@ -36,3 +36,12 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# markdowns
+markdowns/
+
+# issues
+issues/
+
+# agents
+AGENTS.md
