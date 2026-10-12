@@ -1,11 +1,15 @@
 import { useLocalSearchParams, router } from "expo-router";
 import { useContext, useEffect, useState } from "react";
-import { View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { AlertDiv } from "../components/modals/Modals";
 import { Screen } from "../components/Screen";
 import { LoadingBackground } from "../components/Spinner";
 import { TextoCont } from "../components/idComponents/contInput";
 import { Header } from "../components/idComponents/header";
+import { LockIcon } from "../components/Icons";
+import { PinModal } from "../components/modals/PinModal";
+import { useNoteActions } from "../components/hooks/useNoteActions";
+import { colores } from "../components/utils/colors";
 import { DataContext } from "../context/dataContext";
 
 export default function Detail() {
@@ -15,6 +19,7 @@ export default function Detail() {
   const [note, setnote] = useState(null);
   const [newData, setNewData] = useState(defaultData);
   const [editMode, setEditMode] = useState(false);
+  const [unlocked, setUnlocked] = useState(false);
   const [localError, setLocalError] = useState("");
   const { notasManager } = useContext(DataContext);
   const { obtenerItem, setError } = notasManager;
@@ -24,6 +29,7 @@ export default function Detail() {
 
     setError("");
     setLocalError("");
+    setUnlocked(false);
 
     if (id === "new") {
       setIsNew(true);
@@ -66,13 +72,16 @@ export default function Detail() {
           notasManager={notasManager}
           error={localError}
           setError={setLocalError}
+          locked={!!newData?.locked && !unlocked}
+          viewable={!newData?.locked || unlocked}
+          onUnlocked={() => setUnlocked(true)}
         />
       )}
     </Screen>
   );
 }
 
-function ContenidoDetail({ modoEdit, data, notasManager, error, setError }) {
+function ContenidoDetail({ modoEdit, data, notasManager, error, setError, locked, viewable, onUnlocked }) {
   const { mensaje, setMensaje } = notasManager;
   const { editMode, setEditMode, isNew } = modoEdit;
   const { newData, setNewData, note, id } = data;
@@ -88,13 +97,62 @@ function ContenidoDetail({ modoEdit, data, notasManager, error, setError }) {
       <Header
         edit={{ editMode, setEditMode, isNew }}
         data={{ newData, setNewData, note, id }}
+        locked={locked}
+        viewable={viewable}
       />
       <View style={{ flex: 1 }}>
-        <TextoCont data={{ newData, setNewData }} editMode={editMode} isNew={isNew} />
+        {locked ? (
+          <LockedNote note={note} setNewData={setNewData} onUnlocked={onUnlocked} />
+        ) : (
+          <TextoCont data={{ newData, setNewData }} editMode={editMode} isNew={isNew} />
+        )}
       </View>
     </>
   );
 }
+
+function LockedNote({ note, setNewData, onUnlocked }) {
+  const { verificarPin } = useNoteActions({ note, setNote: setNewData });
+
+  return (
+    <View style={styles.lockedCont}>
+      <LockIcon size={56} color={colores.turquesa2} />
+      <Text style={styles.lockedTitle}>Nota bloqueada</Text>
+      <Text style={styles.lockedText}>
+        Ingresá el PIN para ver/editar la nota. Si salís y volvés, se pedirá de nuevo.
+      </Text>
+      <PinModal
+        visible
+        mode="enter"
+        title="Nota bloqueada"
+        description="Ingresá el PIN para ver la nota."
+        onClose={() => router.replace("/")}
+        onSuccess={onUnlocked}
+        onSubmit={(pin) => verificarPin(pin)}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  lockedCont: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
+    padding: 24,
+  },
+  lockedTitle: {
+    color: "white",
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  lockedText: {
+    color: colores.gris,
+    fontSize: 15,
+    textAlign: "center",
+  },
+});
 
 const defaultData = {
   header: "",

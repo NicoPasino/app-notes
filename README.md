@@ -7,7 +7,7 @@ Esta app es un proyecto personal con la finalidad de aprender y mejorar en el de
 
 ## 🚀 Funcionalidades principales:
 - Ver, Buscar, Filtrar.
-- Crear, Editar.
+- Crear, Editar, Bloquear y Desbloquear notas.
 - Compartir y exportar notas.
 - Archivar, Marcar como favorito.
 - Enviar a la papelera, Eliminar permanentemente.

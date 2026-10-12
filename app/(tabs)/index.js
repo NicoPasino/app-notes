@@ -65,6 +65,14 @@ export default function Main() {
             item.archivado !== true,
         );
         break;
+      case "bloqueados":
+        filtrados = items.filter(
+          (item) =>
+            item.locked === true &&
+            item.eliminado !== true &&
+            item.archivado !== true,
+        );
+        break;
       case "archivados":
         filtrados = items.filter(
           (item) => item.archivado === true && item.eliminado !== true,

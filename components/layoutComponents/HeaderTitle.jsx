@@ -9,6 +9,7 @@ import {
   FavoriteIcon,
   TrashIcon,
   FolderIcon,
+  LockIcon,
 } from "../Icons";
 import { downloadApk } from "../../config";
 import { colores } from "../utils/colors";
@@ -29,6 +30,13 @@ export const opcionesVista = [
     titulo: "FAVORITOS",
     descripcion: "Notas favoritas",
     Icono: FavoriteIcon,
+  },
+  {
+    key: "bloqueados",
+    label: "Bloqueados",
+    titulo: "BLOQUEADOS",
+    descripcion: "Notas bloqueadas",
+    Icono: LockIcon,
   },
   {
     key: "archivados",

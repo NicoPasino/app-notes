@@ -6,6 +6,7 @@ import { File, Paths } from "expo-file-system";
 import * as Sharing from "expo-sharing";
 import { DataContext } from "../../context/dataContext";
 import { showToast } from "../utils/toast";
+import { hashPin, verifyPin } from "../utils/pinHash";
 
 function obtenerContenido(note) {
   const header = note?.header?.trim();
@@ -195,6 +196,37 @@ export function useNoteActions({
     }
   };
 
+  const verificarPin = async (pin) => {
+    if (!currentNote?.pin) return { error: "La nota no tiene PIN." };
+    const ok = await verifyPin(pin, currentNote.pin);
+    return ok ? { ok: true } : { error: "PIN incorrecto." };
+  };
+
+  const bloquear = async (pin) => {
+    if (!id || id === "new") return { error: "No se puede bloquear una nota nueva." };
+    try {
+      const hash = await hashPin(pin);
+      const ok = await actualizarParcial({ id, campos: { locked: true, pin: hash } });
+      if (!ok) return { error: "No se pudo bloquear la nota." };
+      await refrescarNota();
+      showToast({ texto1: "Nota bloqueada 🔒" });
+      return { ok: true };
+    } catch {
+      return { error: "No se pudo bloquear la nota." };
+    }
+  };
+
+  const desbloquear = async (pin) => {
+    if (!id || id === "new") return { error: "Nota inválida." };
+    const res = await verificarPin(pin);
+    if (res.error) return res;
+    const ok = await actualizarParcial({ id, campos: { locked: false, pin: null } });
+    if (!ok) return { error: "No se pudo desbloquear la nota." };
+    await refrescarNota();
+    showToast({ texto1: "Nota desbloqueada 🔓" });
+    return { ok: true };
+  };
+
   const enviarDatos = async () => {
     const itemToSave = {
       id: isNew ? undefined : (note?.id || id),
@@ -220,6 +252,9 @@ export function useNoteActions({
     eliminarPermanente,
     compartir,
     guardar,
+    bloquear,
+    desbloquear,
+    verificarPin,
     enviarDatos,
   };
 }

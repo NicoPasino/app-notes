@@ -108,6 +108,14 @@ export const FavoriteIcon = ({ isFav, ...props }) => (
   <FontAwesome name={isFav ? "star" : "star-o"} size={20} color="white" {...props} />
 );
 
+export const LockIcon = (props) => (
+  <FontAwesome name="lock" size={20} color="white" {...props} />
+);
+
+export const UnlockIcon = (props) => (
+  <FontAwesome name="unlock-alt" size={20} color="white" {...props} />
+);
+
 export const CancelIcon = (props) => (
   <FontAwesome name="close" size={28} color="white" {...props} />
 );

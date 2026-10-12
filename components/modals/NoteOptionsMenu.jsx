@@ -1,14 +1,18 @@
+import { useState } from "react";
 import { Alert, Modal, Platform, Pressable, StyleSheet, Text, View } from "react-native";
 import {
   BoxArchiveIcon,
   DelIcon,
   DownloadIcon,
+  LockIcon,
   ShareIcon,
   TrashIcon,
+  UnlockIcon,
   FavoriteIcon,
 } from "../Icons";
 import { colores, colorType } from "../utils/colors";
 import { useNoteActions } from "../hooks/useNoteActions";
+import { PinModal } from "./PinModal";
 
 export { useNoteActions };
 
@@ -22,12 +26,15 @@ export function NoteOptionsMenu({
   onArchivar,
   onPapelera,
   onEliminar,
+  viewable,
 }) {
   const actions = useNoteActions({ id, note, setNote: onUpdate });
+  const [pinVisible, setPinVisible] = useState(false);
 
   const handleFavorito = onFavorito || actions.favorito;
   const handleArchivar = onArchivar || actions.archivar;
   const handlePapelera = onPapelera || actions.papelera;
+  const contenidoVisible = viewable !== undefined ? viewable : !note?.locked;
 
   function eliminarPermanente() {
     onClose();
@@ -64,6 +71,7 @@ export function NoteOptionsMenu({
   }
 
   return (
+    <>
     <Modal
       transparent
       animationType="fade"
@@ -77,15 +85,19 @@ export function NoteOptionsMenu({
           accessibilityLabel="Cerrar menú"
         />
         <View style={styles.menu}>
-          <Pressable style={styles.option} onPress={opcion(() => actions.compartir())}>
-            <ShareIcon color={colores.blanco} />
-            <Text style={styles.optionText}>Compartir</Text>
-          </Pressable>
+          {contenidoVisible && (
+            <>
+              <Pressable style={styles.option} onPress={opcion(() => actions.compartir())}>
+                <ShareIcon color={colores.blanco} />
+                <Text style={styles.optionText}>Compartir</Text>
+              </Pressable>
 
-          <Pressable style={styles.option} onPress={opcion(() => actions.guardar())}>
-            <DownloadIcon color={colores.blanco} size={22} />
-            <Text style={styles.optionText}>Guardar como .txt</Text>
-          </Pressable>
+              <Pressable style={styles.option} onPress={opcion(() => actions.guardar())}>
+                <DownloadIcon color={colores.blanco} size={22} />
+                <Text style={styles.optionText}>Guardar como .txt</Text>
+              </Pressable>
+            </>
+          )}
 
           {!note?.eliminado &&
             <Pressable style={styles.option} onPress={opcion(() => handleFavorito())}>
@@ -100,6 +112,15 @@ export function NoteOptionsMenu({
             <Pressable style={styles.option} onPress={opcion(() => handleArchivar())}>
               <BoxArchiveIcon color={colores.blanco} />
               <Text style={styles.optionText}>{note?.archivado ? "Desarchivar" : "Archivar"}</Text>
+            </Pressable>
+          }
+
+          {!note?.eliminado &&
+            <Pressable style={styles.option} onPress={opcion(() => setPinVisible(true))}>
+              {note?.locked
+                ? <UnlockIcon color={colorType.warning} />
+                : <LockIcon color={colores.blanco} />}
+              <Text style={styles.optionText}>{note?.locked ? "Desbloquear" : "Bloquear"}</Text>
             </Pressable>
           }
 
@@ -119,6 +140,15 @@ export function NoteOptionsMenu({
         </View>
       </View>
     </Modal>
+    <PinModal
+      visible={pinVisible}
+      mode={note?.locked ? "enter" : "set"}
+      onClose={() => setPinVisible(false)}
+      onSubmit={(pin) =>
+        note?.locked ? actions.desbloquear(pin) : actions.bloquear(pin)
+      }
+    />
+    </>
   );
 }
 

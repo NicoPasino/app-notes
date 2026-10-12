@@ -14,17 +14,17 @@ export default function About() {
         <Text style={style.tituloAbout}>{"📌 Acerca de:"}</Text>
         <Text style={style.textoAbout}>
           {"Esta app es un proyecto personal con la finalidad de aprender y mejorar en el desarrollo de aplicaciones móviles y web.\n"}
-          {"Anteriormente funcionaba con una API remota (.NET y MySQL), pero actualmente las notas se guardan localmente en el dispositivo de forma privada.\n"}
+          {"Las notas se guardan localmente en el dispositivo de forma privada.\n"}
         </Text>
 
         <Text style={style.tituloAbout}>{"📌 Funcionalidades:"}</Text>
         <Text style={style.textoAbout}>
           {[
-            "Ver, Buscar, Filtrar.",
-            "Crear, Editar.",
-            "Archivar, marcar como Favorito.",
-            "Enviar a la papelera.",
-            "Eliminar permanentemente.",
+            "Crear, Editar, Bloquear y Desbloquear notas.",
+            "Ver, Buscar y Filtrar notas.",
+            "Archivar y marcar como Favorito.",
+            "Enviar a la papelera y eliminar permanentemente.",
+            "Exportar y compartir.",
           ]
             .map((f) => ` - ${f}\n`)
             .join("")}

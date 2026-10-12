@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { View, Text, StyleSheet, Animated, Pressable } from "react-native";
 import { colorType, colorTypeB } from "./utils/colors";
 import { DesglosarFecha } from "./utils/getDate";
-import { FavoriteIcon } from "./Icons";
+import { FavoriteIcon, LockIcon } from "./Icons";
 
 const showMaxHeader = 20;
 const showMaxText = 170;
@@ -12,6 +12,7 @@ export function Card({ note }) {
   const { id, color } = note;
   const header = note.header ?? "";
   const text = note.text ?? "";
+  const locked = !!note.locked;
   const router = useRouter();
 
   return (
@@ -25,10 +26,19 @@ export function Card({ note }) {
           <View style={[ styles.cardTop, { borderColor: colorType[color], backgroundColor: colorTypeB[color] } ]}>
             {/* Header */}
             <Text style={[styles.header, styles.textWithShadow100, { color: colorType[color] } ]}>
-              {note?.favorito && <FavoriteIcon isFav size={16} color={colorType[color]} />}
-              {note?.favorito && " "}
-              {header.slice(0, showMaxHeader)}
-              {header.length > showMaxHeader && "..."}
+              {locked ? (
+                <>
+                  <LockIcon size={16} color={colorType[color]} />
+                  {" Nota bloqueada"}
+                </>
+              ) : (
+                <>
+                  {note?.favorito && <FavoriteIcon isFav size={16} color={colorType[color]} />}
+                  {note?.favorito && " "}
+                  {header.slice(0, showMaxHeader)}
+                  {header.length > showMaxHeader && "..."}
+                </>
+              )}
             </Text>
 
             {/* Fecha */}
@@ -39,8 +49,14 @@ export function Card({ note }) {
 
           {/* Texto */}
           <Text style={[styles.text, { borderColor: colorType[color] }]}>
-            {text.slice(0, showMaxText)}
-            {text.length > showMaxText && "..."}
+            {locked ? (
+              "🔒 Contenido bloqueado"
+            ) : (
+              <>
+                {text.slice(0, showMaxText)}
+                {text.length > showMaxText && "..."}
+              </>
+            )}
           </Text>
         </View>
       )}

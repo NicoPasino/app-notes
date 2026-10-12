@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { router, Stack } from "expo-router";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 import {
   ConfirmBtn,
@@ -16,7 +16,7 @@ import { ModalColorView } from "../modals/ModalColorView";
 import { NoteOptionsMenu, useNoteActions } from "../modals/NoteOptionsMenu";
 import { __IsWeb__ } from "../../config";
 
-export function Header({ edit, data }) {
+export function Header({ edit, data, locked = false, viewable = true }) {
   const { editMode, setEditMode, isNew } = edit;
   const { newData, setNewData, note, id } = data;
 
@@ -45,17 +45,35 @@ export function Header({ edit, data }) {
             if (__IsWeb__) return <BackBtn />;
             return null;
           },
-          headerTitle: () => (
-            <TituloCont
-              header={newData?.header}
-              color={newData?.color}
-              editMode={editMode}
-              handleHeaderChange={(header) =>
-                setNewData((prev) => ({ ...prev, header }))
-              }
-            />
-          ),
+          headerTitle: () =>
+            locked ? (
+              <Text style={{ color: colores.blanco, fontWeight: "bold", fontSize: 16 }}>
+                🔒 Bloqueada
+              </Text>
+            ) : (
+              <TituloCont
+                header={newData?.header}
+                color={newData?.color}
+                editMode={editMode}
+                handleHeaderChange={(header) =>
+                  setNewData((prev) => ({ ...prev, header }))
+                }
+              />
+            ),
           headerRight: () => {
+            if (locked) return (
+              <View style={detailStyles.wrap}>
+                <EllipsisBtn accion={() => setMenuVisible((v) => !v)} />
+                <NoteOptionsMenu
+                  visible={menuVisible}
+                  onClose={() => setMenuVisible(false)}
+                  id={id}
+                  note={newData}
+                  onUpdate={setNewData}
+                  viewable={viewable}
+                />
+              </View>
+            );
             if (editMode) return (
               <View style={detailStyles.wrap}>
                 <SelectColorBtn
@@ -81,6 +99,7 @@ export function Header({ edit, data }) {
                   id={id}
                   note={newData}
                   onUpdate={setNewData}
+                  viewable={viewable}
                 />
               </View>
             );

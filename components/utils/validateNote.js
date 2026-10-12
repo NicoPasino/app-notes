@@ -9,6 +9,8 @@ const limite = {
 };
 
 const regexFechaUTC = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+// PIN almacenado como "salt:hash" (salt hex 32, SHA-256 hex 64). Nunca en claro.
+const regexPin = /^[a-f0-9]{32}:[a-f0-9]{64}$/;
 
 function esEntero(valor) {
   return Number.isInteger(Number(valor));
@@ -35,6 +37,8 @@ export function validateNote(note, { crear = false } = {}) {
   const favorito = note.favorito;
   const archivado = note.archivado;
   const eliminado = note.eliminado;
+  const locked = note.locked;
+  const pin = note.pin;
 
   if (crear || id !== undefined) {
     if (!esEntero(id) || id < limite.idMin || id > limite.idMax) {
@@ -82,9 +86,16 @@ export function validateNote(note, { crear = false } = {}) {
     ["favorito", favorito],
     ["archivado", archivado],
     ["eliminado", eliminado],
+    ["locked", locked],
   ]) {
     if (valor !== undefined && valor !== null && !esBool(valor)) {
       return { ok: false, message: `El campo ${campo} debe ser booleano.` };
+    }
+  }
+
+  if (pin !== undefined && pin !== null) {
+    if (typeof pin !== "string" || !regexPin.test(pin)) {
+      return { ok: false, message: "El PIN debe ser un hash válido." };
     }
   }
 

@@ -23,6 +23,8 @@ function normalizeNote(note) {
     favorito: !!note.favorito,
     archivado: !!note.archivado,
     eliminado: !!note.eliminado,
+    locked: !!note.locked,
+    pin: note.pin ?? null,
   };
 }
 
@@ -61,10 +63,33 @@ function getDb() {
       color TEXT,
       favorito INTEGER DEFAULT 0,
       archivado INTEGER DEFAULT 0,
-      eliminado INTEGER DEFAULT 0
+      eliminado INTEGER DEFAULT 0,
+      locked INTEGER DEFAULT 0,
+      pin TEXT
     );
   `);
+  migrarColumnas(db);
   return db;
+}
+
+// `CREATE TABLE IF NOT EXISTS` no agrega columnas a una tabla ya existente.
+// Se agregan aquí de forma idempotente para no perder notas existentes.
+function migrarColumnas(db) {
+  const columnas = [
+    ["locked", "INTEGER DEFAULT 0"],
+    ["pin", "TEXT"],
+  ];
+  try {
+    const info = db.getAllSync("PRAGMA table_info(notas)");
+    const existentes = new Set(info.map((c) => c.name));
+    columnas.forEach(([nombre, definicion]) => {
+      if (!existentes.has(nombre)) {
+        db.execSync(`ALTER TABLE notas ADD COLUMN ${nombre} ${definicion};`);
+      }
+    });
+  } catch {
+    // Si la migración falla, se continúa con las columnas previas.
+  }
 }
 
 function toNote(row) {
@@ -80,6 +105,8 @@ function toNote(row) {
     favorito: row.favorito === 1,
     archivado: row.archivado === 1,
     eliminado: row.eliminado === 1,
+    locked: row.locked === 1,
+    pin: row.pin ?? null,
   };
 }
 
@@ -95,6 +122,8 @@ function toRow(note) {
     favorito: note.favorito ? 1 : 0,
     archivado: note.archivado ? 1 : 0,
     eliminado: note.eliminado ? 1 : 0,
+    locked: note.locked ? 1 : 0,
+    pin: note.pin ?? null,
   };
 }
 
@@ -167,6 +196,8 @@ function buildCollection() {
       favorito: item.favorito ?? false,
       archivado: item.archivado ?? false,
       eliminado: item.eliminado ?? false,
+      locked: item.locked ?? false,
+      pin: item.pin ?? null,
       fechaCreacion: item.fechaCreacion ?? ahora,
       fechaModificacion: item.fechaModificacion ?? ahora,
     });
@@ -193,11 +224,12 @@ function buildCollection() {
         try {
           const row = toRow(nuevaNota);
           db.runSync(
-            `INSERT INTO notas (id, header, text, fechaCreacion, fechaModificacion, name, color, favorito, archivado, eliminado)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO notas (id, header, text, fechaCreacion, fechaModificacion, name, color, favorito, archivado, eliminado, locked, pin)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [
               row.id, row.header, row.text, row.fechaCreacion, row.fechaModificacion,
               row.name, row.color, row.favorito, row.archivado, row.eliminado,
+              row.locked, row.pin,
             ],
           );
           return { ok: true };
@@ -223,6 +255,7 @@ function buildCollection() {
     const nid = Number(id);
     const camposActualizables = [
       "header", "text", "name", "color", "favorito", "archivado", "eliminado",
+      "locked", "pin",
     ];
 
     const soloActualizables = {};
