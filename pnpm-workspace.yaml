@@ -1,2 +1,4 @@
 allowBuilds:
   unrs-resolver: false
+minimumReleaseAgeExclude:
+  - expo-splash-screen@57.0.10
