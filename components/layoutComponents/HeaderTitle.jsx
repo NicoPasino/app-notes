@@ -1,9 +1,7 @@
 import { router } from "expo-router";
 import { useContext, useState } from "react";
-import { Linking, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import {
-  DownloadIcon,
-  AndroidIcon,
   NoteIcon,
   ArchiveIcon,
   FavoriteIcon,
@@ -11,9 +9,7 @@ import {
   FolderIcon,
   LockIcon,
 } from "../Icons";
-import { downloadApk } from "../../config";
 import { colores } from "../utils/colors";
-import { __IsWeb__ } from "../../config";
 import { DataContext } from "../../context/dataContext";
 
 export const opcionesVista = [
@@ -58,7 +54,7 @@ export function HeaderTitle() {
   const { vista } = useContext(DataContext);
   const opcionActual = opcionesVista.find((o) => o.key === vista) ?? opcionesVista[0];
 
-  return __IsWeb__ ? <HeaderWeb /> : <HeaderAIOS titulo={opcionActual.titulo} />;
+  return <HeaderFolder titulo={opcionActual.titulo} />;
 }
 
 export function HeaderRight() {
@@ -94,23 +90,7 @@ export function HeaderRight() {
   );
 }
 
-function HeaderWeb() {
-  return (
-    <Pressable
-      onPress={() => Linking.openURL(downloadApk)}
-      style={({ pressed, hovered }) => [
-        { transform: [{ scale: hovered ? 1.02 : 1 }] },
-        styles.downloadBtn,
-      ]}
-    >
-      <DownloadIcon color={colores.turquesa2} />
-      <Text style={styles.Titulo}>Descargar Apk<br/>para Android</Text>
-      <AndroidIcon color={colores.turquesa2} />
-    </Pressable>
-  );
-}
-
-function HeaderAIOS({ titulo }) {
+function HeaderFolder({ titulo }) {
   return (
     <Pressable onPress={() => router.replace("/")}>
       <Text style={[styles.Titulo, styles.textShadow100]}>{titulo}</Text>
@@ -222,16 +202,5 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 15,
     fontSize: 26,
-  },
-  downloadBtn: {
-    flexDirection: "row",
-    padding: 8,
-    borderRadius: 10,
-    borderWidth: 1,
-    backgroundColor: "#51afb926",
-    borderColor: colores.turquesa,
-    alignItems: "center",
-    alignContent: "center",
-    justifyContent: "center",
   },
 });

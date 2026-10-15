@@ -5,6 +5,7 @@ import { InfoIcon, NoteIcon } from "../../components/Icons";
 import { colores } from "../../components/utils/colors";
 import { AddBtn } from "../../components/buttons/TabButtons";
 import { BotonDestello } from "../../components/buttons/Destello";
+import { DownloadApkFloat } from "../../components/buttons/DownloadApkFloat";
 
 // Nav (Footer)
 export default function TabsLayout() {
@@ -45,6 +46,8 @@ export default function TabsLayout() {
           <AddBtn />
         </BotonDestello>
       </View>
+
+      <DownloadApkFloat />
     </>
   );
 }
