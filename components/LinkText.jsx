@@ -1,12 +1,9 @@
 import { Linking, StyleSheet, Text } from "react-native";
 
 function handlePressLink(url) {
-  Linking.canOpenURL(url).then((supported) => {
-    if (supported) {
-      Linking.openURL("https://" + url);
-    } else {
-      console.log("Don't know how to open URI: " + url);
-    }
+  const fullUrl = /^https?:\/\//i.test(url) ? url : "https://" + url;
+  Linking.openURL(fullUrl).catch((err) => {
+    console.log("Don't know how to open URI: " + fullUrl, err);
   });
 }
 
