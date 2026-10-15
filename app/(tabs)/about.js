@@ -12,18 +12,18 @@ export default function About() {
         showsVerticalScrollIndicator={false}
       >
         <Text style={style.tituloAbout}>{"📌 Acerca de:"}</Text>
-        <Text style={style.textoAbout}>
+        <Text style={[style.textoA, { textAlign: "justify" }]}>
           {"Esta app es un proyecto personal con la finalidad de aprender y mejorar en el desarrollo de aplicaciones móviles y web.\n"}
           {"Las notas se guardan localmente en el dispositivo de forma privada.\n"}
         </Text>
 
         <Text style={style.tituloAbout}>{"📌 Funcionalidades:"}</Text>
-        <Text style={style.textoAbout}>
+        <Text style={style.textoA}>
           {[
             "Crear, Editar, Bloquear y Desbloquear notas.",
             "Ver, Buscar y Filtrar notas.",
             "Archivar y marcar como Favorito.",
-            "Enviar a la papelera y eliminar permanentemente.",
+            "Enviar a la papelera y eliminar.",
             "Exportar y compartir.",
           ]
             .map((f) => ` - ${f}\n`)
@@ -31,18 +31,18 @@ export default function About() {
         </Text>
 
         <Text style={style.tituloAbout}>{"🛠️ Tecnologías utilizadas:"}</Text>
-        <Text style={style.textoAbout}>
+        <Text style={style.textoA}>
           {" - React Native.\n - SQLite.\n"}
         </Text>
 
         <Text style={style.tituloAbout}>{"💻 Repositorio: "}</Text>
-        <Text style={style.textoAbout}>
+        <Text style={style.textoA}>
           {"GitHub: "}
           <LinkText url="github.com/NicoPasino/app-notes" />
         </Text>
 
         <Text style={style.tituloAbout}>{"🧑‍💻 Autor: Nicolás Pasino."}</Text>
-        <Text style={style.textoAbout}>
+        <Text style={style.textoA}>
           {"LinkedIn: "}
           <LinkText url="linkedin.com/in/nicolas-pasino" />
           <Br />
@@ -75,11 +75,10 @@ const style = StyleSheet.create({
     marginTop: 22,
     marginBottom: 10,
   },
-  textoAbout: {
+  textoA: {
     color: colores.gris,
     fontSize: 15,
     lineHeight: 24,
     marginLeft: 4,
-    textAlign: "justify",
   },
 });
