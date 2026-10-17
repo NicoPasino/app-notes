@@ -119,3 +119,7 @@ export const UnlockIcon = (props) => (
 export const CancelIcon = (props) => (
   <FontAwesome name="close" size={28} color="white" {...props} />
 );
+
+export const SearchIcon = (props) => (
+  <FontAwesome name="search" size={32} color="white" {...props} />
+);

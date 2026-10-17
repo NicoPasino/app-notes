@@ -3,11 +3,12 @@ import { Card, NewCard } from "../../components/Card";
 import { AlertDiv } from "../../components/modals/Modals";
 import { LoadingBackground } from "../../components/Spinner";
 import { SearchFilter } from "../../components/SearchFilter";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { DataContext } from "../../context/dataContext";
 import { __IsWeb__ } from "../../config";
 import { colores } from "../../components/utils/colors";
 import { opcionesVista } from "../../components/layoutComponents/HeaderTitle";
+import { SearchIcon } from "../../components/Icons";
 
 function EstadoVacio({ opcion, onIrInicio }) {
   const Icono = opcion.Icono;
@@ -28,23 +29,73 @@ function EstadoVacio({ opcion, onIrInicio }) {
   );
 }
 
+function SinResultados({ onLimpiar }) {
+  return (
+    <View style={styles.emptyCont}>
+      <SearchIcon size={44} color={colores.gris} />
+      <Text style={styles.emptyTitle}>Sin resultados</Text>
+      <Text style={styles.emptyDesc}>Probá con otra búsqueda o color.</Text>
+      <Pressable
+        onPress={onLimpiar}
+        style={({ pressed }) => [
+          styles.irInicioBtn,
+          pressed && styles.irInicioBtnPressed,
+        ]}
+      >
+        <Text style={styles.irInicioText}>Limpiar filtros</Text>
+      </Pressable>
+    </View>
+  );
+}
+
 function Contenido({ itemsIndex, vista, onIrInicio }) {
-  const [filteredItems, setFilteredItems] = useState([]);
+  const [query, setQuery] = useState("");
+  const [selectedColor, setSelectedColor] = useState(null);
   const opcionActual = opcionesVista.find((o) => o.key === vista) ?? opcionesVista[0];
+
+  const hayFiltro = query.trim().length > 0 || selectedColor !== null;
+
+  const filteredItems = useMemo(() => {
+    const q = query.toLowerCase().trim();
+    if (!q && !selectedColor) return itemsIndex;
+    return itemsIndex.filter((note) => {
+      const matchText =
+        !q ||
+        note.header?.toLowerCase().includes(q) ||
+        note.text?.toLowerCase().includes(q);
+      const matchColor = !selectedColor || note.color === selectedColor;
+      return matchText && matchColor;
+    });
+  }, [itemsIndex, query, selectedColor]);
+
+  function limpiarFiltros() {
+    setQuery("");
+    setSelectedColor(null);
+  }
+
+  let contenido;
+  if (filteredItems.length > 0) {
+    contenido = filteredItems.map((item) => <Card key={item.id} note={item} />);
+  } else if (hayFiltro) {
+    contenido = <SinResultados onLimpiar={limpiarFiltros} />;
+  } else if (vista === "notas") {
+    contenido = <NewCard />;
+  } else {
+    contenido = <EstadoVacio opcion={opcionActual} onIrInicio={onIrInicio} />;
+  }
 
   return (
     <ScrollView
       keyboardShouldPersistTaps="handled"
       contentContainerStyle={styles.scrollContent}
     >
-      <SearchFilter notes={itemsIndex} onFilter={setFilteredItems} />
-      {filteredItems.length > 0 ? (
-        filteredItems.map((item) => <Card key={item.id} note={item} />)
-      ) : vista === "notas" ? (
-        <NewCard />
-      ) : (
-        <EstadoVacio opcion={opcionActual} onIrInicio={onIrInicio} />
-      )}
+      <SearchFilter
+        query={query}
+        onQueryChange={setQuery}
+        selectedColor={selectedColor}
+        onColorChange={setSelectedColor}
+      />
+      {contenido}
     </ScrollView>
   );
 }
@@ -128,6 +179,11 @@ const styles = StyleSheet.create({
     color: colores.gris,
     fontSize: 18,
     fontWeight: "bold",
+    textAlign: "center",
+  },
+  emptyDesc: {
+    color: colores.gris,
+    fontSize: 14,
     textAlign: "center",
   },
   irInicioBtn: {

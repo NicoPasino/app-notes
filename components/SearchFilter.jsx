@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import { colorType } from "./utils/colors";
 import { useContext } from "react";
@@ -6,23 +5,8 @@ import { DataContext } from "../context/dataContext";
 
 const colorKeys = Object.keys(colorType);
 
-export function SearchFilter({ notes, onFilter }) {
-  const [query, setQuery] = useState("");
-  const [selectedColor, setSelectedColor] = useState(null);
+export function SearchFilter({ query, onQueryChange, selectedColor, onColorChange }) {
   const { vista } = useContext(DataContext);
-
-  useEffect(() => {
-    const q = query.toLowerCase().trim();
-    const filtered = notes.filter((note) => {
-      const matchText =
-        !q ||
-        note.header?.toLowerCase().includes(q) ||
-        note.text?.toLowerCase().includes(q);
-      const matchColor = !selectedColor || note.color === selectedColor;
-      return matchText && matchColor;
-    });
-    onFilter(filtered);
-  }, [query, selectedColor, notes, onFilter]);
 
   return (
     <View style={styles.container}>
@@ -33,10 +17,10 @@ export function SearchFilter({ notes, onFilter }) {
           placeholder={`Buscar en ${vista}...`}
           placeholderTextColor="#555"
           value={query}
-          onChangeText={setQuery}
+          onChangeText={onQueryChange}
         />
         {query.length > 0 && (
-          <Pressable onPress={() => setQuery("")} style={styles.clearBtn}>
+          <Pressable onPress={() => onQueryChange("")} style={styles.clearBtn}>
             <Text style={styles.clearText}>x</Text>
           </Pressable>
         )}
@@ -45,7 +29,7 @@ export function SearchFilter({ notes, onFilter }) {
       {/* Filtrar por color */}
       <View style={styles.colorsRow}>
         <Pressable
-          onPress={() => setSelectedColor(null)}
+          onPress={() => onColorChange(null)}
           style={[
             styles.colorDot,
             styles.colorAll,
@@ -58,7 +42,7 @@ export function SearchFilter({ notes, onFilter }) {
         {colorKeys.map((key) => (
           <Pressable
             key={key}
-            onPress={() => setSelectedColor(selectedColor === key ? null : key)}
+            onPress={() => onColorChange(selectedColor === key ? null : key)}
             style={[
               styles.colorDot,
               { backgroundColor: colorType[key] },
