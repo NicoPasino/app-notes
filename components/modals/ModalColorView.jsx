@@ -1,5 +1,5 @@
 import { Button, Modal, Pressable, View } from "react-native";
-import detailStyles, { detailStyles as styles } from "../utils/detailStyles";
+import { detailStyles as styles } from "../utils/detailStyles";
 import { colorType } from "../utils/colors";
 
 // Modal para cambiar color
@@ -15,7 +15,7 @@ export function ModalColorView({ modal, data }) {
       onRequestClose={() => setModalColorVisible(false)}
     >
       <Pressable
-        style={detailStyles.modalContainer}
+        style={styles.modalContainer}
         onPress={() => setModalColorVisible(false)}
       >
         <View style={styles.modalContent}>

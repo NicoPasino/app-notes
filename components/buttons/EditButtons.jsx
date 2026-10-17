@@ -7,7 +7,7 @@ import {
   EllipsisIcon,
 } from "../Icons";
 import { colores, colorType } from "../utils/colors";
-import styles from "../utils/detailStyles";
+import { detailStyles as styles } from "../utils/detailStyles";
 import confirmAlert from "../utils/ConfirmAlert";
 
 export function ConfirmBtn({ accion }) {
@@ -60,7 +60,8 @@ export function DeactivateBtn({ accion }) {
       onPress={() =>
         confirmAlert({
           accion: () => accion(),
-          texto: "¿Seguro que quieres eliminar la Nota? \nSe enviará a la papelera.",
+          texto:
+            "¿Seguro que quieres eliminar la Nota? \nSe enviará a la papelera.",
         })
       }
     >

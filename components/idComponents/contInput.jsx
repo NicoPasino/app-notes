@@ -2,7 +2,7 @@ import { ScrollView, Text, TextInput, View } from "react-native";
 import { memo } from "react";
 import { Loading } from "../Spinner";
 import { colorType } from "../utils/colors";
-import detailStyles from "../utils/detailStyles";
+import { detailStyles } from "../utils/detailStyles";
 import { DesglosarFecha } from "../utils/getDate";
 
 const cursorStyle = (editMode) => (!editMode ? "default" : "text");
@@ -20,7 +20,12 @@ export function TituloCont({ header, color, editMode, handleHeaderChange }) {
           cursor: cursorStyle(editMode),
           backgroundColor: backgColor(),
         },
-        editMode && { width: "95%", alignSelf: "center", textAlign: "center", borderRadius: 8 },
+        editMode && {
+          width: "95%",
+          alignSelf: "center",
+          textAlign: "center",
+          borderRadius: 8,
+        },
       ]}
       editable={editMode}
       placeholder="Título..."
@@ -45,8 +50,13 @@ export const TextoCont = memo(function TextoCont({ data, editMode, isNew }) {
       <View style={[detailStyles.body]}>
         {!editMode && !isNew && (
           <View style={detailStyles.info}>
-            <Text style={detailStyles.textInfo}>Creada: {(DesglosarFecha(newData.fechaCreacion)).fecha}</Text>
-            <Text style={detailStyles.textInfo}>Modificada: hace {(DesglosarFecha(newData.fechaModificacion)).tiempoTranscurrido}</Text>
+            <Text style={detailStyles.textInfo}>
+              Creada: {DesglosarFecha(newData.fechaCreacion).fecha}
+            </Text>
+            <Text style={detailStyles.textInfo}>
+              Modificada: hace{" "}
+              {DesglosarFecha(newData.fechaModificacion).tiempoTranscurrido}
+            </Text>
           </View>
         )}
         <TextInput

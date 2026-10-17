@@ -3,7 +3,7 @@ import { Card, NewCard } from "../../components/Card";
 import { AlertDiv } from "../../components/modals/Modals";
 import { LoadingBackground } from "../../components/Spinner";
 import { SearchFilter } from "../../components/SearchFilter";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import { DataContext } from "../../context/dataContext";
 import { __IsWeb__ } from "../../config";
 import { colores } from "../../components/utils/colors";
@@ -15,7 +15,9 @@ function EstadoVacio({ opcion, onIrInicio }) {
   return (
     <View style={styles.emptyCont}>
       <Icono size={44} color={colores.gris} />
-      <Text style={styles.emptyTitle}>Sin {opcion.descripcion.toLowerCase()}</Text>
+      <Text style={styles.emptyTitle}>
+        Sin {opcion.descripcion.toLowerCase()}
+      </Text>
       <Pressable
         onPress={onIrInicio}
         style={({ pressed }) => [
@@ -51,7 +53,8 @@ function SinResultados({ onLimpiar }) {
 function Contenido({ itemsIndex, vista, onIrInicio }) {
   const [query, setQuery] = useState("");
   const [selectedColor, setSelectedColor] = useState(null);
-  const opcionActual = opcionesVista.find((o) => o.key === vista) ?? opcionesVista[0];
+  const opcionActual =
+    opcionesVista.find((o) => o.key === vista) ?? opcionesVista[0];
 
   const hayFiltro = query.trim().length > 0 || selectedColor !== null;
 
@@ -103,43 +106,35 @@ function Contenido({ itemsIndex, vista, onIrInicio }) {
 export default function Main() {
   const { notasManager, vista, setVista } = useContext(DataContext);
   const { items, error, loading } = notasManager;
-  const [itemsIndex, setItemsIndex] = useState([]);
 
-  useEffect(() => {
-    let filtrados;
+  const itemsIndex = useMemo(() => {
     switch (vista) {
       case "favoritos":
-        filtrados = items.filter(
+        return items.filter(
           (item) =>
             item.favorito === true &&
             item.eliminado !== true &&
             item.archivado !== true,
         );
-        break;
       case "bloqueados":
-        filtrados = items.filter(
+        return items.filter(
           (item) =>
             item.locked === true &&
             item.eliminado !== true &&
             item.archivado !== true,
         );
-        break;
       case "archivados":
-        filtrados = items.filter(
+        return items.filter(
           (item) => item.archivado === true && item.eliminado !== true,
         );
-        break;
       case "eliminados":
-        filtrados = items.filter((item) => item.eliminado === true);
-        break;
+        return items.filter((item) => item.eliminado === true);
       case "notas":
       default:
-        filtrados = items.filter(
+        return items.filter(
           (item) => item.eliminado !== true && item.archivado !== true,
         );
-        break;
     }
-    setItemsIndex(filtrados);
   }, [items, vista]);
 
   return (

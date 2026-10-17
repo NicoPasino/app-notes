@@ -15,31 +15,30 @@ import { DataContext } from "../context/dataContext";
 export default function Detail() {
   const { id: idParam } = useLocalSearchParams(); // obtener parametros
   const id = Array.isArray(idParam) ? idParam[0] : idParam;
-  const [isNew, setIsNew] = useState(false);
+  const { notasManager } = useContext(DataContext);
+
+  // key={id} reinicia el estado local al navegar entre notas, sin
+  // resetearlo con setState dentro de un efecto.
+  return <DetalleContenido key={id} id={id} notasManager={notasManager} />;
+}
+
+function DetalleContenido({ id, notasManager }) {
+  const { obtenerItem, setError } = notasManager;
+  const isNew = id === "new";
   const [note, setnote] = useState(null);
   const [newData, setNewData] = useState(defaultData);
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(isNew);
   const [unlocked, setUnlocked] = useState(false);
   const [localError, setLocalError] = useState("");
-  const { notasManager } = useContext(DataContext);
-  const { obtenerItem, setError } = notasManager;
 
   useEffect(() => {
     if (!id) return;
 
+    // setError es el setter del estado global (contexto), no de este
+    // componente; se limpia para no heredar errores de otra pantalla.
     setError("");
-    setLocalError("");
-    setUnlocked(false);
 
-    if (id === "new") {
-      setIsNew(true);
-      setEditMode(true);
-      return;
-    }
-
-    setnote(null);
-    setIsNew(false);
-    setEditMode(false);
+    if (isNew) return;
 
     async function fetchData() {
       let res;
@@ -59,7 +58,7 @@ export default function Detail() {
       }
     }
     fetchData();
-  }, [id]);
+  }, [id, isNew, obtenerItem, setError]);
 
   return (
     <Screen>
@@ -81,14 +80,35 @@ export default function Detail() {
   );
 }
 
-function ContenidoDetail({ modoEdit, data, notasManager, error, setError, locked, viewable, onUnlocked }) {
+function ContenidoDetail({
+  modoEdit,
+  data,
+  notasManager,
+  error,
+  setError,
+  locked,
+  viewable,
+  onUnlocked,
+}) {
   const { mensaje, setMensaje } = notasManager;
   const { editMode, setEditMode, isNew } = modoEdit;
   const { newData, setNewData, note, id } = data;
 
-  const handleVolverOnError = () => { setError(""); router.replace("/") };
+  const handleVolverOnError = () => {
+    setError("");
+    router.replace("/");
+  };
 
-  if (error) return <AlertDiv mensaje={error} link={{ onPress: () => handleVolverOnError(), label: "Volver a Inicio" }} />;
+  if (error)
+    return (
+      <AlertDiv
+        mensaje={error}
+        link={{
+          onPress: () => handleVolverOnError(),
+          label: "Volver a Inicio",
+        }}
+      />
+    );
   return (
     <>
       {mensaje && (
@@ -102,9 +122,17 @@ function ContenidoDetail({ modoEdit, data, notasManager, error, setError, locked
       />
       <View style={{ flex: 1 }}>
         {locked ? (
-          <LockedNote note={note} setNewData={setNewData} onUnlocked={onUnlocked} />
+          <LockedNote
+            note={note}
+            setNewData={setNewData}
+            onUnlocked={onUnlocked}
+          />
         ) : (
-          <TextoCont data={{ newData, setNewData }} editMode={editMode} isNew={isNew} />
+          <TextoCont
+            data={{ newData, setNewData }}
+            editMode={editMode}
+            isNew={isNew}
+          />
         )}
       </View>
     </>
@@ -119,7 +147,8 @@ function LockedNote({ note, setNewData, onUnlocked }) {
       <LockIcon size={56} color={colores.turquesa2} />
       <Text style={styles.lockedTitle}>Nota bloqueada</Text>
       <Text style={styles.lockedText}>
-        Ingresá el PIN para ver/editar la nota. Si salís y volvés, se pedirá de nuevo.
+        Ingresá el PIN para ver/editar la nota. Si salís y volvés, se pedirá de
+        nuevo.
       </Text>
       <PinModal
         visible

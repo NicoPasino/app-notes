@@ -1,9 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Animated, Platform, Easing } from "react-native";
 import { __IsWeb__ } from "../../config";
 
 export const BotonDestello = ({ children }) => {
-  const animation = useRef(new Animated.Value(0)).current;
+  const [animation] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
     const runAnimation = () => {

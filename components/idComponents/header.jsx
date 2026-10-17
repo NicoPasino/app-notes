@@ -10,7 +10,7 @@ import {
 } from "../buttons/EditButtons";
 import { BackBtn, CancelBtn } from "../buttons/GeneralButtons";
 import { colores, colorType } from "../utils/colors";
-import detailStyles from "../utils/detailStyles";
+import { detailStyles } from "../utils/detailStyles";
 import { TituloCont } from "../idComponents/contInput";
 import { ModalColorView } from "../modals/ModalColorView";
 import { NoteOptionsMenu, useNoteActions } from "../modals/NoteOptionsMenu";
@@ -47,7 +47,13 @@ export function Header({ edit, data, locked = false, viewable = true }) {
           },
           headerTitle: () =>
             locked ? (
-              <Text style={{ color: colores.blanco, fontWeight: "bold", fontSize: 16 }}>
+              <Text
+                style={{
+                  color: colores.blanco,
+                  fontWeight: "bold",
+                  fontSize: 16,
+                }}
+              >
                 🔒 Bloqueada
               </Text>
             ) : (
@@ -61,37 +67,41 @@ export function Header({ edit, data, locked = false, viewable = true }) {
               />
             ),
           headerRight: () => {
-            if (locked) return (
-              <View style={detailStyles.wrap}>
-                <EllipsisBtn accion={() => setMenuVisible((v) => !v)} />
-                <NoteOptionsMenu
-                  visible={menuVisible}
-                  onClose={() => setMenuVisible(false)}
-                  id={id}
-                  note={newData}
-                  onUpdate={setNewData}
-                  viewable={viewable}
-                />
-              </View>
-            );
-            if (editMode) return (
-              <View style={detailStyles.wrap}>
-                <SelectColorBtn
-                  accion={() => setModalColorVisible(true)}
-                  color={newColor}
-                />
-                <CancelBtn
-                  accion={() => {
-                    setEditMode(false);
-                    if (isNew) return router.replace("/");
-                    setNewData(note);
-                  }}
-                />
-              </View>
-            );
+            if (locked)
+              return (
+                <View style={detailStyles.wrap}>
+                  <EllipsisBtn accion={() => setMenuVisible((v) => !v)} />
+                  <NoteOptionsMenu
+                    visible={menuVisible}
+                    onClose={() => setMenuVisible(false)}
+                    id={id}
+                    note={newData}
+                    onUpdate={setNewData}
+                    viewable={viewable}
+                  />
+                </View>
+              );
+            if (editMode)
+              return (
+                <View style={detailStyles.wrap}>
+                  <SelectColorBtn
+                    accion={() => setModalColorVisible(true)}
+                    color={newColor}
+                  />
+                  <CancelBtn
+                    accion={() => {
+                      setEditMode(false);
+                      if (isNew) return router.replace("/");
+                      setNewData(note);
+                    }}
+                  />
+                </View>
+              );
             return (
               <View style={detailStyles.wrap}>
-                {!newData?.eliminado && !newData?.archivado && <EditBtn accion={() => setEditMode(true)} />}
+                {!newData?.eliminado && !newData?.archivado && (
+                  <EditBtn accion={() => setEditMode(true)} />
+                )}
                 <EllipsisBtn accion={() => setMenuVisible((v) => !v)} />
                 <NoteOptionsMenu
                   visible={menuVisible}
@@ -115,6 +125,6 @@ export function Header({ edit, data, locked = false, viewable = true }) {
   );
 }
 
-// Notes: 
+// Notes:
 // - No crear componentes de inputs para el Header, ya que se vuelve a renderizar en cada cambio del input.
-// - 
+// -

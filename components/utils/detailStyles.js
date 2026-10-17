@@ -68,6 +68,4 @@ export const detailStyles = StyleSheet.create({
   },
 });
 
-export default detailStyles;
-
 // Platform.select({ web: 8 }),

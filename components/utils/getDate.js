@@ -1,14 +1,13 @@
 export function DesglosarFecha(_fecha) {
   const date = new Date(_fecha);
 
-  const D = date.toLocaleDateString('es-ES', { weekday: 'long' }); // "jueves"
+  const D = date.toLocaleDateString("es-ES", { weekday: "long" }); // "jueves"
   const d = date.getDate(); // "7"
   const dd = d.toString().padStart(2, "0"); // "07"
   const m = date.getMonth() + 1; // "8"
   const mm = m.toString().padStart(2, "0"); // "08"
-  const MMMM = date.toLocaleDateString('es-ES', { month: 'long' }); // "agosto"
+  const MMMM = date.toLocaleDateString("es-ES", { month: "long" }); // "agosto"
   const yyyy = date.getFullYear(); // "2026"
-  const yy = yyyy.toString().slice(-2); // "26"
 
   const hour = date.getHours().toString().padStart(2, "0");
   const min = date.getMinutes().toString().padStart(2, "0");
@@ -29,17 +28,17 @@ export function DesglosarFecha(_fecha) {
 
   return {
     date,
-    fechaCorta,   // "7/8/2026"
-    fecha,        // "07/08/2026"
-    fechaStr,     // "07-agosto-2026"
-    fechaLarga,   // "jueves 7 de agosto de 2026"
-    hora,         // "00:40"
-    horaLarga,    // "00:40:05"
+    fechaCorta, // "7/8/2026"
+    fecha, // "07/08/2026"
+    fechaStr, // "07-agosto-2026"
+    fechaLarga, // "jueves 7 de agosto de 2026"
+    hora, // "00:40"
+    horaLarga, // "00:40:05"
     fechaConHora, // "27/08/2026 00:40"
     fechaConHoraStr, // "27-agosto-2026 00:40"
-    fechaDate,    // "2026-01-22 00:00:00"
-    tiempoTranscurrido
-  }
+    fechaDate, // "2026-01-22 00:00:00"
+    tiempoTranscurrido,
+  };
 }
 
 export function getDate() {

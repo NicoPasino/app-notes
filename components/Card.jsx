@@ -1,5 +1,5 @@
 import { useRouter } from "expo-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Animated, Pressable } from "react-native";
 import { colorType, colorTypeB } from "./utils/colors";
 import { DesglosarFecha } from "./utils/getDate";
@@ -19,13 +19,38 @@ export function Card({ note }) {
     <Pressable
       key={id}
       onPress={() => router.push(`/${id}`)}
-      style={({ hovered }) => [ styles.cardMargin, { transform: [{ scale: hovered ? 1.02 : 1 }] } ]}
+      style={({ hovered }) => [
+        styles.cardMargin,
+        { transform: [{ scale: hovered ? 1.02 : 1 }] },
+      ]}
     >
       {({ pressed }) => (
-        <View style={[ styles.card, { borderColor: colorType[color], backgroundColor: pressed ? "#fff1" : "#fff0" } ]}>
-          <View style={[ styles.cardTop, { borderColor: colorType[color], backgroundColor: colorTypeB[color] } ]}>
+        <View
+          style={[
+            styles.card,
+            {
+              borderColor: colorType[color],
+              backgroundColor: pressed ? "#fff1" : "#fff0",
+            },
+          ]}
+        >
+          <View
+            style={[
+              styles.cardTop,
+              {
+                borderColor: colorType[color],
+                backgroundColor: colorTypeB[color],
+              },
+            ]}
+          >
             {/* Header */}
-            <Text style={[styles.header, styles.textWithShadow100, { color: colorType[color] } ]}>
+            <Text
+              style={[
+                styles.header,
+                styles.textWithShadow100,
+                { color: colorType[color] },
+              ]}
+            >
               {locked ? (
                 <>
                   <LockIcon size={16} color={colorType[color]} />
@@ -33,7 +58,9 @@ export function Card({ note }) {
                 </>
               ) : (
                 <>
-                  {note?.favorito && <FavoriteIcon isFav size={16} color={colorType[color]} />}
+                  {note?.favorito && (
+                    <FavoriteIcon isFav size={16} color={colorType[color]} />
+                  )}
                   {note?.favorito && " "}
                   {header.slice(0, showMaxHeader)}
                   {header.length > showMaxHeader && "..."}
@@ -43,7 +70,7 @@ export function Card({ note }) {
 
             {/* Fecha */}
             <Text style={styles.fecha}>
-              {(DesglosarFecha(note.fechaModificacion)).tiempoTranscurrido}
+              {DesglosarFecha(note.fechaModificacion).tiempoTranscurrido}
             </Text>
           </View>
 
@@ -70,20 +97,28 @@ export function NewCard() {
   return (
     <Pressable
       onPress={() => router.push(`/new`)}
-      style={({ hovered }) => [ styles.cardMargin, { transform: [{ scale: hovered ? 1.02 : 1 }] } ]}
-      >
-        {({ pressed }) => (
-          <View style={[styles.newCard, { backgroundColor: pressed ? "#223" : "#112" }]}>
-            <Text style={styles.newCardPlus}>+</Text>
-            <Text style={styles.newCardText}>Nueva Nota</Text>
-          </View>
-        )}
+      style={({ hovered }) => [
+        styles.cardMargin,
+        { transform: [{ scale: hovered ? 1.02 : 1 }] },
+      ]}
+    >
+      {({ pressed }) => (
+        <View
+          style={[
+            styles.newCard,
+            { backgroundColor: pressed ? "#223" : "#112" },
+          ]}
+        >
+          <Text style={styles.newCardPlus}>+</Text>
+          <Text style={styles.newCardText}>Nueva Nota</Text>
+        </View>
+      )}
     </Pressable>
   );
 }
 
 export function AnimatedCard({ note, index }) {
-  const opacity = useRef(new Animated.Value(0)).current;
+  const [opacity] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
     Animated.timing(opacity, {

@@ -7,5 +7,3 @@ export const showToast = ({ tipo = "success", texto1, texto2 }) => {
     text2: texto2,
   });
 };
-
-export default showToast;

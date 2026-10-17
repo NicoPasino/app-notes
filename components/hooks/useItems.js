@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import showToast from "../utils/toast";
+import { useCallback, useEffect, useState } from "react";
+import { showToast } from "../utils/toast";
 import { router } from "expo-router";
 import { converToLocal } from "../utils/getDate";
 
@@ -9,7 +9,7 @@ export function useItems({ itemsDB }) {
   const [error, setError] = useState(false);
   const [mensaje, setMensaje] = useState(false);
 
-  function hayError(res) {
+  const hayError = useCallback((res) => {
     try {
       if (res?.error) {
         setError(res.error);
@@ -26,30 +26,58 @@ export function useItems({ itemsDB }) {
       setError("Error de código, error al responder la base local.");
       return true;
     }
-  }
+  }, []);
 
-  async function recargarItems(itemsDBArg) {
+  // Lee y convierte los items sin tocar estado: no referencia setters, así
+  // puede usarse desde el efecto de carga inicial sin violar
+  // react-hooks/set-state-in-effect.
+  const leerItems = useCallback(async () => {
+    const res = await itemsDB?.obtenerTodos();
+
+    // Convertir fechas de UTC a local. Se protege cada item para que una
+    // sola nota corrupta no rompa la carga de toda la lista.
+    if (Array.isArray(res)) {
+      res.forEach((item) => {
+        try {
+          item.fechaCreacion = converToLocal(item.fechaCreacion);
+          item.fechaModificacion = converToLocal(item.fechaModificacion);
+        } catch {
+          // Item inválido: se descarta la fecha pero se conserva la nota.
+          item.fechaCreacion = "";
+          item.fechaModificacion = "";
+        }
+      });
+    }
+
+    return res;
+  }, [itemsDB]);
+
+  // Carga inicial: `loading` ya arranca en `true` y la función asíncrona
+  // está definida dentro del efecto para no ejecutar setState de forma
+  // síncrona (react-hooks/set-state-in-effect).
+  useEffect(() => {
+    async function cargarInicial() {
+      try {
+        const res = await leerItems();
+        if (hayError(res)) return;
+        setItems(Array.isArray(res) ? res : []);
+      } catch (err) {
+        setError(err?.message || String(err));
+        // No se vacía la lista para no perder datos válidos ya cargados.
+      } finally {
+        setLoading(false);
+      }
+    }
+    cargarInicial();
+  }, [leerItems, hayError]);
+
+  // Recarga manual (evento de usuario): muestra el loading mientras llegan
+  // los datos.
+  const recargarItems = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await itemsDBArg?.obtenerTodos();
-
-      // Convertir fechas de UTC a local. Se protege cada item para que una
-      // sola nota corrupta no rompa la carga de toda la lista.
-      if (Array.isArray(res)) {
-        res.forEach((item) => {
-          try {
-            item.fechaCreacion = converToLocal(item.fechaCreacion);
-            item.fechaModificacion = converToLocal(item.fechaModificacion);
-          } catch {
-            // Item inválido: se descarta la fecha pero se conserva la nota.
-            item.fechaCreacion = "";
-            item.fechaModificacion = "";
-          }
-        });
-      }
-
+      const res = await leerItems();
       if (hayError(res)) return;
-
       setItems(Array.isArray(res) ? res : []);
     } catch (err) {
       setError(err?.message || String(err));
@@ -58,17 +86,13 @@ export function useItems({ itemsDB }) {
     } finally {
       setLoading(false);
     }
-  }
-
-  useEffect(() => {
-    recargarItems(itemsDB);
-  }, [itemsDB]);
+  }, [leerItems, hayError]);
 
   const agregar = async ({ nuevoItem }) => {
     const res = await itemsDB.agregar(nuevoItem);
     if (hayError(res)) return;
     showToast({ texto1: "Creado correctamente ✅" });
-    recargarItems(itemsDB);
+    recargarItems();
     router.replace("/");
     // return res;
   };
@@ -76,7 +100,7 @@ export function useItems({ itemsDB }) {
     const res = await itemsDB.actualizar(nuevoDato);
     if (hayError(res)) return;
     showToast({ texto1: "Actualizado correctamente ✅" });
-    recargarItems(itemsDB);
+    recargarItems();
     router.replace("/");
     // return res;
   };
@@ -84,24 +108,27 @@ export function useItems({ itemsDB }) {
     const res = await itemsDB.actualizarParcial(id, campos);
     if (hayError(res)) return false;
     showToast({ texto1: "Actualizado correctamente ✅" });
-    recargarItems(itemsDB);
+    recargarItems();
     return true;
   };
-  const obtenerItem = async (id) => {
-    const res = await itemsDB.obtenerPorId(id);
-    if (hayError(res)) return;
-    if (!res) return null;
+  const obtenerItem = useCallback(
+    async (id) => {
+      const res = await itemsDB.obtenerPorId(id);
+      if (hayError(res)) return;
+      if (!res) return null;
 
-    res.fechaCreacion = converToLocal(res.fechaCreacion);
-    res.fechaModificacion = converToLocal(res.fechaModificacion);
+      res.fechaCreacion = converToLocal(res.fechaCreacion);
+      res.fechaModificacion = converToLocal(res.fechaModificacion);
 
-    return res;
-  };
+      return res;
+    },
+    [itemsDB, hayError],
+  );
   const eliminar = async (id) => {
     const res = await itemsDB.eliminar(Number(id));
     if (hayError(res)) return;
     showToast({ texto1: "Eliminado correctamente ✅" });
-    recargarItems(itemsDB);
+    recargarItems();
     router.replace("/");
     // return res;
   };
