@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~57.0.15",
-    "@expo/vector-icons": "^15.1.1",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
     "expo": "^57.0.20",

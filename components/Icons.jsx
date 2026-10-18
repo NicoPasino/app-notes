@@ -1,125 +1,139 @@
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Svg, { Path } from "react-native-svg";
+import { FA4, FA6 } from "./iconsData";
 
-export const CircleInfoIcon = (props) => (
-  <FontAwesome6 name="circle-info" size={24} color="white" {...props} />
-);
+function IconShape({ icon, size, color, ...props }) {
+  return (
+    <Svg width={size} height={size} viewBox={icon.viewBox} {...props}>
+      {icon.paths.map((p, i) => (
+        <Path
+          key={i}
+          d={p.d}
+          fill={color}
+          fillRule={p.fillRule}
+          transform={p.transform}
+        />
+      ))}
+    </Svg>
+  );
+}
 
-export const HomeIcon = (props) => (
-  <FontAwesome name="home" size={32} color="white" {...props} />
-);
-
-export const InfoIcon = (props) => (
-  <FontAwesome name="info" size={32} color="white" {...props} />
-);
-
-export const DownloadIcon = (props) => (
-  <FontAwesome name="cloud-download" size={32} color="white" {...props} />
-);
-
-export const AndroidIcon = (props) => (
-  <FontAwesome name="android" size={30} color="white" {...props} />
-);
-
-export const NoteIcon = (props) => (
-  <FontAwesome name="sticky-note" size={32} color="white" {...props} />
-);
-
-export const CloudIcon = (props) => (
-  <FontAwesome name="cloud" size={32} color="white" {...props} />
-);
-
-export const ArchiveIcon = (props) => (
-  <FontAwesome name="archive" size={32} color="white" {...props} />
-);
-
-export const NavIcon = (props) => (
-  <FontAwesome name="navicon" size={32} color="white" {...props} />
-);
-
-export const BackIcon = (props) => (
-  <FontAwesome6 name="arrow-left" size={32} color="white" {...props} />
-);
-
-export const ReloadIcon = (props) => (
-  <FontAwesome name="refresh" size={32} color="white" {...props} />
-);
-
-export const BoxArchiveIcon = (props) => (
-  <FontAwesome6 name="box-archive" size={24} color="black" {...props} />
-);
-
-export const PlaneIcon = (props) => (
-  <FontAwesome6 name="paper-plane" size={24} color="black" {...props} />
-);
-
-export const ShareIcon = (props) => (
-  <FontAwesome6 name="share-nodes" size={24} color="black" {...props} />
-);
-
-export const ListIcon = ({ type = 0, ...props }) => {
-  switch (type) {
-    case 1:
-      return <FontAwesome name="th-list" size={24} color="black" {...props} />;
-    case 2:
-      return <FontAwesome name="th-large" size={24} color="black" {...props} />;
-    case 3:
-      return <FontAwesome name="th" size={24} color="black" {...props} />;
-    default:
-      return <FontAwesome name="list" size={24} color="black" {...props} />;
-  }
+const makeIcon = (name, icon, size, color) => {
+  const Component = (props) => (
+    <IconShape icon={icon} size={size} color={color} {...props} />
+  );
+  Component.displayName = name;
+  return Component;
 };
 
+export const CircleInfoIcon = makeIcon(
+  "CircleInfoIcon",
+  FA6.circleInfo,
+  24,
+  "white",
+);
+
+export const HomeIcon = makeIcon("HomeIcon", FA4.home, 32, "white");
+
+export const InfoIcon = makeIcon("InfoIcon", FA4.info, 32, "white");
+
+export const DownloadIcon = makeIcon(
+  "DownloadIcon",
+  FA4.cloudDownload,
+  32,
+  "white",
+);
+
+export const AndroidIcon = makeIcon("AndroidIcon", FA4.android, 30, "white");
+
+export const NoteIcon = makeIcon("NoteIcon", FA4.stickyNote, 32, "white");
+
+export const CloudIcon = makeIcon("CloudIcon", FA4.cloud, 32, "white");
+
+export const ArchiveIcon = makeIcon("ArchiveIcon", FA4.archive, 32, "white");
+
+export const NavIcon = makeIcon("NavIcon", FA4.navicon, 32, "white");
+
+export const BackIcon = makeIcon("BackIcon", FA6.arrowLeft, 32, "white");
+
+export const ReloadIcon = makeIcon("ReloadIcon", FA4.refresh, 32, "white");
+
+export const BoxArchiveIcon = makeIcon(
+  "BoxArchiveIcon",
+  FA6.boxArchive,
+  24,
+  "black",
+);
+
+export const PlaneIcon = makeIcon("PlaneIcon", FA6.paperPlane, 24, "black");
+
+export const ShareIcon = makeIcon("ShareIcon", FA6.shareNodes, 24, "black");
+
+const LIST_VARIANTS = { 1: FA4.thList, 2: FA4.thLarge, 3: FA4.th };
+
+export const ListIcon = ({ type = 0, ...props }) => (
+  <IconShape
+    icon={LIST_VARIANTS[type] ?? FA4.list}
+    size={24}
+    color="black"
+    {...props}
+  />
+);
+
 export const FolderIcon = ({ isOpen = false, ...props }) => (
-  <FontAwesome6 name={isOpen ? "folder-open" : "folder"} size={24} color="black" {...props} />
+  <IconShape
+    icon={isOpen ? FA6.folderOpen : FA6.folder}
+    size={24}
+    color="black"
+    {...props}
+  />
 );
 
 export const TrashIcon = ({ isDeleted = false, ...props }) => (
-  <FontAwesome6 name={isDeleted ? "trash-arrow-up" : "trash-alt"} size={24} color="black" {...props} />
+  <IconShape
+    icon={isDeleted ? FA6.trashArrowUp : FA6.trashCan}
+    size={24}
+    color="black"
+    {...props}
+  />
 );
 
 // Notes
 
-export const PlusIcon = (props) => (
-  <FontAwesome name="plus" size={25} color="white" {...props} />
+export const PlusIcon = makeIcon("PlusIcon", FA4.plus, 25, "white");
+
+export const CirclePlusIcon = makeIcon(
+  "CirclePlusIcon",
+  FA6.circlePlus,
+  25,
+  "white",
 );
 
-export const CirclePlusIcon = (props) => (
-  <FontAwesome6 name="circle-plus" size={25} color="white" {...props} />
-);
+export const DelIcon = makeIcon("DelIcon", FA4.trashO, 25, "white");
 
-export const DelIcon = (props) => (
-  <FontAwesome name="trash-o" size={25} color="white" {...props} />
-);
+export const EditIcon = makeIcon("EditIcon", FA6.pen, 18, "white");
 
-export const EditIcon = (props) => (
-  <FontAwesome6 name="pen" size={18} color="white" {...props} /> // edit / pen
-);
+export const ConfirmIcon = makeIcon("ConfirmIcon", FA4.check, 25, "white");
 
-export const ConfirmIcon = (props) => (
-  <FontAwesome name="check" size={25} color="white" {...props} />
-);
-
-export const EllipsisIcon = (props) => (
-  <FontAwesome6 name="ellipsis-vertical" size={22} color="white" {...props} />
+export const EllipsisIcon = makeIcon(
+  "EllipsisIcon",
+  FA6.ellipsisVertical,
+  22,
+  "white",
 );
 
 export const FavoriteIcon = ({ isFav, ...props }) => (
-  <FontAwesome name={isFav ? "star" : "star-o"} size={20} color="white" {...props} />
+  <IconShape
+    icon={isFav ? FA4.star : FA4.starO}
+    size={20}
+    color="white"
+    {...props}
+  />
 );
 
-export const LockIcon = (props) => (
-  <FontAwesome name="lock" size={20} color="white" {...props} />
-);
+export const LockIcon = makeIcon("LockIcon", FA4.lock, 20, "white");
 
-export const UnlockIcon = (props) => (
-  <FontAwesome name="unlock-alt" size={20} color="white" {...props} />
-);
+export const UnlockIcon = makeIcon("UnlockIcon", FA4.unlockAlt, 20, "white");
 
-export const CancelIcon = (props) => (
-  <FontAwesome name="close" size={28} color="white" {...props} />
-);
+export const CancelIcon = makeIcon("CancelIcon", FA4.close, 28, "white");
 
-export const SearchIcon = (props) => (
-  <FontAwesome name="search" size={32} color="white" {...props} />
-);
+export const SearchIcon = makeIcon("SearchIcon", FA4.search, 32, "white");
