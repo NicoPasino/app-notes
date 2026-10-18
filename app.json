@@ -7,21 +7,13 @@
     "icon": "./assets/icon.png",
     "scheme": "notes",
     "userInterfaceStyle": "dark",
-    "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.nikitox.Notas",
-      "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
-      }
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#0A0F23"
       },
-      "edgeToEdgeEnabled": true,
-      "package": "com.nikitox.Notas"
+      "versionCode": 1,
+      "package": "space.nicopasino.appnotes"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -42,7 +34,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#0A0F23"
         }
-      ]
+      ],
+      "expo-sqlite"
     ]
   }
 }
