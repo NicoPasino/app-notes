@@ -9,6 +9,17 @@ export const colorType = {
   dark: "#343a40",
 };
 
+export const colorTypeA = {
+  primary: "#0d6dfd70",
+  secondary: "#6c757d70",
+  success: "#19875470",
+  danger: "#dc354570",
+  warning: "#ffc10770",
+  info: "#0dcaf070",
+  light: "#f8f9fa70",
+  dark: "#343a4070",
+};
+
 export const colorTypeB = {
   primary: "#0d6dfd20",
   secondary: "#6c757d20",

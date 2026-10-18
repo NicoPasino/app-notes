@@ -9,6 +9,7 @@ import { __IsWeb__ } from "../../config";
 import { colores } from "../../components/utils/colors";
 import { opcionesVista } from "../../components/layoutComponents/HeaderTitle";
 import { SearchIcon } from "../../components/Icons";
+import { irANuevaNota } from "../../components/utils/irANuevaNota";
 
 function EstadoVacio({ opcion, onIrInicio }) {
   const Icono = opcion.Icono;
@@ -31,28 +32,18 @@ function EstadoVacio({ opcion, onIrInicio }) {
   );
 }
 
-function SinResultados({ onLimpiar }) {
+function SinResultados() {
   return (
     <View style={styles.emptyCont}>
-      <SearchIcon size={44} color={colores.gris} />
+      <SearchIcon size={44} color={colores.pressed} />
       <Text style={styles.emptyTitle}>Sin resultados</Text>
-      <Text style={styles.emptyDesc}>Probá con otra búsqueda o color.</Text>
-      <Pressable
-        onPress={onLimpiar}
-        style={({ pressed }) => [
-          styles.irInicioBtn,
-          pressed && styles.irInicioBtnPressed,
-        ]}
-      >
-        <Text style={styles.irInicioText}>Limpiar filtros</Text>
-      </Pressable>
     </View>
   );
 }
 
 function Contenido({ itemsIndex, vista, onIrInicio }) {
   const [query, setQuery] = useState("");
-  const [selectedColor, setSelectedColor] = useState(null);
+  const { selectedColor, setSelectedColor } = useContext(DataContext);
   const opcionActual =
     opcionesVista.find((o) => o.key === vista) ?? opcionesVista[0];
 
@@ -78,9 +69,24 @@ function Contenido({ itemsIndex, vista, onIrInicio }) {
 
   let contenido;
   if (filteredItems.length > 0) {
-    contenido = filteredItems.map((item) => <Card key={item.id} note={item} />);
+    contenido = (
+      <>
+        {filteredItems.map((item) => (
+          <Card key={item.id} note={item} />
+        ))}
+        {vista === "notas" && <NewCard color={selectedColor} />}
+      </>
+    );
   } else if (hayFiltro) {
-    contenido = <SinResultados onLimpiar={limpiarFiltros} />;
+    contenido = (
+      <>
+        {vista === "notas" && <NewCard color={selectedColor} />}
+        <SinResultados
+          onLimpiar={limpiarFiltros}
+          onNuevaNota={() => irANuevaNota(selectedColor)}
+        />
+      </>
+    );
   } else if (vista === "notas") {
     contenido = <NewCard />;
   } else {
@@ -171,7 +177,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   emptyTitle: {
-    color: colores.gris,
+    color: colores.pressed,
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",

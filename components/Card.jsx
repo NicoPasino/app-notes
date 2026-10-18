@@ -1,8 +1,9 @@
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Animated, Pressable } from "react-native";
-import { colorType, colorTypeB } from "./utils/colors";
+import { colorType, colorTypeA, colorTypeB } from "./utils/colors";
 import { DesglosarFecha } from "./utils/getDate";
+import { irANuevaNota } from "./utils/irANuevaNota";
 import { FavoriteIcon, LockIcon } from "./Icons";
 
 const showMaxHeader = 20;
@@ -91,12 +92,12 @@ export function Card({ note }) {
   );
 }
 
-export function NewCard() {
-  const router = useRouter();
+export function NewCard({ color }) {
+  const tint = color ? colorTypeA[color] : colorTypeA.secondary;
 
   return (
     <Pressable
-      onPress={() => router.push(`/new`)}
+      onPress={() => irANuevaNota(color)}
       style={({ hovered }) => [
         styles.cardMargin,
         { transform: [{ scale: hovered ? 1.02 : 1 }] },
@@ -106,11 +107,14 @@ export function NewCard() {
         <View
           style={[
             styles.newCard,
-            { backgroundColor: pressed ? "#223" : "#112" },
+            {
+              backgroundColor: pressed ? colorTypeB[color] : "#112",
+              borderColor: tint,
+            },
           ]}
         >
-          <Text style={styles.newCardPlus}>+</Text>
-          <Text style={styles.newCardText}>Nueva Nota</Text>
+          <Text style={[styles.newCardPlus, { color: tint }]}>+</Text>
+          {/* <Text style={[styles.newCardText, { color: tint }]}>Nueva Nota</Text> */}
         </View>
       )}
     </Pressable>
@@ -151,24 +155,24 @@ const styles = StyleSheet.create({
   },
   newCard: {
     maxWidth: 800,
+    width: "100%",
     borderRadius: borderRadius,
     borderWidth: 2,
     borderColor: "gray",
     borderStyle: "dashed",
-    margin: 20,
-    padding: 30,
+    paddingVertical: 16,
+    paddingHorizontal: 20,
     justifyContent: "center",
     alignItems: "center",
   },
   newCardPlus: {
-    fontSize: 40,
+    fontSize: 34,
     color: "gray",
-    marginTop: -10,
+    marginTop: -4,
   },
   newCardText: {
     fontSize: 16,
     color: "gray",
-    marginBottom: 10,
   },
   cardTop: {
     flexDirection: "row",
