@@ -9,10 +9,11 @@ export const DataContext = createContext();
 export function DataProvider({ children }) {
   const notasManager = useItems({ itemsDB: notasLocalAPI });
   const [vista, setVista] = useState("notas");
+  const [selectedColor, setSelectedColor] = useState(null);
 
   return (
     <DataContext.Provider
-      value={{ notasManager, vista, setVista }}
+      value={{ notasManager, vista, setVista, selectedColor, setSelectedColor }}
     >
       {children}
     </DataContext.Provider>

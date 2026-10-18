@@ -9,24 +9,43 @@ import { Header } from "../components/idComponents/header";
 import { LockIcon } from "../components/Icons";
 import { PinModal } from "../components/modals/PinModal";
 import { useNoteActions } from "../components/hooks/useNoteActions";
-import { colores } from "../components/utils/colors";
+import { colores, colorType } from "../components/utils/colors";
 import { DataContext } from "../context/dataContext";
 
 export default function Detail() {
-  const { id: idParam } = useLocalSearchParams(); // obtener parametros
+  const params = useLocalSearchParams();
+  const idParam = params.id;
   const id = Array.isArray(idParam) ? idParam[0] : idParam;
+  const colorParam = Array.isArray(params.color)
+    ? params.color[0]
+    : params.color;
   const { notasManager } = useContext(DataContext);
 
   // key={id} reinicia el estado local al navegar entre notas, sin
-  // resetearlo con setState dentro de un efecto.
-  return <DetalleContenido key={id} id={id} notasManager={notasManager} />;
+  // resetearlo con setState dentro de un efecto. Para notas nuevas se
+  // incluye el color inicial (filtro activo) para que también reinicie.
+  const key = id === "new" && colorParam ? `${id}-${colorParam}` : id;
+  return (
+    <DetalleContenido
+      key={key}
+      id={id}
+      colorInicial={colorParam}
+      notasManager={notasManager}
+    />
+  );
 }
 
-function DetalleContenido({ id, notasManager }) {
+function DetalleContenido({ id, colorInicial, notasManager }) {
   const { obtenerItem, setError } = notasManager;
   const isNew = id === "new";
   const [note, setnote] = useState(null);
-  const [newData, setNewData] = useState(defaultData);
+  const [newData, setNewData] = useState(() => ({
+    ...defaultData,
+    color:
+      colorInicial && colorType[colorInicial]
+        ? colorInicial
+        : defaultData.color,
+  }));
   const [editMode, setEditMode] = useState(isNew);
   const [unlocked, setUnlocked] = useState(false);
   const [localError, setLocalError] = useState("");

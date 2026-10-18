@@ -1,8 +1,10 @@
 import { Pressable } from "react-native";
-import { router } from "expo-router";
+import { useContext } from "react";
 import { colores } from "../utils/colors";
 import { CirclePlusIcon } from "../Icons";
 import { __IsWeb__ } from "../../config";
+import { DataContext } from "../../context/dataContext";
+import { irANuevaNota } from "../utils/irANuevaNota";
 
 function colorBtn(p, h) {
   if (__IsWeb__) return h ? colores.turquesa : colores.blanco;
@@ -10,10 +12,11 @@ function colorBtn(p, h) {
 }
 
 export function AddBtn() {
+  const { selectedColor } = useContext(DataContext);
   return (
     <Pressable
       style={({ hovered }) => [{ transform: [{ scale: hovered ? 1.1 : 1 }] }]}
-      onPress={() => router.push(`/${"new"}`)}
+      onPress={() => irANuevaNota(selectedColor)}
     >
       {({ pressed, hovered }) => (
         <CirclePlusIcon size={55} color={colorBtn(pressed, hovered)} />
