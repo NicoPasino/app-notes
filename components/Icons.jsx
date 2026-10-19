@@ -2,8 +2,14 @@ import Svg, { Path } from "react-native-svg";
 import { FA4, FA6 } from "./iconsData";
 
 function IconShape({ icon, size, color, ...props }) {
+  const [, , vbW, vbH] = icon.viewBox.split(" ").map(Number);
   return (
-    <Svg width={size} height={size} viewBox={icon.viewBox} {...props}>
+    <Svg
+      width={(size * vbW) / vbH}
+      height={size}
+      viewBox={icon.viewBox}
+      {...props}
+    >
       {icon.paths.map((p, i) => (
         <Path
           key={i}
@@ -112,7 +118,7 @@ export const DelIcon = makeIcon("DelIcon", FA4.trashO, 25, "white");
 
 export const EditIcon = makeIcon("EditIcon", FA6.pen, 18, "white");
 
-export const ConfirmIcon = makeIcon("ConfirmIcon", FA4.check, 25, "white");
+export const ConfirmIcon = makeIcon("ConfirmIcon", FA4.check, 28, "white");
 
 export const EllipsisIcon = makeIcon(
   "EllipsisIcon",

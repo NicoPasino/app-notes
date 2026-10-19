@@ -8,7 +8,7 @@ import { irANuevaNota } from "../utils/irANuevaNota";
 
 function colorBtn(p, h) {
   if (__IsWeb__) return h ? colores.turquesa : colores.blanco;
-  else return p ? colores.pressed : colores.turquesa;
+  else return p ? colores.pressed : colores.blanco;
 }
 
 export function AddBtn() {
@@ -19,7 +19,7 @@ export function AddBtn() {
       onPress={() => irANuevaNota(selectedColor)}
     >
       {({ pressed, hovered }) => (
-        <CirclePlusIcon size={55} color={colorBtn(pressed, hovered)} />
+        <CirclePlusIcon size={65} color={colorBtn(pressed, hovered)} />
       )}
     </Pressable>
   );

@@ -12,7 +12,7 @@ import confirmAlert from "../utils/ConfirmAlert";
 
 export function ConfirmBtn({ accion }) {
   return (
-    <Pressable onPress={() => accion()}>
+    <Pressable onPress={() => accion()} style={styles.iconBtn}>
       {({ pressed }) => (
         <ConfirmIcon color={pressed ? colores.pressed : colorType.success} />
       )}
@@ -29,6 +29,7 @@ export function DeleteBtn({ accion }) {
           texto: "¿Seguro que quieres eliminar la Nota?",
         })
       }
+      style={styles.iconBtn}
     >
       {({ pressed }) => (
         <DelIcon color={pressed ? colores.pressed : colorType.danger} />
@@ -46,6 +47,7 @@ export function ArchiveBtn({ accion }) {
           texto: "¿Seguro que quieres archivar la Nota?",
         })
       }
+      style={styles.iconBtn}
     >
       {({ pressed }) => (
         <BoxArchiveIcon color={pressed ? colores.pressed : colores.blanco} />
@@ -64,6 +66,7 @@ export function DeactivateBtn({ accion }) {
             "¿Seguro que quieres eliminar la Nota? \nSe enviará a la papelera.",
         })
       }
+      style={styles.iconBtn}
     >
       {({ pressed }) => (
         <DelIcon color={pressed ? colores.pressed : colorType.danger} />
@@ -74,7 +77,7 @@ export function DeactivateBtn({ accion }) {
 
 export function EditBtn({ accion }) {
   return (
-    <Pressable onPress={() => accion()}>
+    <Pressable onPress={() => accion()} style={styles.iconBtn}>
       {({ pressed }) => (
         <EditIcon color={pressed ? colores.pressed : colores.blanco} />
       )}
@@ -84,7 +87,7 @@ export function EditBtn({ accion }) {
 
 export function EllipsisBtn({ accion }) {
   return (
-    <Pressable onPress={() => accion()} hitSlop={10} style={styles.ellipsisBtn}>
+    <Pressable onPress={() => accion()} hitSlop={10} style={styles.iconBtn}>
       {({ pressed }) => (
         <EllipsisIcon color={pressed ? colores.pressed : colores.blanco} />
       )}

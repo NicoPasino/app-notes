@@ -1,6 +1,5 @@
 import { Tabs } from "expo-router";
 import { Platform, StyleSheet, View } from "react-native";
-
 import { InfoIcon, NoteIcon } from "../../components/Icons";
 import { colores } from "../../components/utils/colors";
 import { AddBtn } from "../../components/buttons/TabButtons";
@@ -55,7 +54,7 @@ export default function TabsLayout() {
 const styles = StyleSheet.create({
   newBtn: {
     position: "absolute",
-    bottom: Platform.select({ web: 25, android: 50 }), // altura botón
+    bottom: Platform.select({ web: 35, android: 60 }), // altura botón
     left: 0,
     right: 0,
     alignItems: "center",

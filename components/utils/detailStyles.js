@@ -61,10 +61,11 @@ export const detailStyles = StyleSheet.create({
     justifyContent: "space-between",
     gap: 25,
   },
-  ellipsisBtn: {
-    padding: 8,
-    justifyContent: "center",
+  iconBtn: {
+    width: 36,
+    height: 36,
     alignItems: "center",
+    justifyContent: "center",
   },
 });
 

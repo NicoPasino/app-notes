@@ -5,7 +5,12 @@ import { DataContext } from "../context/dataContext";
 
 const colorKeys = Object.keys(colorType);
 
-export function SearchFilter({ query, onQueryChange, selectedColor, onColorChange }) {
+export function SearchFilter({
+  query,
+  onQueryChange,
+  selectedColor,
+  onColorChange,
+}) {
   const { vista } = useContext(DataContext);
 
   return (
@@ -21,7 +26,7 @@ export function SearchFilter({ query, onQueryChange, selectedColor, onColorChang
         />
         {query.length > 0 && (
           <Pressable onPress={() => onQueryChange("")} style={styles.clearBtn}>
-            <Text style={styles.clearText}>x</Text>
+            <Text style={styles.clearText}>×</Text>
           </Pressable>
         )}
       </View>
@@ -80,13 +85,14 @@ const styles = StyleSheet.create({
     outlineStyle: "none",
   },
   clearBtn: {
-    paddingLeft: 8,
-    paddingVertical: 4,
+    marginBottom: 4,
   },
   clearText: {
     color: "#888",
-    fontSize: 18,
+    fontSize: 25,
     fontWeight: "bold",
+    margin: 0,
+    padding: 0,
   },
   colorsRow: {
     flexDirection: "row",
