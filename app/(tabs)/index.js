@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Pressable, StyleSheet } from "react-native";
+import { View, ScrollView, StyleSheet } from "react-native";
 import { Card, NewCard } from "../../components/Card";
 import { AlertDiv } from "../../components/modals/Modals";
 import { LoadingBackground } from "../../components/Spinner";
@@ -6,40 +6,8 @@ import { SearchFilter } from "../../components/SearchFilter";
 import { useContext, useMemo, useState } from "react";
 import { DataContext } from "../../context/dataContext";
 import { __IsWeb__ } from "../../config";
-import { colores } from "../../components/utils/colors";
 import { opcionesVista } from "../../components/layoutComponents/HeaderTitle";
-import { SearchIcon } from "../../components/Icons";
-import { irANuevaNota } from "../../components/utils/irANuevaNota";
-
-function EstadoVacio({ opcion, onIrInicio }) {
-  const Icono = opcion.Icono;
-  return (
-    <View style={styles.emptyCont}>
-      <Icono size={44} color={colores.gris} />
-      <Text style={styles.emptyTitle}>
-        Sin {opcion.descripcion.toLowerCase()}
-      </Text>
-      <Pressable
-        onPress={onIrInicio}
-        style={({ pressed }) => [
-          styles.irInicioBtn,
-          pressed && styles.irInicioBtnPressed,
-        ]}
-      >
-        <Text style={styles.irInicioText}>Ir a inicio</Text>
-      </Pressable>
-    </View>
-  );
-}
-
-function SinResultados() {
-  return (
-    <View style={styles.emptyCont}>
-      <SearchIcon size={44} color={colores.pressed} />
-      <Text style={styles.emptyTitle}>Sin resultados</Text>
-    </View>
-  );
-}
+import { EstadoVacio, SinResultados } from "../../components/EmptyStates";
 
 function Contenido({ itemsIndex, vista, onIrInicio }) {
   const [query, setQuery] = useState("");
@@ -62,11 +30,6 @@ function Contenido({ itemsIndex, vista, onIrInicio }) {
     });
   }, [itemsIndex, query, selectedColor]);
 
-  function limpiarFiltros() {
-    setQuery("");
-    setSelectedColor(null);
-  }
-
   let contenido;
   if (filteredItems.length > 0) {
     contenido = (
@@ -81,10 +44,7 @@ function Contenido({ itemsIndex, vista, onIrInicio }) {
     contenido = (
       <>
         {vista === "notas" && <NewCard color={selectedColor} />}
-        <SinResultados
-          onLimpiar={limpiarFiltros}
-          onNuevaNota={() => irANuevaNota(selectedColor)}
-        />
+        <SinResultados />
       </>
     );
   } else if (vista === "notas") {
@@ -168,39 +128,5 @@ const styles = StyleSheet.create({
     margin: __IsWeb__ ? "auto" : 0,
     maxWidth: __IsWeb__ ? 832 : undefined,
     width: "100%",
-  },
-  emptyCont: {
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 90,
-    gap: 16,
-    paddingHorizontal: 24,
-  },
-  emptyTitle: {
-    color: colores.pressed,
-    fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  emptyDesc: {
-    color: colores.gris,
-    fontSize: 14,
-    textAlign: "center",
-  },
-  irInicioBtn: {
-    borderWidth: 1,
-    borderColor: colores.turquesa,
-    backgroundColor: "#51afb926",
-    borderRadius: 10,
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-  },
-  irInicioBtnPressed: {
-    backgroundColor: "#7dd3fd2e",
-  },
-  irInicioText: {
-    color: colores.turquesa2,
-    fontSize: 15,
-    fontWeight: "bold",
   },
 });

@@ -2,6 +2,7 @@ import { useLocalSearchParams, router } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { AlertDiv } from "../components/modals/Modals";
+import { NotaNoEncontrada } from "../components/EmptyStates";
 import { Screen } from "../components/Screen";
 import { LoadingBackground } from "../components/Spinner";
 import { TextoCont } from "../components/idComponents/contInput";
@@ -119,15 +120,7 @@ function ContenidoDetail({
   };
 
   if (error)
-    return (
-      <AlertDiv
-        mensaje={error}
-        link={{
-          onPress: () => handleVolverOnError(),
-          label: "Volver a Inicio",
-        }}
-      />
-    );
+    return <NotaNoEncontrada onIrInicio={() => handleVolverOnError()} />;
   return (
     <>
       {mensaje && (
