@@ -7,11 +7,21 @@ import * as Sharing from "expo-sharing";
 import { DataContext } from "../../context/dataContext";
 import { showToast } from "../utils/toast";
 import { hashPin, verifyPin } from "../utils/pinHash";
+import { noteLimits } from "../utils/validateNote";
 
 function obtenerContenido(note) {
   const header = note?.header?.trim();
   const text = note?.text?.trim();
   return [header, text].filter(Boolean).join("\n\n");
+}
+
+function derivarTitulo(text) {
+  const limpio = text.replace(/\s+/g, " ").trim();
+  if (!limpio) return "";
+  if (limpio.length <= noteLimits.headerMax) return limpio;
+  const cortado = limpio.slice(0, noteLimits.headerMax);
+  const corte = cortado.lastIndexOf(" ");
+  return (corte > 0 ? cortado.slice(0, corte) : cortado).trim();
 }
 
 function obtenerNombreArchivo(header) {
@@ -203,10 +213,14 @@ export function useNoteActions({
   };
 
   const bloquear = async (pin) => {
-    if (!id || id === "new") return { error: "No se puede bloquear una nota nueva." };
+    if (!id || id === "new")
+      return { error: "No se puede bloquear una nota nueva." };
     try {
       const hash = await hashPin(pin);
-      const ok = await actualizarParcial({ id, campos: { locked: true, pin: hash } });
+      const ok = await actualizarParcial({
+        id,
+        campos: { locked: true, pin: hash },
+      });
       if (!ok) return { error: "No se pudo bloquear la nota." };
       await refrescarNota();
       showToast({ texto1: "Nota bloqueada 🔒" });
@@ -220,7 +234,10 @@ export function useNoteActions({
     if (!id || id === "new") return { error: "Nota inválida." };
     const res = await verificarPin(pin);
     if (res.error) return res;
-    const ok = await actualizarParcial({ id, campos: { locked: false, pin: null } });
+    const ok = await actualizarParcial({
+      id,
+      campos: { locked: false, pin: null },
+    });
     if (!ok) return { error: "No se pudo desbloquear la nota." };
     await refrescarNota();
     showToast({ texto1: "Nota desbloqueada 🔓" });
@@ -228,9 +245,21 @@ export function useNoteActions({
   };
 
   const enviarDatos = async () => {
+    const header = currentNote?.header?.trim() ?? "";
+    const text = currentNote?.text?.trim() ?? "";
+
+    if (!header && !text) {
+      showToast({
+        tipo: "info",
+        texto1: "La nota está vacía",
+        texto2: "Agrega un título o un texto",
+      });
+      return false;
+    }
+
     const itemToSave = {
-      id: isNew ? undefined : (note?.id || id),
-      header: currentNote?.header,
+      id: isNew ? undefined : note?.id || id,
+      header: header || derivarTitulo(text),
       text: currentNote?.text,
       color: currentNote?.color,
     };
@@ -242,6 +271,7 @@ export function useNoteActions({
       await actualizar({ nuevoDato });
     }
     if (setEditMode) setEditMode(false);
+    return true;
   };
 
   return {
