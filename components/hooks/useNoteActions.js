@@ -244,9 +244,10 @@ export function useNoteActions({
     return { ok: true };
   };
 
-  const enviarDatos = async () => {
-    const header = currentNote?.header?.trim() ?? "";
-    const text = currentNote?.text?.trim() ?? "";
+  const enviarDatos = async (overrides) => {
+    const base = overrides ? { ...currentNote, ...overrides } : currentNote;
+    const header = base?.header?.trim() ?? "";
+    const text = base?.text?.trim() ?? "";
 
     if (!header && !text) {
       showToast({
@@ -260,8 +261,8 @@ export function useNoteActions({
     const itemToSave = {
       id: isNew ? undefined : note?.id || id,
       header: header || derivarTitulo(text),
-      text: currentNote?.text,
-      color: currentNote?.color,
+      text: base?.text,
+      color: base?.color,
     };
 
     if (isNew) {

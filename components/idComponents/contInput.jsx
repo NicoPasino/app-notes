@@ -1,4 +1,4 @@
-import { ScrollView, Text, TextInput, View } from "react-native";
+import { Platform, ScrollView, Text, TextInput, View } from "react-native";
 import { memo } from "react";
 import { Loading } from "../Spinner";
 import { colorType } from "../utils/colors";
@@ -12,8 +12,15 @@ export function TituloCont({ header, color, editMode, handleHeaderChange }) {
   const backgColor = () => (editMode ? "#0005" : "#0000");
   if (header === undefined && color === undefined) return <Loading />;
 
+  const isWeb = Platform.OS === "web";
+  const textProps =
+    editMode && !isWeb
+      ? { defaultValue: header ?? "" }
+      : { value: header ?? "" };
+
   return (
     <TextInput
+      key={isWeb ? "web" : editMode ? "edit" : "view"}
       style={[
         detailStyles.title,
         {
@@ -23,8 +30,9 @@ export function TituloCont({ header, color, editMode, handleHeaderChange }) {
         editMode && {
           width: "95%",
           alignSelf: "center",
-          textAlign: "center",
+          textAlign: Platform.OS === "android" ? "left" : "center",
           borderRadius: 8,
+          paddingHorizontal: 8,
         },
       ]}
       editable={editMode}
@@ -32,7 +40,9 @@ export function TituloCont({ header, color, editMode, handleHeaderChange }) {
       placeholderTextColor={newColor}
       onChangeText={(value) => handleHeaderChange(value)}
       maxLength={50}
-      value={header}
+      {...textProps}
+      multiline={false}
+      numberOfLines={1}
     />
   );
 }

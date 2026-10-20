@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { router, Stack } from "expo-router";
 import { Text, View } from "react-native";
 
@@ -20,6 +20,8 @@ export function Header({ edit, data, locked = false, viewable = true }) {
   const { editMode, setEditMode, isNew } = edit;
   const { newData, setNewData, note, id } = data;
 
+  const headerRef = useRef(newData?.header ?? "");
+
   const [modalColorVisible, setModalColorVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const newColor = newData ? colorType[newData?.color] : colorType.light;
@@ -33,6 +35,24 @@ export function Header({ edit, data, locked = false, viewable = true }) {
     setEditMode,
   });
 
+  const confirmar = () => {
+    const header = headerRef.current ?? "";
+    setNewData((prev) => ({ ...prev, header }));
+    enviarDatos({ header });
+  };
+
+  const empezarEdicion = () => {
+    headerRef.current = newData?.header ?? "";
+    setEditMode(true);
+  };
+
+  const cancelar = () => {
+    headerRef.current = note?.header ?? "";
+    setEditMode(false);
+    if (isNew) return router.replace("/");
+    setNewData(note);
+  };
+
   return (
     <>
       <Stack.Screen
@@ -41,7 +61,7 @@ export function Header({ edit, data, locked = false, viewable = true }) {
           headerTintColor: colores.blanco,
           headerBackVisible: !editMode,
           headerLeft: () => {
-            if (editMode) return <ConfirmBtn accion={enviarDatos} />;
+            if (editMode) return <ConfirmBtn accion={confirmar} />;
             if (__IsWeb__) return <BackBtn />;
             return null;
           },
@@ -61,9 +81,12 @@ export function Header({ edit, data, locked = false, viewable = true }) {
                 header={newData?.header}
                 color={newData?.color}
                 editMode={editMode}
-                handleHeaderChange={(header) =>
-                  setNewData((prev) => ({ ...prev, header }))
-                }
+                handleHeaderChange={(header) => {
+                  headerRef.current = header;
+                  if (__IsWeb__) {
+                    setNewData((prev) => ({ ...prev, header }));
+                  }
+                }}
               />
             ),
           headerRight: () => {
@@ -88,19 +111,13 @@ export function Header({ edit, data, locked = false, viewable = true }) {
                     accion={() => setModalColorVisible(true)}
                     color={newColor}
                   />
-                  <CancelBtn
-                    accion={() => {
-                      setEditMode(false);
-                      if (isNew) return router.replace("/");
-                      setNewData(note);
-                    }}
-                  />
+                  <CancelBtn accion={cancelar} />
                 </View>
               );
             return (
               <View style={detailStyles.wrap}>
                 {!newData?.eliminado && !newData?.archivado && (
-                  <EditBtn accion={() => setEditMode(true)} />
+                  <EditBtn accion={empezarEdicion} />
                 )}
                 <EllipsisBtn accion={() => setMenuVisible((v) => !v)} />
                 <NoteOptionsMenu
