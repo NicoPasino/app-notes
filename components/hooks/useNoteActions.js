@@ -224,6 +224,7 @@ export function useNoteActions({
       if (!ok) return { error: "No se pudo bloquear la nota." };
       await refrescarNota();
       showToast({ texto1: "Nota bloqueada 🔒" });
+      router.replace("/");
       return { ok: true };
     } catch {
       return { error: "No se pudo bloquear la nota." };

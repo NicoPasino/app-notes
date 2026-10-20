@@ -24,7 +24,7 @@ function Contenido({ itemsIndex, vista, onIrInicio }) {
       const matchText =
         !q ||
         note.header?.toLowerCase().includes(q) ||
-        note.text?.toLowerCase().includes(q);
+        (!note.locked && note.text?.toLowerCase().includes(q));
       const matchColor = !selectedColor || note.color === selectedColor;
       return matchText && matchColor;
     });

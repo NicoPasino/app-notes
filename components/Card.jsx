@@ -52,21 +52,14 @@ export function Card({ note }) {
                 { color: colorType[color] },
               ]}
             >
-              {locked ? (
-                <>
-                  <LockIcon size={16} color={colorType[color]} />
-                  {" Nota bloqueada"}
-                </>
-              ) : (
-                <>
-                  {note?.favorito && (
-                    <FavoriteIcon isFav size={16} color={colorType[color]} />
-                  )}
-                  {note?.favorito && " "}
-                  {header.slice(0, showMaxHeader)}
-                  {header.length > showMaxHeader && "..."}
-                </>
+              {note?.favorito && (
+                <FavoriteIcon isFav size={16} color={colorType[color]} />
               )}
+              {note?.favorito && " "}
+              {locked && <LockIcon size={16} color={colorType[color]} />}
+              {locked && " "}
+              {header.slice(0, showMaxHeader)}
+              {header.length > showMaxHeader && "..."}
             </Text>
 
             {/* Fecha */}
@@ -76,7 +69,13 @@ export function Card({ note }) {
           </View>
 
           {/* Texto */}
-          <Text style={[styles.text, { borderColor: colorType[color] }]}>
+          <Text
+            style={[
+              styles.text,
+              { borderColor: colorType[color] },
+              locked && styles.lockedText,
+            ]}
+          >
             {locked ? (
               "🔒 Contenido bloqueado"
             ) : (
@@ -205,6 +204,10 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     borderBottomLeftRadius: borderRadius,
     borderBottomRightRadius: borderRadius,
+  },
+  lockedText: {
+    color: colorType.secondary,
+    fontStyle: "italic",
   },
   subtitle: {
     fontSize: 15,
