@@ -11,7 +11,7 @@ export function SearchFilter({
   selectedColor,
   onColorChange,
 }) {
-  const { vista } = useContext(DataContext);
+  const { folder } = useContext(DataContext);
 
   return (
     <View style={styles.container}>
@@ -19,7 +19,7 @@ export function SearchFilter({
       <View style={styles.searchRow}>
         <TextInput
           style={styles.input}
-          placeholder={`Buscar en ${vista}...`}
+          placeholder={`Buscar en ${folder}...`}
           placeholderTextColor="#555"
           value={query}
           onChangeText={onQueryChange}

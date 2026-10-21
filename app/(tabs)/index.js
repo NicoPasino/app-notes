@@ -3,24 +3,22 @@ import { Card, NewCard } from "../../components/Card";
 import { AlertDiv } from "../../components/modals/Modals";
 import { LoadingBackground } from "../../components/Spinner";
 import { SearchFilter } from "../../components/SearchFilter";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useMemo } from "react";
 import { DataContext } from "../../context/dataContext";
 import { __IsWeb__ } from "../../config";
-import { opcionesVista } from "../../components/layoutComponents/HeaderTitle";
+import { opcionesFolder } from "../../components/layoutComponents/opciones";
 import { EstadoVacio, SinResultados } from "../../components/EmptyStates";
 
-function Contenido({ itemsIndex, vista, onIrInicio }) {
-  const [query, setQuery] = useState("");
-  const { selectedColor, setSelectedColor } = useContext(DataContext);
+function Contenido({ itemsFolder, folder, onIrInicio }) {
+  const { query, setQuery, selectedColor, setSelectedColor } =
+    useContext(DataContext);
   const opcionActual =
-    opcionesVista.find((o) => o.key === vista) ?? opcionesVista[0];
-
-  const hayFiltro = query.trim().length > 0 || selectedColor !== null;
+    opcionesFolder.find((o) => o.key === folder) ?? opcionesFolder[0];
 
   const filteredItems = useMemo(() => {
     const q = query.toLowerCase().trim();
-    if (!q && !selectedColor) return itemsIndex;
-    return itemsIndex.filter((note) => {
+    if (!q && !selectedColor) return itemsFolder;
+    return itemsFolder.filter((note) => {
       const matchText =
         !q ||
         note.header?.toLowerCase().includes(q) ||
@@ -28,29 +26,32 @@ function Contenido({ itemsIndex, vista, onIrInicio }) {
       const matchColor = !selectedColor || note.color === selectedColor;
       return matchText && matchColor;
     });
-  }, [itemsIndex, query, selectedColor]);
+  }, [itemsFolder, query, selectedColor]);
 
   let contenido;
-  if (filteredItems.length > 0) {
+  if (itemsFolder.length === 0) {
+    contenido =
+      folder === "notas" ? (
+        <NewCard />
+      ) : (
+        <EstadoVacio opcion={opcionActual} onIrInicio={onIrInicio} />
+      );
+  } else if (filteredItems.length === 0) {
+    contenido = (
+      <>
+        {folder === "notas" && <NewCard color={selectedColor} />}
+        <SinResultados />
+      </>
+    );
+  } else {
     contenido = (
       <>
         {filteredItems.map((item) => (
           <Card key={item.id} note={item} />
         ))}
-        {vista === "notas" && <NewCard color={selectedColor} />}
+        {folder === "notas" && <NewCard color={selectedColor} />}
       </>
     );
-  } else if (hayFiltro) {
-    contenido = (
-      <>
-        {vista === "notas" && <NewCard color={selectedColor} />}
-        <SinResultados />
-      </>
-    );
-  } else if (vista === "notas") {
-    contenido = <NewCard />;
-  } else {
-    contenido = <EstadoVacio opcion={opcionActual} onIrInicio={onIrInicio} />;
   }
 
   return (
@@ -70,11 +71,11 @@ function Contenido({ itemsIndex, vista, onIrInicio }) {
 }
 
 export default function Main() {
-  const { notasManager, vista, setVista } = useContext(DataContext);
+  const { notasManager, folder, cambiarFolder } = useContext(DataContext);
   const { items, error, loading } = notasManager;
 
-  const itemsIndex = useMemo(() => {
-    switch (vista) {
+  const itemsFolder = useMemo(() => {
+    switch (folder) {
       case "favoritos":
         return items.filter(
           (item) =>
@@ -101,7 +102,7 @@ export default function Main() {
           (item) => item.eliminado !== true && item.archivado !== true,
         );
     }
-  }, [items, vista]);
+  }, [items, folder]);
 
   return (
     <View style={{ backgroundColor: "#0a0a23", flex: 1 }}>
@@ -111,9 +112,9 @@ export default function Main() {
         <AlertDiv mensaje={error} />
       ) : (
         <Contenido
-          itemsIndex={itemsIndex}
-          vista={vista}
-          onIrInicio={() => setVista("notas")}
+          itemsFolder={itemsFolder}
+          folder={folder}
+          onIrInicio={() => cambiarFolder("notas")}
         />
       )}
     </View>

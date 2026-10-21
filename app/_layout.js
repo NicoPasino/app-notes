@@ -1,7 +1,10 @@
 import { Stack } from "expo-router";
 import { Screen } from "../components/Screen";
 import Toast from "react-native-toast-message";
-import { HeaderTitle, HeaderRight } from "../components/layoutComponents/HeaderTitle";
+import {
+  HeaderTitle,
+  HeaderRight,
+} from "../components/layoutComponents/HeaderTab";
 import { DataProvider } from "../context/dataContext";
 
 // Header + Toast (Index)
@@ -12,7 +15,7 @@ export default function Layout() {
         <Stack
           screenOptions={{
             headerStyle: { backgroundColor: "#00001d" },
-            headerLeft: () => <></>, // eviar mostrar BackBtnNativo
+            headerLeft: () => <></>, // (vacío para evitar mostrar BackBtnNativo)
             headerTitle: () => <HeaderTitle />,
             headerRight: () => <HeaderRight />,
             headerLeftContainerStyle: { paddingLeft: "10%" },
