@@ -75,7 +75,7 @@ export const TextoCont = memo(function TextoCont({ data, editMode, isNew }) {
           placeholderTextColor="#888"
           enterKeyHint="enter"
           multiline
-          // autoFocus={true}
+          autoFocus={true}
           textBreakStrategy="simple"
           editable={editMode}
           onChangeText={(text) => setNewData((prev) => ({ ...prev, text }))}

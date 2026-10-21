@@ -7,7 +7,15 @@ import { validateNote } from "../components/utils/validateNote";
 
 const DB_NAME = "notasLocal.db";
 const LS_KEY = "notasLocalStorage";
+const LS_FLAG_PRIMERA_VEZ = "notasPrimeraVez";
 const WINDOW = typeof window !== "undefined" ? window : null;
+
+const NOTA_BIENVENIDA = {
+  header: "¡Bienvenido! 👋",
+  text: "Esta es tu primera nota, creada automáticamente.\n\n• Toca una nota para abrirla y editarla.\n• Usa los filtros de color para organizarlas.\n• Puedes editar o eliminar esta nota cuando quieras.",
+  color: "warning",
+  name: "Local",
+};
 
 // ---------- Normalización de notas ----------
 function normalizeNote(note) {
@@ -306,6 +314,51 @@ function buildCollection() {
     }
   };
 
+  // ---------- Primera vez: nota de bienvenida ----------
+  const leerFlagPrimeraVez = () => {
+    if (__IsWeb__) return WINDOW?.localStorage?.getItem(LS_FLAG_PRIMERA_VEZ);
+    try {
+      db.execSync(
+        "CREATE TABLE IF NOT EXISTS config (clave TEXT PRIMARY KEY, valor TEXT)",
+      );
+      const row = db.getFirstSync("SELECT valor FROM config WHERE clave = ?", [
+        LS_FLAG_PRIMERA_VEZ,
+      ]);
+      return row?.valor ?? null;
+    } catch {
+      return null;
+    }
+  };
+
+  const escribirFlagPrimeraVez = () => {
+    if (__IsWeb__) {
+      WINDOW?.localStorage?.setItem(LS_FLAG_PRIMERA_VEZ, "1");
+      return;
+    }
+    try {
+      db.execSync(
+        "CREATE TABLE IF NOT EXISTS config (clave TEXT PRIMARY KEY, valor TEXT)",
+      );
+      db.runSync("INSERT OR REPLACE INTO config (clave, valor) VALUES (?, ?)", [
+        LS_FLAG_PRIMERA_VEZ,
+        "1",
+      ]);
+    } catch {
+      // Sin persistencia de config: se reintentará en el próximo arranque.
+    }
+  };
+
+  // Crea la nota de bienvenida solo en la primera ejecución de la app.
+  const inicializarPrimeraVez = () => {
+    try {
+      if (leerFlagPrimeraVez()) return;
+      const res = agregar(NOTA_BIENVENIDA);
+      if (res?.ok) escribirFlagPrimeraVez();
+    } catch {
+      // Nunca debe bloquear el arranque de la app.
+    }
+  };
+
   return {
     obtenerTodos,
     obtenerPorId,
@@ -313,6 +366,7 @@ function buildCollection() {
     eliminar,
     actualizar,
     actualizarParcial,
+    inicializarPrimeraVez,
   };
 }
 

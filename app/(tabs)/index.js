@@ -40,7 +40,7 @@ function Contenido({ itemsFolder, folder, onIrInicio }) {
     contenido = (
       <>
         {folder === "notas" && <NewCard color={selectedColor} />}
-        <SinResultados />
+        <SinResultados color={selectedColor} />
       </>
     );
   } else {
@@ -75,33 +75,42 @@ export default function Main() {
   const { items, error, loading } = notasManager;
 
   const itemsFolder = useMemo(() => {
+    let lista;
     switch (folder) {
       case "favoritos":
-        return items.filter(
+        lista = items.filter(
           (item) =>
             item.favorito === true &&
             item.eliminado !== true &&
             item.archivado !== true,
         );
+        break;
       case "bloqueados":
-        return items.filter(
+        lista = items.filter(
           (item) =>
             item.locked === true &&
             item.eliminado !== true &&
             item.archivado !== true,
         );
+        break;
       case "archivados":
-        return items.filter(
+        lista = items.filter(
           (item) => item.archivado === true && item.eliminado !== true,
         );
+        break;
       case "eliminados":
-        return items.filter((item) => item.eliminado === true);
+        lista = items.filter((item) => item.eliminado === true);
+        break;
       case "notas":
       default:
-        return items.filter(
+        lista = items.filter(
           (item) => item.eliminado !== true && item.archivado !== true,
         );
     }
+    // Orden por defecto: más recientemente modificadas primero.
+    return lista.sort((a, b) =>
+      (b.fechaModificacion ?? "").localeCompare(a.fechaModificacion ?? ""),
+    );
   }, [items, folder]);
 
   return (

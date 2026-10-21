@@ -58,6 +58,7 @@ export function useItems({ itemsDB }) {
   useEffect(() => {
     async function cargarInicial() {
       try {
+        itemsDB?.inicializarPrimeraVez?.();
         const res = await leerItems();
         if (hayError(res)) return;
         setItems(Array.isArray(res) ? res : []);
@@ -69,7 +70,7 @@ export function useItems({ itemsDB }) {
       }
     }
     cargarInicial();
-  }, [leerItems, hayError]);
+  }, [leerItems, hayError, itemsDB]);
 
   // Recarga manual (evento de usuario): muestra el loading mientras llegan
   // los datos.

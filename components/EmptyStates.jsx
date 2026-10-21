@@ -1,23 +1,31 @@
 import { StyleSheet, Text, View } from "react-native";
 import { IrInicioBtn } from "./buttons/IrInicioBtn";
 import { CircleInfoIcon, NoteIcon, SearchIcon } from "./Icons";
-import { colores } from "./utils/colors";
+import { colorTypeA, colores } from "./utils/colors";
 
-function EmptyState({ Icono, iconColor = colores.gris, titulo, children }) {
+function EmptyState({
+  Icono,
+  iconColor = colores.gris,
+  colorTitulo = colores.pressed,
+  titulo,
+  children,
+}) {
   return (
     <View style={styles.emptyCont}>
       <Icono size={44} color={iconColor} />
-      <Text style={styles.emptyTitle}>{titulo}</Text>
+      <Text style={[styles.emptyTitle, { color: colorTitulo }]}>{titulo}</Text>
       {children}
     </View>
   );
 }
 
-export function SinResultados() {
+export function SinResultados({ color }) {
+  const colorActivo = (color && colorTypeA[color]) || colores.pressed;
   return (
     <EmptyState
       Icono={SearchIcon}
-      iconColor={colores.pressed}
+      iconColor={colorActivo}
+      colorTitulo={colorActivo}
       titulo="Sin resultados"
     />
   );
@@ -59,7 +67,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   emptyTitle: {
-    color: colores.pressed,
     fontSize: 18,
     fontWeight: "bold",
     textAlign: "center",
